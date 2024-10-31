@@ -159,6 +159,82 @@ export type BlankSectionWhereInput = {
   composition?: InputMaybe<CompositionStructureNodeWhereInput>;
 };
 
+export type BlogElement = IData & _IComponent & _IContent & _IElement & {
+  __typename?: 'BlogElement';
+  Author?: Maybe<Scalars['String']['output']>;
+  Image?: Maybe<ContentUrl>;
+  Text?: Maybe<RichText>;
+  Title?: Maybe<Scalars['String']['output']>;
+  /** @deprecated Use `_link` field instead */
+  _children?: Maybe<QueryRef>;
+  _deleted?: Maybe<Scalars['Bool']['output']>;
+  _fulltext?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  _id?: Maybe<Scalars['String']['output']>;
+  _link?: Maybe<QueryRef>;
+  _metadata?: Maybe<IContentMetadata>;
+  _modified?: Maybe<Scalars['Date']['output']>;
+  _score?: Maybe<Scalars['Float']['output']>;
+};
+
+
+export type BlogElement_FulltextArgs = {
+  highlight?: InputMaybe<HighlightOptions>;
+};
+
+
+export type BlogElement_LinkArgs = {
+  type?: InputMaybe<LinkTypes>;
+};
+
+export type BlogElementAutocomplete = {
+  __typename?: 'BlogElementAutocomplete';
+  Image?: Maybe<ContentUrlAutocomplete>;
+  Text?: Maybe<RichTextAutocomplete>;
+  _metadata?: Maybe<IContentMetadataAutocomplete>;
+};
+
+export type BlogElementFacet = {
+  __typename?: 'BlogElementFacet';
+  Image?: Maybe<ContentUrlFacet>;
+  Text?: Maybe<RichTextFacet>;
+  _metadata?: Maybe<IContentMetadataFacet>;
+};
+
+export type BlogElementOrderByInput = {
+  Image?: InputMaybe<ContentUrlOrderByInput>;
+  Text?: InputMaybe<RichTextOrderByInput>;
+  _metadata?: InputMaybe<IContentMetadataOrderByInput>;
+  _minimumScore?: InputMaybe<Scalars['Float']['input']>;
+  _modified?: InputMaybe<OrderBy>;
+  _ranking?: InputMaybe<Ranking>;
+  _semanticWeight?: InputMaybe<Scalars['Float']['input']>;
+};
+
+export type BlogElementOutput = {
+  __typename?: 'BlogElementOutput';
+  autocomplete?: Maybe<BlogElementAutocomplete>;
+  cursor?: Maybe<Scalars['String']['output']>;
+  facets?: Maybe<BlogElementFacet>;
+  items?: Maybe<Array<Maybe<BlogElement>>>;
+  total?: Maybe<Scalars['Int']['output']>;
+};
+
+
+export type BlogElementOutputTotalArgs = {
+  all?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type BlogElementWhereInput = {
+  Image?: InputMaybe<ContentUrlWhereInput>;
+  Text?: InputMaybe<RichTextWhereInput>;
+  _and?: InputMaybe<Array<InputMaybe<BlogElementWhereInput>>>;
+  _fulltext?: InputMaybe<SearchableStringFilterInput>;
+  _metadata?: InputMaybe<IContentMetadataWhereInput>;
+  _modified?: InputMaybe<DateFilterInput>;
+  _not?: InputMaybe<Array<InputMaybe<BlogElementWhereInput>>>;
+  _or?: InputMaybe<Array<InputMaybe<BlogElementWhereInput>>>;
+};
+
 export type CompositionDisplaySetting = {
   __typename?: 'CompositionDisplaySetting';
   key?: Maybe<Scalars['String']['output']>;
@@ -578,9 +654,78 @@ export type DateFilterInput = {
 
 /** Decay influences the weight of the score based on field values with a decay function */
 export type Decay = {
-  origin?: InputMaybe<Scalars['String']['input']>;
+  origin?: InputMaybe<Scalars['Date']['input']>;
   rate?: InputMaybe<Scalars['Float']['input']>;
   scale?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type FooterElement = IData & _IComponent & _IContent & _IElement & {
+  __typename?: 'FooterElement';
+  Text?: Maybe<RichText>;
+  /** @deprecated Use `_link` field instead */
+  _children?: Maybe<QueryRef>;
+  _deleted?: Maybe<Scalars['Bool']['output']>;
+  _fulltext?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  _id?: Maybe<Scalars['String']['output']>;
+  _link?: Maybe<QueryRef>;
+  _metadata?: Maybe<IContentMetadata>;
+  _modified?: Maybe<Scalars['Date']['output']>;
+  _score?: Maybe<Scalars['Float']['output']>;
+};
+
+
+export type FooterElement_FulltextArgs = {
+  highlight?: InputMaybe<HighlightOptions>;
+};
+
+
+export type FooterElement_LinkArgs = {
+  type?: InputMaybe<LinkTypes>;
+};
+
+export type FooterElementAutocomplete = {
+  __typename?: 'FooterElementAutocomplete';
+  Text?: Maybe<RichTextAutocomplete>;
+  _metadata?: Maybe<IContentMetadataAutocomplete>;
+};
+
+export type FooterElementFacet = {
+  __typename?: 'FooterElementFacet';
+  Text?: Maybe<RichTextFacet>;
+  _metadata?: Maybe<IContentMetadataFacet>;
+};
+
+export type FooterElementOrderByInput = {
+  Text?: InputMaybe<RichTextOrderByInput>;
+  _metadata?: InputMaybe<IContentMetadataOrderByInput>;
+  _minimumScore?: InputMaybe<Scalars['Float']['input']>;
+  _modified?: InputMaybe<OrderBy>;
+  _ranking?: InputMaybe<Ranking>;
+  _semanticWeight?: InputMaybe<Scalars['Float']['input']>;
+};
+
+export type FooterElementOutput = {
+  __typename?: 'FooterElementOutput';
+  autocomplete?: Maybe<FooterElementAutocomplete>;
+  cursor?: Maybe<Scalars['String']['output']>;
+  facets?: Maybe<FooterElementFacet>;
+  items?: Maybe<Array<Maybe<FooterElement>>>;
+  total?: Maybe<Scalars['Int']['output']>;
+};
+
+
+export type FooterElementOutputTotalArgs = {
+  all?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type FooterElementWhereInput = {
+  Text?: InputMaybe<RichTextWhereInput>;
+  _and?: InputMaybe<Array<InputMaybe<FooterElementWhereInput>>>;
+  _fulltext?: InputMaybe<SearchableStringFilterInput>;
+  _metadata?: InputMaybe<IContentMetadataWhereInput>;
+  _modified?: InputMaybe<DateFilterInput>;
+  _not?: InputMaybe<Array<InputMaybe<FooterElementWhereInput>>>;
+  _or?: InputMaybe<Array<InputMaybe<FooterElementWhereInput>>>;
 };
 
 export type GenericMedia = IData & _IContent & _IMedia & {
@@ -645,6 +790,80 @@ export type GenericMediaWhereInput = {
   _modified?: InputMaybe<DateFilterInput>;
   _not?: InputMaybe<Array<InputMaybe<GenericMediaWhereInput>>>;
   _or?: InputMaybe<Array<InputMaybe<GenericMediaWhereInput>>>;
+};
+
+export type HeaderElement = IData & _IComponent & _IContent & _IElement & {
+  __typename?: 'HeaderElement';
+  Logo?: Maybe<RichText>;
+  Title?: Maybe<RichText>;
+  /** @deprecated Use `_link` field instead */
+  _children?: Maybe<QueryRef>;
+  _deleted?: Maybe<Scalars['Bool']['output']>;
+  _fulltext?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  _id?: Maybe<Scalars['String']['output']>;
+  _link?: Maybe<QueryRef>;
+  _metadata?: Maybe<IContentMetadata>;
+  _modified?: Maybe<Scalars['Date']['output']>;
+  _score?: Maybe<Scalars['Float']['output']>;
+};
+
+
+export type HeaderElement_FulltextArgs = {
+  highlight?: InputMaybe<HighlightOptions>;
+};
+
+
+export type HeaderElement_LinkArgs = {
+  type?: InputMaybe<LinkTypes>;
+};
+
+export type HeaderElementAutocomplete = {
+  __typename?: 'HeaderElementAutocomplete';
+  Logo?: Maybe<RichTextAutocomplete>;
+  Title?: Maybe<RichTextAutocomplete>;
+  _metadata?: Maybe<IContentMetadataAutocomplete>;
+};
+
+export type HeaderElementFacet = {
+  __typename?: 'HeaderElementFacet';
+  Logo?: Maybe<RichTextFacet>;
+  Title?: Maybe<RichTextFacet>;
+  _metadata?: Maybe<IContentMetadataFacet>;
+};
+
+export type HeaderElementOrderByInput = {
+  Logo?: InputMaybe<RichTextOrderByInput>;
+  Title?: InputMaybe<RichTextOrderByInput>;
+  _metadata?: InputMaybe<IContentMetadataOrderByInput>;
+  _minimumScore?: InputMaybe<Scalars['Float']['input']>;
+  _modified?: InputMaybe<OrderBy>;
+  _ranking?: InputMaybe<Ranking>;
+  _semanticWeight?: InputMaybe<Scalars['Float']['input']>;
+};
+
+export type HeaderElementOutput = {
+  __typename?: 'HeaderElementOutput';
+  autocomplete?: Maybe<HeaderElementAutocomplete>;
+  cursor?: Maybe<Scalars['String']['output']>;
+  facets?: Maybe<HeaderElementFacet>;
+  items?: Maybe<Array<Maybe<HeaderElement>>>;
+  total?: Maybe<Scalars['Int']['output']>;
+};
+
+
+export type HeaderElementOutputTotalArgs = {
+  all?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type HeaderElementWhereInput = {
+  Logo?: InputMaybe<RichTextWhereInput>;
+  Title?: InputMaybe<RichTextWhereInput>;
+  _and?: InputMaybe<Array<InputMaybe<HeaderElementWhereInput>>>;
+  _fulltext?: InputMaybe<SearchableStringFilterInput>;
+  _metadata?: InputMaybe<IContentMetadataWhereInput>;
+  _modified?: InputMaybe<DateFilterInput>;
+  _not?: InputMaybe<Array<InputMaybe<HeaderElementWhereInput>>>;
+  _or?: InputMaybe<Array<InputMaybe<HeaderElementWhereInput>>>;
 };
 
 /** Options for highlighting */
@@ -1229,6 +1448,70 @@ export enum OrderByFacetType {
   Value = 'VALUE'
 }
 
+export type PaginationBlock = IData & _IComponent & _IContent & {
+  __typename?: 'PaginationBlock';
+  /** @deprecated Use `_link` field instead */
+  _children?: Maybe<QueryRef>;
+  _deleted?: Maybe<Scalars['Bool']['output']>;
+  _fulltext?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  _id?: Maybe<Scalars['String']['output']>;
+  _link?: Maybe<QueryRef>;
+  _metadata?: Maybe<IContentMetadata>;
+  _modified?: Maybe<Scalars['Date']['output']>;
+  _score?: Maybe<Scalars['Float']['output']>;
+};
+
+
+export type PaginationBlock_FulltextArgs = {
+  highlight?: InputMaybe<HighlightOptions>;
+};
+
+
+export type PaginationBlock_LinkArgs = {
+  type?: InputMaybe<LinkTypes>;
+};
+
+export type PaginationBlockAutocomplete = {
+  __typename?: 'PaginationBlockAutocomplete';
+  _metadata?: Maybe<IContentMetadataAutocomplete>;
+};
+
+export type PaginationBlockFacet = {
+  __typename?: 'PaginationBlockFacet';
+  _metadata?: Maybe<IContentMetadataFacet>;
+};
+
+export type PaginationBlockOrderByInput = {
+  _metadata?: InputMaybe<IContentMetadataOrderByInput>;
+  _minimumScore?: InputMaybe<Scalars['Float']['input']>;
+  _modified?: InputMaybe<OrderBy>;
+  _ranking?: InputMaybe<Ranking>;
+  _semanticWeight?: InputMaybe<Scalars['Float']['input']>;
+};
+
+export type PaginationBlockOutput = {
+  __typename?: 'PaginationBlockOutput';
+  autocomplete?: Maybe<PaginationBlockAutocomplete>;
+  cursor?: Maybe<Scalars['String']['output']>;
+  facets?: Maybe<PaginationBlockFacet>;
+  items?: Maybe<Array<Maybe<PaginationBlock>>>;
+  total?: Maybe<Scalars['Int']['output']>;
+};
+
+
+export type PaginationBlockOutputTotalArgs = {
+  all?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type PaginationBlockWhereInput = {
+  _and?: InputMaybe<Array<InputMaybe<PaginationBlockWhereInput>>>;
+  _fulltext?: InputMaybe<SearchableStringFilterInput>;
+  _metadata?: InputMaybe<IContentMetadataWhereInput>;
+  _modified?: InputMaybe<DateFilterInput>;
+  _not?: InputMaybe<Array<InputMaybe<PaginationBlockWhereInput>>>;
+  _or?: InputMaybe<Array<InputMaybe<PaginationBlockWhereInput>>>;
+};
+
 export type ParagraphElement = IData & _IComponent & _IContent & _IElement & {
   __typename?: 'ParagraphElement';
   Text?: Maybe<RichText>;
@@ -1298,14 +1581,83 @@ export type ParagraphElementWhereInput = {
   _or?: InputMaybe<Array<InputMaybe<ParagraphElementWhereInput>>>;
 };
 
+export type ProductImage = IData & _IContent & _IImage & _IMedia & {
+  __typename?: 'ProductImage';
+  /** @deprecated Use `_link` field instead */
+  _children?: Maybe<QueryRef>;
+  _deleted?: Maybe<Scalars['Bool']['output']>;
+  _fulltext?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  _id?: Maybe<Scalars['String']['output']>;
+  _link?: Maybe<QueryRef>;
+  _metadata?: Maybe<IContentMetadata>;
+  _modified?: Maybe<Scalars['Date']['output']>;
+  _score?: Maybe<Scalars['Float']['output']>;
+};
+
+
+export type ProductImage_FulltextArgs = {
+  highlight?: InputMaybe<HighlightOptions>;
+};
+
+
+export type ProductImage_LinkArgs = {
+  type?: InputMaybe<LinkTypes>;
+};
+
+export type ProductImageAutocomplete = {
+  __typename?: 'ProductImageAutocomplete';
+  _metadata?: Maybe<IContentMetadataAutocomplete>;
+};
+
+export type ProductImageFacet = {
+  __typename?: 'ProductImageFacet';
+  _metadata?: Maybe<IContentMetadataFacet>;
+};
+
+export type ProductImageOrderByInput = {
+  _metadata?: InputMaybe<IContentMetadataOrderByInput>;
+  _minimumScore?: InputMaybe<Scalars['Float']['input']>;
+  _modified?: InputMaybe<OrderBy>;
+  _ranking?: InputMaybe<Ranking>;
+  _semanticWeight?: InputMaybe<Scalars['Float']['input']>;
+};
+
+export type ProductImageOutput = {
+  __typename?: 'ProductImageOutput';
+  autocomplete?: Maybe<ProductImageAutocomplete>;
+  cursor?: Maybe<Scalars['String']['output']>;
+  facets?: Maybe<ProductImageFacet>;
+  items?: Maybe<Array<Maybe<ProductImage>>>;
+  total?: Maybe<Scalars['Int']['output']>;
+};
+
+
+export type ProductImageOutputTotalArgs = {
+  all?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type ProductImageWhereInput = {
+  _and?: InputMaybe<Array<InputMaybe<ProductImageWhereInput>>>;
+  _fulltext?: InputMaybe<SearchableStringFilterInput>;
+  _metadata?: InputMaybe<IContentMetadataWhereInput>;
+  _modified?: InputMaybe<DateFilterInput>;
+  _not?: InputMaybe<Array<InputMaybe<ProductImageWhereInput>>>;
+  _or?: InputMaybe<Array<InputMaybe<ProductImageWhereInput>>>;
+};
+
 export type Query = {
   __typename?: 'Query';
   BlankExperience?: Maybe<BlankExperienceOutput>;
   BlankSection?: Maybe<BlankSectionOutput>;
+  BlogElement?: Maybe<BlogElementOutput>;
   Data?: Maybe<DataOutput>;
+  FooterElement?: Maybe<FooterElementOutput>;
   GenericMedia?: Maybe<GenericMediaOutput>;
+  HeaderElement?: Maybe<HeaderElementOutput>;
   ImageMedia?: Maybe<ImageMediaOutput>;
+  PaginationBlock?: Maybe<PaginationBlockOutput>;
   ParagraphElement?: Maybe<ParagraphElementOutput>;
+  ProductImage?: Maybe<ProductImageOutput>;
   SysContentFolder?: Maybe<SysContentFolderOutput>;
   VideoMedia?: Maybe<VideoMediaOutput>;
   _Component?: Maybe<_ComponentOutput>;
@@ -1343,6 +1695,17 @@ export type QueryBlankSectionArgs = {
 };
 
 
+export type QueryBlogElementArgs = {
+  cursor?: InputMaybe<Scalars['String']['input']>;
+  ids?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  limit?: Scalars['Int']['input'];
+  locale?: InputMaybe<Array<InputMaybe<Locales>>>;
+  orderBy?: InputMaybe<BlogElementOrderByInput>;
+  skip?: Scalars['Int']['input'];
+  where?: InputMaybe<BlogElementWhereInput>;
+};
+
+
 export type QueryDataArgs = {
   cursor?: InputMaybe<Scalars['String']['input']>;
   ids?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
@@ -1351,6 +1714,17 @@ export type QueryDataArgs = {
   orderBy?: InputMaybe<DataOrderByInput>;
   skip?: Scalars['Int']['input'];
   where?: InputMaybe<DataWhereInput>;
+};
+
+
+export type QueryFooterElementArgs = {
+  cursor?: InputMaybe<Scalars['String']['input']>;
+  ids?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  limit?: Scalars['Int']['input'];
+  locale?: InputMaybe<Array<InputMaybe<Locales>>>;
+  orderBy?: InputMaybe<FooterElementOrderByInput>;
+  skip?: Scalars['Int']['input'];
+  where?: InputMaybe<FooterElementWhereInput>;
 };
 
 
@@ -1365,6 +1739,17 @@ export type QueryGenericMediaArgs = {
 };
 
 
+export type QueryHeaderElementArgs = {
+  cursor?: InputMaybe<Scalars['String']['input']>;
+  ids?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  limit?: Scalars['Int']['input'];
+  locale?: InputMaybe<Array<InputMaybe<Locales>>>;
+  orderBy?: InputMaybe<HeaderElementOrderByInput>;
+  skip?: Scalars['Int']['input'];
+  where?: InputMaybe<HeaderElementWhereInput>;
+};
+
+
 export type QueryImageMediaArgs = {
   cursor?: InputMaybe<Scalars['String']['input']>;
   ids?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
@@ -1376,6 +1761,17 @@ export type QueryImageMediaArgs = {
 };
 
 
+export type QueryPaginationBlockArgs = {
+  cursor?: InputMaybe<Scalars['String']['input']>;
+  ids?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  limit?: Scalars['Int']['input'];
+  locale?: InputMaybe<Array<InputMaybe<Locales>>>;
+  orderBy?: InputMaybe<PaginationBlockOrderByInput>;
+  skip?: Scalars['Int']['input'];
+  where?: InputMaybe<PaginationBlockWhereInput>;
+};
+
+
 export type QueryParagraphElementArgs = {
   cursor?: InputMaybe<Scalars['String']['input']>;
   ids?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
@@ -1384,6 +1780,17 @@ export type QueryParagraphElementArgs = {
   orderBy?: InputMaybe<ParagraphElementOrderByInput>;
   skip?: Scalars['Int']['input'];
   where?: InputMaybe<ParagraphElementWhereInput>;
+};
+
+
+export type QueryProductImageArgs = {
+  cursor?: InputMaybe<Scalars['String']['input']>;
+  ids?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  limit?: Scalars['Int']['input'];
+  locale?: InputMaybe<Array<InputMaybe<Locales>>>;
+  orderBy?: InputMaybe<ProductImageOrderByInput>;
+  skip?: Scalars['Int']['input'];
+  where?: InputMaybe<ProductImageWhereInput>;
 };
 
 
@@ -1522,10 +1929,15 @@ export type QueryRef = {
   __typename?: 'QueryRef';
   BlankExperience?: Maybe<BlankExperienceOutput>;
   BlankSection?: Maybe<BlankSectionOutput>;
+  BlogElement?: Maybe<BlogElementOutput>;
   Data?: Maybe<DataOutput>;
+  FooterElement?: Maybe<FooterElementOutput>;
   GenericMedia?: Maybe<GenericMediaOutput>;
+  HeaderElement?: Maybe<HeaderElementOutput>;
   ImageMedia?: Maybe<ImageMediaOutput>;
+  PaginationBlock?: Maybe<PaginationBlockOutput>;
   ParagraphElement?: Maybe<ParagraphElementOutput>;
+  ProductImage?: Maybe<ProductImageOutput>;
   SysContentFolder?: Maybe<SysContentFolderOutput>;
   VideoMedia?: Maybe<VideoMediaOutput>;
   _Component?: Maybe<_ComponentOutput>;
@@ -1563,6 +1975,17 @@ export type QueryRefBlankSectionArgs = {
 };
 
 
+export type QueryRefBlogElementArgs = {
+  cursor?: InputMaybe<Scalars['String']['input']>;
+  ids?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  limit?: Scalars['Int']['input'];
+  locale?: InputMaybe<Array<InputMaybe<Locales>>>;
+  orderBy?: InputMaybe<BlogElementOrderByInput>;
+  skip?: Scalars['Int']['input'];
+  where?: InputMaybe<BlogElementWhereInput>;
+};
+
+
 export type QueryRefDataArgs = {
   cursor?: InputMaybe<Scalars['String']['input']>;
   ids?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
@@ -1571,6 +1994,17 @@ export type QueryRefDataArgs = {
   orderBy?: InputMaybe<DataOrderByInput>;
   skip?: Scalars['Int']['input'];
   where?: InputMaybe<DataWhereInput>;
+};
+
+
+export type QueryRefFooterElementArgs = {
+  cursor?: InputMaybe<Scalars['String']['input']>;
+  ids?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  limit?: Scalars['Int']['input'];
+  locale?: InputMaybe<Array<InputMaybe<Locales>>>;
+  orderBy?: InputMaybe<FooterElementOrderByInput>;
+  skip?: Scalars['Int']['input'];
+  where?: InputMaybe<FooterElementWhereInput>;
 };
 
 
@@ -1585,6 +2019,17 @@ export type QueryRefGenericMediaArgs = {
 };
 
 
+export type QueryRefHeaderElementArgs = {
+  cursor?: InputMaybe<Scalars['String']['input']>;
+  ids?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  limit?: Scalars['Int']['input'];
+  locale?: InputMaybe<Array<InputMaybe<Locales>>>;
+  orderBy?: InputMaybe<HeaderElementOrderByInput>;
+  skip?: Scalars['Int']['input'];
+  where?: InputMaybe<HeaderElementWhereInput>;
+};
+
+
 export type QueryRefImageMediaArgs = {
   cursor?: InputMaybe<Scalars['String']['input']>;
   ids?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
@@ -1596,6 +2041,17 @@ export type QueryRefImageMediaArgs = {
 };
 
 
+export type QueryRefPaginationBlockArgs = {
+  cursor?: InputMaybe<Scalars['String']['input']>;
+  ids?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  limit?: Scalars['Int']['input'];
+  locale?: InputMaybe<Array<InputMaybe<Locales>>>;
+  orderBy?: InputMaybe<PaginationBlockOrderByInput>;
+  skip?: Scalars['Int']['input'];
+  where?: InputMaybe<PaginationBlockWhereInput>;
+};
+
+
 export type QueryRefParagraphElementArgs = {
   cursor?: InputMaybe<Scalars['String']['input']>;
   ids?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
@@ -1604,6 +2060,17 @@ export type QueryRefParagraphElementArgs = {
   orderBy?: InputMaybe<ParagraphElementOrderByInput>;
   skip?: Scalars['Int']['input'];
   where?: InputMaybe<ParagraphElementWhereInput>;
+};
+
+
+export type QueryRefProductImageArgs = {
+  cursor?: InputMaybe<Scalars['String']['input']>;
+  ids?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  limit?: Scalars['Int']['input'];
+  locale?: InputMaybe<Array<InputMaybe<Locales>>>;
+  orderBy?: InputMaybe<ProductImageOrderByInput>;
+  skip?: Scalars['Int']['input'];
+  where?: InputMaybe<ProductImageWhereInput>;
 };
 
 
@@ -2854,9 +3321,18 @@ export enum System_Locales {
 }
 
 export type CompositionElementNodeFragment = { __typename?: 'CompositionElementNode', key?: string | null, element?: (
-    { __typename?: 'ParagraphElement', _metadata?: { __typename?: 'ContentMetadata', types?: Array<string | null> | null } | { __typename?: 'InstanceMetadata', types?: Array<string | null> | null } | { __typename?: 'ItemMetadata', types?: Array<string | null> | null } | { __typename?: 'MediaMetadata', types?: Array<string | null> | null } | null }
+    { __typename?: 'BlogElement' }
+    & { ' $fragmentRefs'?: { 'BlogElementFragment': BlogElementFragment } }
+  ) | (
+    { __typename?: 'FooterElement' }
+    & { ' $fragmentRefs'?: { 'FooterElementFragment': FooterElementFragment } }
+  ) | (
+    { __typename?: 'HeaderElement' }
+    & { ' $fragmentRefs'?: { 'HeaderElementFragment': HeaderElementFragment } }
+  ) | (
+    { __typename?: 'ParagraphElement' }
     & { ' $fragmentRefs'?: { 'ParagraphElementFragment': ParagraphElementFragment } }
-  ) | { __typename?: '_Element', _metadata?: { __typename?: 'ContentMetadata', types?: Array<string | null> | null } | { __typename?: 'InstanceMetadata', types?: Array<string | null> | null } | { __typename?: 'ItemMetadata', types?: Array<string | null> | null } | { __typename?: 'MediaMetadata', types?: Array<string | null> | null } | null } | null } & { ' $fragmentName'?: 'CompositionElementNodeFragment' };
+  ) | { __typename?: '_Element' } | null } & { ' $fragmentName'?: 'CompositionElementNodeFragment' };
 
 export type VisualBuilderQueryVariables = Exact<{
   key?: InputMaybe<Scalars['String']['input']>;
@@ -2872,8 +3348,17 @@ export type VisualBuilderQuery = { __typename?: 'Query', _Experience?: { __typen
                 & { ' $fragmentRefs'?: { 'CompositionElementNodeFragment': CompositionElementNodeFragment } }
               ) | { __typename?: 'CompositionNode' } | { __typename?: 'CompositionStructureNode' } | null> | null } | null> | null } | null> | null } | null> | null } | null, _metadata?: { __typename?: 'ContentMetadata', key?: string | null, version?: string | null } | { __typename?: 'InstanceMetadata', key?: string | null, version?: string | null } | { __typename?: 'ItemMetadata', key?: string | null, version?: string | null } | { __typename?: 'MediaMetadata', key?: string | null, version?: string | null } | null } | null> | null } | null };
 
+export type BlogElementFragment = { __typename?: 'BlogElement', Author?: string | null, Title?: string | null, Image?: { __typename?: 'ContentUrl', default?: string | null } | null, Text?: { __typename?: 'RichText', html?: string | null } | null } & { ' $fragmentName'?: 'BlogElementFragment' };
+
+export type FooterElementFragment = { __typename?: 'FooterElement', Text?: { __typename?: 'RichText', html?: string | null } | null } & { ' $fragmentName'?: 'FooterElementFragment' };
+
+export type HeaderElementFragment = { __typename?: 'HeaderElement', Logo?: { __typename?: 'RichText', html?: string | null } | null } & { ' $fragmentName'?: 'HeaderElementFragment' };
+
 export type ParagraphElementFragment = { __typename?: 'ParagraphElement', Text?: { __typename?: 'RichText', html?: string | null } | null } & { ' $fragmentName'?: 'ParagraphElementFragment' };
 
+export const BlogElementFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"blogElement"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"BlogElement"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Author"}},{"kind":"Field","name":{"kind":"Name","value":"Image"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"default"}}]}},{"kind":"Field","name":{"kind":"Name","value":"Text"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"html"}}]}},{"kind":"Field","name":{"kind":"Name","value":"Title"}}]}}]} as unknown as DocumentNode<BlogElementFragment, unknown>;
 export const ParagraphElementFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"paragraphElement"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ParagraphElement"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Text"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"html"}}]}}]}}]} as unknown as DocumentNode<ParagraphElementFragment, unknown>;
-export const CompositionElementNodeFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"compositionElementNode"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CompositionElementNode"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"element"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"_metadata"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"types"}}]}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"paragraphElement"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"paragraphElement"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ParagraphElement"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Text"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"html"}}]}}]}}]} as unknown as DocumentNode<CompositionElementNodeFragment, unknown>;
-export const VisualBuilderDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"VisualBuilder"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"key"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"version"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"_Experience"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_metadata"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"key"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"key"}}}]}}]}},{"kind":"ObjectField","name":{"kind":"Name","value":"_or"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_metadata"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"version"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"version"}}}]}}]}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"composition"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"grids"},"name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CompositionStructureNode"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","alias":{"kind":"Name","value":"rows"},"name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CompositionStructureNode"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","alias":{"kind":"Name","value":"columns"},"name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CompositionStructureNode"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","alias":{"kind":"Name","value":"elements"},"name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"compositionElementNode"}}]}}]}}]}}]}}]}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"_metadata"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"version"}}]}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"paragraphElement"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ParagraphElement"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Text"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"html"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"compositionElementNode"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CompositionElementNode"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"element"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"_metadata"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"types"}}]}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"paragraphElement"}}]}}]}}]} as unknown as DocumentNode<VisualBuilderQuery, VisualBuilderQueryVariables>;
+export const HeaderElementFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"headerElement"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"HeaderElement"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Logo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"html"}}]}}]}}]} as unknown as DocumentNode<HeaderElementFragment, unknown>;
+export const FooterElementFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"footerElement"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"FooterElement"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Text"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"html"}}]}}]}}]} as unknown as DocumentNode<FooterElementFragment, unknown>;
+export const CompositionElementNodeFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"compositionElementNode"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CompositionElementNode"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"element"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"blogElement"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"paragraphElement"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"headerElement"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"footerElement"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"blogElement"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"BlogElement"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Author"}},{"kind":"Field","name":{"kind":"Name","value":"Image"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"default"}}]}},{"kind":"Field","name":{"kind":"Name","value":"Text"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"html"}}]}},{"kind":"Field","name":{"kind":"Name","value":"Title"}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"paragraphElement"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ParagraphElement"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Text"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"html"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"headerElement"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"HeaderElement"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Logo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"html"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"footerElement"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"FooterElement"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Text"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"html"}}]}}]}}]} as unknown as DocumentNode<CompositionElementNodeFragment, unknown>;
+export const VisualBuilderDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"VisualBuilder"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"key"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"version"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"_Experience"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_metadata"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"key"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"key"}}}]}}]}},{"kind":"ObjectField","name":{"kind":"Name","value":"_or"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_metadata"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"version"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"version"}}}]}}]}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"composition"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"grids"},"name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CompositionStructureNode"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","alias":{"kind":"Name","value":"rows"},"name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CompositionStructureNode"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","alias":{"kind":"Name","value":"columns"},"name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CompositionStructureNode"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","alias":{"kind":"Name","value":"elements"},"name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"compositionElementNode"}}]}}]}}]}}]}}]}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"_metadata"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"version"}}]}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"blogElement"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"BlogElement"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Author"}},{"kind":"Field","name":{"kind":"Name","value":"Image"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"default"}}]}},{"kind":"Field","name":{"kind":"Name","value":"Text"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"html"}}]}},{"kind":"Field","name":{"kind":"Name","value":"Title"}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"paragraphElement"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ParagraphElement"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Text"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"html"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"headerElement"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"HeaderElement"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Logo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"html"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"footerElement"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"FooterElement"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Text"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"html"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"compositionElementNode"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CompositionElementNode"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"element"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"blogElement"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"paragraphElement"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"headerElement"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"footerElement"}}]}}]}}]} as unknown as DocumentNode<VisualBuilderQuery, VisualBuilderQueryVariables>;

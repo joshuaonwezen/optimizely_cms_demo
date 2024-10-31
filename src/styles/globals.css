@@ -4,26 +4,45 @@
 
 :root {
   --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+    --foreground-rgb: 214, 228, 255; /* Light blue for dark mode text */
   }
 }
 
-body {
+html {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+    45deg,
+    #10141e, /* Default color at start */
+    #0d1a46, /* Darker shade of blue */
+    #1f2a65, /* Darker variant of #0232de */
+    #4a188d, /* Original dark purple */
+    #3a0e7d, /* Darker variant of #4a188d */
+    #6323fb, /* Original vibrant purple */
+    #5c2cfa, /* Darker variant of #6323fb */
+    #10141e /* Default color at end */
+  );
+  background-size: 300% 300%;
+  animation: gradientShift 20s ease-in-out infinite; /* Increased duration for subtle effect */
+}
+
+body {
+  margin: 0; /* Remove default margin */
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 50% 50%; /* Slightly adjust position for subtlety */
+  }
+  100% {
+    background-position: 100% 50%;
+  }
 }
 
 @layer utilities {

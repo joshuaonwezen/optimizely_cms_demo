@@ -13,8 +13,11 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
-    "\n    fragment compositionElementNode on CompositionElementNode {\n        key\n        element {\n            _metadata {\n                types\n            }\n            ...paragraphElement\n        }\n    }\n": types.CompositionElementNodeFragmentDoc,
+    "\n    fragment compositionElementNode on CompositionElementNode {\n    key\n    element {\n        ...blogElement\n        ...paragraphElement\n        ...headerElement\n        ...footerElement\n    }\n    }\n": types.CompositionElementNodeFragmentDoc,
     "\nquery VisualBuilder($key: String, $version: String) {\n  _Experience(where: {\n      _metadata: { key: { eq: $key } }\n      _or: { _metadata: { version: { eq: $version } } }\n    }) {\n    items {      \n      composition {\n            grids: nodes {\n              ... on CompositionStructureNode {\n                key\n                rows: nodes {\n                  ... on CompositionStructureNode {\n                    key\n                    columns: nodes {\n                      ... on CompositionStructureNode {\n                        key\n                        elements: nodes {\n                          ...compositionElementNode\n                        }\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n      _metadata {\n        key\n        version,        \n      }\n    }\n  }\n}\n": types.VisualBuilderDocument,
+    "\n  fragment blogElement on BlogElement {\n    Author\n    Image {\n      default\n    }\n    Text {\n      html\n    }\n    Title\n  }\n": types.BlogElementFragmentDoc,
+    "\n    fragment footerElement on FooterElement {\n        Text {\n            html\n        }\n    }\n": types.FooterElementFragmentDoc,
+    "\n  fragment headerElement on HeaderElement {\n    Logo {\n      html\n    }\n  }\n": types.HeaderElementFragmentDoc,
     "\n    fragment paragraphElement on ParagraphElement {\n        Text {\n            html\n        }\n    }\n": types.ParagraphElementFragmentDoc,
 };
 
@@ -35,11 +38,23 @@ export function graphql(source: string): unknown;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n    fragment compositionElementNode on CompositionElementNode {\n        key\n        element {\n            _metadata {\n                types\n            }\n            ...paragraphElement\n        }\n    }\n"): (typeof documents)["\n    fragment compositionElementNode on CompositionElementNode {\n        key\n        element {\n            _metadata {\n                types\n            }\n            ...paragraphElement\n        }\n    }\n"];
+export function graphql(source: "\n    fragment compositionElementNode on CompositionElementNode {\n    key\n    element {\n        ...blogElement\n        ...paragraphElement\n        ...headerElement\n        ...footerElement\n    }\n    }\n"): (typeof documents)["\n    fragment compositionElementNode on CompositionElementNode {\n    key\n    element {\n        ...blogElement\n        ...paragraphElement\n        ...headerElement\n        ...footerElement\n    }\n    }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\nquery VisualBuilder($key: String, $version: String) {\n  _Experience(where: {\n      _metadata: { key: { eq: $key } }\n      _or: { _metadata: { version: { eq: $version } } }\n    }) {\n    items {      \n      composition {\n            grids: nodes {\n              ... on CompositionStructureNode {\n                key\n                rows: nodes {\n                  ... on CompositionStructureNode {\n                    key\n                    columns: nodes {\n                      ... on CompositionStructureNode {\n                        key\n                        elements: nodes {\n                          ...compositionElementNode\n                        }\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n      _metadata {\n        key\n        version,        \n      }\n    }\n  }\n}\n"): (typeof documents)["\nquery VisualBuilder($key: String, $version: String) {\n  _Experience(where: {\n      _metadata: { key: { eq: $key } }\n      _or: { _metadata: { version: { eq: $version } } }\n    }) {\n    items {      \n      composition {\n            grids: nodes {\n              ... on CompositionStructureNode {\n                key\n                rows: nodes {\n                  ... on CompositionStructureNode {\n                    key\n                    columns: nodes {\n                      ... on CompositionStructureNode {\n                        key\n                        elements: nodes {\n                          ...compositionElementNode\n                        }\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n      _metadata {\n        key\n        version,        \n      }\n    }\n  }\n}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  fragment blogElement on BlogElement {\n    Author\n    Image {\n      default\n    }\n    Text {\n      html\n    }\n    Title\n  }\n"): (typeof documents)["\n  fragment blogElement on BlogElement {\n    Author\n    Image {\n      default\n    }\n    Text {\n      html\n    }\n    Title\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n    fragment footerElement on FooterElement {\n        Text {\n            html\n        }\n    }\n"): (typeof documents)["\n    fragment footerElement on FooterElement {\n        Text {\n            html\n        }\n    }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  fragment headerElement on HeaderElement {\n    Logo {\n      html\n    }\n  }\n"): (typeof documents)["\n  fragment headerElement on HeaderElement {\n    Logo {\n      html\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
