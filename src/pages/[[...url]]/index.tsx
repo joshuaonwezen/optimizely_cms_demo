@@ -17,7 +17,7 @@ export default function Home() {
             if (contentIdArray.length > 1) {
                 version = contentIdArray[contentIdArray.length - 1]
             }
-        } else if (locationUrl.indexOf("/preview?key")) {
+        } else if (locationUrl.indexOf("/preview?key") !== -1) {
             const url = new URL(locationUrl);
             try {
                 const urlKey = url.searchParams.get("key");
@@ -36,6 +36,10 @@ export default function Home() {
             } catch {
                 version = undefined;   
             }
+        } else {
+            const pathArray = window?.location?.pathname?.split('/')
+            const contentId = pathArray[pathArray.length - 1]
+            key = "/" + contentId;
         }
     }
     
