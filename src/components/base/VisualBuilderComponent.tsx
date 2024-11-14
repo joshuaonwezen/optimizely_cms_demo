@@ -16,6 +16,10 @@ query VisualBuilder($key: String, $version: String) {
             grids: nodes {
               ... on CompositionStructureNode {
                 key
+                displaySettings {
+                  key
+                  value
+                }
                 rows: nodes {
                   ... on CompositionStructureNode {
                     key
@@ -56,10 +60,12 @@ const VisualBuilderComponent: FC<VisualBuilderProps> = ({ version, contentKey })
         variables.key = contentKey;
     }
 
-    const { data, refetch } = useQuery(VisualBuilder, { 
+    const { data, refetch, error } = useQuery(VisualBuilder, { 
       variables: variables,
       notifyOnNetworkStatusChange: true, });
-
+    if (error) {
+      console.error("GraphQL Error:", error.message);
+    }
     useEffect(() => {
         onContentSaved(_ => {
           const contentIdArray = _.contentLink.split('_')
@@ -85,8 +91,15 @@ const VisualBuilderComponent: FC<VisualBuilderProps> = ({ version, contentKey })
     return (
         <div className="relative w-full flex-1 vb:outline">
             <div className="relative w-full flex-1 vb:outline">
-                {experience?.composition?.grids?.map((grid: any) =>
-                    <div key={grid.key} className="relative w-full flex flex-col flex-nowrap justify-start vb:grid"
+                {experience?.composition?.grids?.map((grid: any) => {
+                  const displaySetting = grid.displaySettings?.find(
+                    (setting: any) => setting.key === "defaultBlogStyles"
+                  );
+                
+                  // Determine the class based on the display setting's value
+                  const flexDirection = displaySetting?.value === "Row" ? "flex-row" : "flex-col";
+                  return (
+                    <div key={grid.key} className={`relative w-full flex ${flexDirection} flex-colflex-nowrap justify-start vb:grid`}
                          data-epi-block-id={grid.key}>
                         {grid.rows?.map((row: any) =>
                             <div key={row.key} className="flex-1 flex flex-row flex-nowrap justify-start vb:row">
@@ -101,7 +114,8 @@ const VisualBuilderComponent: FC<VisualBuilderProps> = ({ version, contentKey })
                                 ))}
                             </div>)}
                     </div>
-                )}
+                  )
+                })}
             </div>
         </div>
     )
