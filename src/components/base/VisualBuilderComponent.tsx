@@ -6,11 +6,14 @@ import CompositionNodeComponent from "./CompositionNodeComponent";
 import { onContentSaved } from "@/helpers/onContentSaved";
 
 export const VisualBuilder = graphql(/* GraphQL */ `
-  query VisualBuilder($key: String, $version: String) {
+  query VisualBuilder($url: String, $key: String, $version: String) {
     _Experience(
       where: {
-        _metadata: { url: { default: { eq: $key } } }
-        _or: [{ _metadata: { version: { eq: $version } } }]
+      _or: [
+        { _metadata: { url: { default: { eq: $url } } } }
+        { _metadata: { version: { eq: $version } } }
+        { _metadata: { key: { eq: $key } } }
+      ]
       }
     ) {
       items {
@@ -50,11 +53,13 @@ export const VisualBuilder = graphql(/* GraphQL */ `
 interface VisualBuilderProps {
   contentKey?: string;
   version?: string;
+  url?: string;
 }
 
 const VisualBuilderComponent: FC<VisualBuilderProps> = ({
   version,
   contentKey,
+  url,
 }) => {
   const variables: Record<string, unknown> = {};
   if (version) {
@@ -65,6 +70,11 @@ const VisualBuilderComponent: FC<VisualBuilderProps> = ({
     variables.key = contentKey;
   }
 
+  if (url) {
+    variables.url = url;
+  }
+
+  console.log(variables)
   const { data, refetch, error } = useQuery(VisualBuilder, {
     variables: variables,
     notifyOnNetworkStatusChange: true,

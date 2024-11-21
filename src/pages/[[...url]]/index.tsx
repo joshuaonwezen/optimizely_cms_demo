@@ -6,6 +6,7 @@ const inter = Inter({ subsets: ["latin"] });
 export default function Home() {
     let version: string | undefined;
     let key: string | undefined;
+    let url: string | undefined;
 
     if (typeof window !== "undefined" && window.location !== undefined) {
         let locationUrl = window.location.toString();
@@ -39,14 +40,16 @@ export default function Home() {
         } else {
             const pathArray = window?.location?.pathname?.split('/')
             const contentId = pathArray[pathArray.length - 1]
-            key = "/" + contentId;
+            url = "/" + contentId;
         }
     }
     
     return (
         <main className={`flex min-h-screen flex-col items-center px-12 justify-between ${inter.className}`}>
-            <VisualBuilderComponent version={version} contentKey={key}/>
+            <VisualBuilderComponent version={version} contentKey={key} url={url}/>
         </main>
         // </>
     );
 }
+
+
