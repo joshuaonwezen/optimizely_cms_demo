@@ -9,11 +9,20 @@ export const VisualBuilder = graphql(/* GraphQL */ `
   query VisualBuilder($url: String, $key: String, $version: String) {
     _Experience(
       where: {
-      _or: [
-        { _metadata: { url: { default: { eq: $url } } } }
-        { _metadata: { version: { eq: $version } } }
-        { _metadata: { key: { eq: $key } } }
-      ]
+        _or: [
+          {
+            _and: [
+              { _metadata: { url: { default: { eq: $url } } } },
+              { _metadata: { version: { eq: $version } } }
+            ]
+          },
+          {
+            _and: [
+              { _metadata: { key: { eq: $key } } },
+              { _metadata: { version: { eq: $version } } }
+            ]
+          }
+        ]
       }
     ) {
       items {
