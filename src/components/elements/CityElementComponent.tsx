@@ -24,7 +24,7 @@ const CityElementComponent = (props: {
         <article className="max-w-3xl mx-2 my-8 p-8 bg-[#1a1736] rounded-lg shadow-lg border border-[#3a2c98] text-[#e4e2f5]">
             <h1 className="text-3xl font-bold mb-3">{cityElement.Title}</h1>
             
-            {cityElement.Image?.default && (
+            {cityElement.Image?.url?.default && (
                 <div className="w-full mb-6">
                     <img
                         src={cityElement.Image.url.default}

@@ -23,10 +23,10 @@ const CompositionComponentNodeComponent = (props: {
 }) => {
     const compositionComponentNode = useFragment(CompositionComponentNodeFragment, props.compositionComponentNode)
     const component = compositionComponentNode.component
-    switch (element?.__typename) {
+    switch (component?.__typename) {
         // case "ParagraphElement":
         //     return <ParagraphElementComponent paragraphElement={component}/>
-        case "CityElement":
+        case "CityBlock":
             return <CityElementComponent cityElement={component}/>
         // case "HeaderElement":
         //     return <HeaderElementComponent headerElement={element}/>
