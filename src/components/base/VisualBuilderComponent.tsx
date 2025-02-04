@@ -13,7 +13,6 @@ export const VisualBuilder = graphql(/* GraphQL */ `
           {
             _and: [
               { _metadata: { url: { default: { eq: $url } } } },
-              { _metadata: { version: { eq: $version } } }
             ]
           },
           {
