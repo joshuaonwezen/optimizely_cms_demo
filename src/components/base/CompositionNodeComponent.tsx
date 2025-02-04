@@ -1,29 +1,33 @@
 import { FragmentType, useFragment } from '../../graphql/fragment-masking'
 import { graphql } from '@/graphql'
-import ParagraphElementComponent from '../elements/ParagraphElementComponent'
-import BlogElementComponent from '../elements/BlogElementComponent'
-import FooterElementComponent from '../elements/FooterElementComponent'
-import HeaderElementComponent from '../elements/HeaderElementComponent'
+// import ParagraphElementComponent from '../elements/ParagraphElementComponent'
+import CityElementComponent from '../elements/CityElementComponent'
+// import FooterElementComponent from '../elements/FooterElementComponent'
+// import HeaderElementComponent from '../elements/HeaderElementComponent'
 
-export const CompositionElementNodeFragment = graphql(/* GraphQL */ `
-    fragment compositionElementNode on CompositionElementNode {
+
+export const CompositionComponentNodeFragment = graphql(/* GraphQL */ `
+    fragment compositionComponentNode on CompositionComponentNode {
         key
-        block {
-            ...cityBlock
+        component {
+            _metadata {
+                types
+            }
+            ...cityElement
         }
     }
 `)
 
-const CompositionElementNodeComponent = (props: {
-    compositionElementNode: FragmentType<typeof CompositionElementNodeFragment>
+const CompositionComponentNodeComponent = (props: {
+    compositionComponentNode: FragmentType<typeof CompositionComponentNodeFragment>
 }) => {
-    const compositionElementNode = useFragment(CompositionElementNodeFragment, props.compositionElementNode)
-    const block = compositionElementNode.block
+    const compositionComponentNode = useFragment(CompositionComponentNodeFragment, props.compositionComponentNode)
+    const component = compositionComponentNode.component
     switch (element?.__typename) {
         // case "ParagraphElement":
-        //     return <ParagraphElementComponent paragraphElement={element}/>
-        case "CityBlock":
-            return <CityBlock cityBlock={block}/>
+        //     return <ParagraphElementComponent paragraphElement={component}/>
+        case "CityElement":
+            return <CityElementComponent cityElement={component}/>
         // case "HeaderElement":
         //     return <HeaderElementComponent headerElement={element}/>
         // case "FooterElement":
@@ -33,4 +37,4 @@ const CompositionElementNodeComponent = (props: {
     }
 }
 
-export default CompositionElementNodeComponent
+export default CompositionComponentNodeComponent

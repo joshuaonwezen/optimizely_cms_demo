@@ -40,7 +40,7 @@ export const VisualBuilder = graphql(/* GraphQL */ `
                     ... on CompositionStructureNode {
                       key
                       elements: nodes {
-                        ...compositionElementNode
+                        ...compositionComponentNode
                       }
                     }
                   }
@@ -156,7 +156,7 @@ const VisualBuilderComponent: FC<VisualBuilderProps> = ({
                           key={element?.key}
                         >
                           <CompositionNodeComponent
-                            compositionElementNode={element}
+                            compositionComponentNode={element}
                           />
                         </div>
                       ))}
