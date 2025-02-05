@@ -116,8 +116,6 @@ const VisualBuilderComponent: FC<VisualBuilderProps> = ({
     // Check if variables.key is defined
     const isPreview = variables.key !== undefined;
 
-    console.log(variables?.version, variables?.key, variables?.url);
-    console.log(isPreview)
     // Select the correct query based on preview mode
     const { data, refetch, error } = useQuery(
       isPreview ? PreviewBuilder : VisualBuilder,
@@ -147,6 +145,7 @@ const VisualBuilderComponent: FC<VisualBuilderProps> = ({
                 version = contentIdArray[contentIdArray.length - 1];
                 variables.version = version;
             }
+            console.log(variables, isPreview)
             refetch(variables);
         });
     }, []);
