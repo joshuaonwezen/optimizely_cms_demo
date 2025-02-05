@@ -6,56 +6,87 @@ import CompositionNodeComponent from "./CompositionNodeComponent";
 import { onContentSaved } from "@/helpers/onContentSaved";
 
 export const VisualBuilder = graphql(/* GraphQL */ `
-    query VisualBuilder($url: String, $key: String, $version: String) {
-        _Experience(
-            where: {
-                _or: [
-                    {
-                        _and: [
-                            { _metadata: { url: { default: { eq: $url } } } }
-                        ]
+  query VisualBuilder($url: String) {
+    _Experience(
+      where: { _metadata: { url: { default: { eq: $url } } } }
+    ) {
+      items {
+        composition {
+          grids: nodes {
+            ... on CompositionStructureNode {
+              key
+              displaySettings {
+                key
+                value
+              }
+              rows: nodes {
+                ... on CompositionStructureNode {
+                  key
+                  columns: nodes {
+                    ... on CompositionStructureNode {
+                      key
+                      elements: nodes {
+                        ...compositionComponentNode
+                      }
                     }
-                    {
-                        _and: [
-                            { _metadata: { key: { eq: $key } } }
-                            { _metadata: { version: { eq: $version } } }
-                        ]
-                    }
-                ]
-            }
-        ) {
-            items {
-                composition {
-                    grids: nodes {
-                        ... on CompositionStructureNode {
-                            key
-                            displaySettings {
-                                key
-                                value
-                            }
-                            rows: nodes {
-                                ... on CompositionStructureNode {
-                                    key
-                                    columns: nodes {
-                                        ... on CompositionStructureNode {
-                                            key
-                                            elements: nodes {
-                                                ...compositionComponentNode
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+                  }
                 }
-                _metadata {
-                    key
-                    version
-                }
+              }
             }
+          }
         }
+        _metadata {
+          key
+          version
+        }
+      }
     }
+  }
+`);
+
+
+export const PreviewBuilder = graphql(/* GraphQL */ `
+  query PreviewBuilder($url: String, $key: String, $version: String) {
+    _Experience(
+      where: {
+        _and: [
+          { _metadata: { key: { eq: $key } } },
+          { _metadata: { version: { eq: $version } } }
+        ]
+      }
+    ) {
+      items {
+        composition {
+          grids: nodes {
+            ... on CompositionStructureNode {
+              key
+              displaySettings {
+                key
+                value
+              }
+              rows: nodes {
+                ... on CompositionStructureNode {
+                  key
+                  columns: nodes {
+                    ... on CompositionStructureNode {
+                      key
+                      elements: nodes {
+                        ...compositionComponentNode
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+        _metadata {
+          key
+          version
+        }
+      }
+    }
+  }
 `);
 
 interface VisualBuilderProps {
@@ -82,7 +113,7 @@ const VisualBuilderComponent: FC<VisualBuilderProps> = ({
         variables.url = url;
     }
 
-    console.log(variables);
+    console.log(variables?.version, variables?.key, variables?.url);
     const { data, refetch, error } = useQuery(VisualBuilder, {
         variables: variables,
         notifyOnNetworkStatusChange: true,
@@ -117,12 +148,7 @@ const VisualBuilderComponent: FC<VisualBuilderProps> = ({
         return null;
     }
 
-    const experience = experiences.find(
-        (exp) =>
-            exp?._metadata.key === contentKey &&
-            exp?._metadata.version === version
-    );
-    console.log(experiences, experience)
+    const experience: any = experiences[experiences.length - 1];
 
     if (!experience) {
         return null;

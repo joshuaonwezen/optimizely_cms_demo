@@ -38,9 +38,8 @@ export default function Home() {
                 version = undefined;   
             }
         } else {
-            const pathArray = window?.location?.pathname?.split('/')
-            const contentId = pathArray[pathArray.length - 1]
-            url = "/" + contentId;
+            const contentId = window?.location?.pathname || "";
+            url = contentId.endsWith("/") ? contentId : contentId + "/";
         }
     }
     
