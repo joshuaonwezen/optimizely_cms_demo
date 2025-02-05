@@ -45,8 +45,8 @@ export const VisualBuilder = graphql(/* GraphQL */ `
 `);
 
 
-export const PreviewBuilder = graphql(/* GraphQL */ `
-  query PreviewBuilder($url: String, $key: String, $version: String) {
+export const PreviewBuilder = graphql(/* GraphQL */ ` 
+  query PreviewBuilder($key: String, $version: String) {
     _Experience(
       where: {
         _and: [
@@ -113,11 +113,19 @@ const VisualBuilderComponent: FC<VisualBuilderProps> = ({
         variables.url = url;
     }
 
+    // Check if variables.key is defined
+    const isPreview = variables.key !== undefined;
+
     console.log(variables?.version, variables?.key, variables?.url);
-    const { data, refetch, error } = useQuery(VisualBuilder, {
+    console.log(isPreview)
+    // Select the correct query based on preview mode
+    const { data, refetch, error } = useQuery(
+      isPreview ? PreviewBuilder : VisualBuilder,
+      {
         variables: variables,
         notifyOnNetworkStatusChange: true,
-    });
+      }
+    );
     if (error) {
         console.error("GraphQL Error:", error.message);
     }
@@ -154,6 +162,8 @@ const VisualBuilderComponent: FC<VisualBuilderProps> = ({
         return null;
     }
 
+    console.log(experience)
+    
     return (
         <div className="relative w-full flex-1 vb:outline">
             <div className="relative w-full flex-1 vb:outline">
