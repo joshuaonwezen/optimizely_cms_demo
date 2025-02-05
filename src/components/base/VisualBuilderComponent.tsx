@@ -4,6 +4,7 @@ import { useQuery } from "@apollo/client";
 import { graphql } from "@/graphql";
 import CompositionNodeComponent from "./CompositionNodeComponent";
 import { onContentSaved } from "@/helpers/onContentSaved";
+import HeaderElementComponent from "../elements/HeaderElementComponent";
 
 export const VisualBuilder = graphql(/* GraphQL */ `
   query VisualBuilder($url: String) {
@@ -166,6 +167,7 @@ const VisualBuilderComponent: FC<VisualBuilderProps> = ({
     return (
         <div className="relative w-full flex-1 vb:outline">
             <div className="relative w-full flex-1 vb:outline">
+                <HeaderElementComponent></HeaderElementComponent>
                 {experience?.composition?.grids?.map((grid: any) => {
                     const displaySetting = grid.displaySettings?.find(
                         (setting: any) => setting.key === "defaultBlogStyles"
