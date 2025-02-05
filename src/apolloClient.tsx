@@ -28,7 +28,7 @@ if (preview_token) {
     });
 
     const communicationScript = document.createElement('script');
-    communicationScript.src = `https://${cmsUrl}/Util/javascript/communicationInjector.js`;
+    communicationScript.src = `https://${cmsUrl}/util/javascript/communicationinjector.js`;
     communicationScript.setAttribute('data-nscript', 'afterInteractive')
     document.body.appendChild(communicationScript);
 }
