@@ -25,12 +25,12 @@ html {
     #5c2cfa, /* Darker variant of #6323fb */
     #10141e /* Default color at end */
   );
-  background-size: 300% 300%;
-  animation: gradientShift 20s ease-in-out infinite; /* Increased duration for subtle effect */
+  background-size: 200% 200%; /* Reduced size for smoother transition */
+  animation: gradientShift 15s linear infinite;
 }
 
 body {
-  margin: 0; /* Remove default margin */
+  margin: 0;
 }
 
 @keyframes gradientShift {
@@ -38,10 +38,10 @@ body {
     background-position: 0% 50%;
   }
   50% {
-    background-position: 50% 50%; /* Slightly adjust position for subtlety */
+    background-position: 100% 50%;
   }
   100% {
-    background-position: 100% 50%;
+    background-position: 0% 50%;
   }
 }
 
