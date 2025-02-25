@@ -319,12 +319,91 @@ export type CityExperienceWhereInput = {
   composition?: InputMaybe<CompositionStructureNodeWhereInput>;
 };
 
+export type CityOverview = IData & _IComponent & _IContent & {
+  __typename?: 'CityOverview';
+  Cities?: Maybe<Array<Maybe<_IContent>>>;
+  Settings?: Maybe<CityPageSettingsProperty>;
+  /** @deprecated Use `_link` field instead */
+  _children?: Maybe<QueryRef>;
+  _deleted?: Maybe<Scalars['Bool']['output']>;
+  _fulltext?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  _id?: Maybe<Scalars['String']['output']>;
+  _link?: Maybe<QueryRef>;
+  _metadata?: Maybe<IContentMetadata>;
+  _modified?: Maybe<Scalars['Date']['output']>;
+  _score?: Maybe<Scalars['Float']['output']>;
+};
+
+
+export type CityOverview_FulltextArgs = {
+  highlight?: InputMaybe<HighlightOptions>;
+};
+
+
+export type CityOverview_LinkArgs = {
+  type?: InputMaybe<LinkTypes>;
+};
+
+export type CityOverviewAutocomplete = {
+  __typename?: 'CityOverviewAutocomplete';
+  Cities?: Maybe<_IContentAutocomplete>;
+  _metadata?: Maybe<IContentMetadataAutocomplete>;
+};
+
+export type CityOverviewFacet = {
+  __typename?: 'CityOverviewFacet';
+  Cities?: Maybe<_IContentFacet>;
+  Settings?: Maybe<Array<Maybe<StringFacet>>>;
+  _metadata?: Maybe<IContentMetadataFacet>;
+};
+
+
+export type CityOverviewFacetSettingsArgs = {
+  filters?: InputMaybe<Array<Scalars['String']['input']>>;
+  limit?: Scalars['Int']['input'];
+  orderBy?: InputMaybe<OrderBy>;
+  orderType?: InputMaybe<OrderByFacetType>;
+};
+
+export type CityOverviewOrderByInput = {
+  Cities?: InputMaybe<_IContentOrderByInput>;
+  Settings?: InputMaybe<OrderBy>;
+  _metadata?: InputMaybe<IContentMetadataOrderByInput>;
+  _minimumScore?: InputMaybe<Scalars['Float']['input']>;
+  _modified?: InputMaybe<OrderBy>;
+  _ranking?: InputMaybe<Ranking>;
+  /** The value needs to be a positive value, but cannot exceed the maximum value of an integer. In case it is exceeded, the maximum of an integer is used. In case of a negative value, semantic search will be disabled. */
+  _semanticWeight?: InputMaybe<Scalars['Float']['input']>;
+};
+
+export type CityOverviewOutput = {
+  __typename?: 'CityOverviewOutput';
+  autocomplete?: Maybe<CityOverviewAutocomplete>;
+  cursor?: Maybe<Scalars['String']['output']>;
+  facets?: Maybe<CityOverviewFacet>;
+  items?: Maybe<Array<Maybe<CityOverview>>>;
+  total?: Maybe<Scalars['Int']['output']>;
+};
+
+
+export type CityOverviewOutputTotalArgs = {
+  all?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type CityOverviewWhereInput = {
+  Cities?: InputMaybe<_IContentWhereInput>;
+  Settings?: InputMaybe<StringFilterInput>;
+  _and?: InputMaybe<Array<InputMaybe<CityOverviewWhereInput>>>;
+  _fulltext?: InputMaybe<SearchableStringFilterInput>;
+  _metadata?: InputMaybe<IContentMetadataWhereInput>;
+  _modified?: InputMaybe<DateFilterInput>;
+  _not?: InputMaybe<Array<InputMaybe<CityOverviewWhereInput>>>;
+  _or?: InputMaybe<Array<InputMaybe<CityOverviewWhereInput>>>;
+};
+
 export type CityPage = IData & _IContent & _IPage & {
   __typename?: 'CityPage';
-  Description?: Maybe<RichText>;
-  Image?: Maybe<ContentReference>;
-  Settings?: Maybe<CityPageSettingsProperty>;
-  Title?: Maybe<Scalars['String']['output']>;
+  CityReference?: Maybe<_IContent>;
   /** @deprecated Use `_link` field instead */
   _children?: Maybe<QueryRef>;
   _deleted?: Maybe<Scalars['Bool']['output']>;
@@ -348,31 +427,18 @@ export type CityPage_LinkArgs = {
 
 export type CityPageAutocomplete = {
   __typename?: 'CityPageAutocomplete';
-  Description?: Maybe<RichTextAutocomplete>;
-  Image?: Maybe<ContentReferenceAutocomplete>;
+  CityReference?: Maybe<_IContentAutocomplete>;
   _metadata?: Maybe<IContentMetadataAutocomplete>;
 };
 
 export type CityPageFacet = {
   __typename?: 'CityPageFacet';
-  Description?: Maybe<RichTextFacet>;
-  Image?: Maybe<ContentReferenceFacet>;
-  Settings?: Maybe<Array<Maybe<StringFacet>>>;
+  CityReference?: Maybe<_IContentFacet>;
   _metadata?: Maybe<IContentMetadataFacet>;
 };
 
-
-export type CityPageFacetSettingsArgs = {
-  filters?: InputMaybe<Array<Scalars['String']['input']>>;
-  limit?: Scalars['Int']['input'];
-  orderBy?: InputMaybe<OrderBy>;
-  orderType?: InputMaybe<OrderByFacetType>;
-};
-
 export type CityPageOrderByInput = {
-  Description?: InputMaybe<RichTextOrderByInput>;
-  Image?: InputMaybe<ContentReferenceOrderByInput>;
-  Settings?: InputMaybe<OrderBy>;
+  CityReference?: InputMaybe<_IContentOrderByInput>;
   _metadata?: InputMaybe<IContentMetadataOrderByInput>;
   _minimumScore?: InputMaybe<Scalars['Float']['input']>;
   _modified?: InputMaybe<OrderBy>;
@@ -469,9 +535,7 @@ export type CityPageSettingsWhereInput = {
 };
 
 export type CityPageWhereInput = {
-  Description?: InputMaybe<RichTextWhereInput>;
-  Image?: InputMaybe<ContentReferenceWhereInput>;
-  Settings?: InputMaybe<StringFilterInput>;
+  CityReference?: InputMaybe<_IContentWhereInput>;
   _and?: InputMaybe<Array<InputMaybe<CityPageWhereInput>>>;
   _fulltext?: InputMaybe<SearchableStringFilterInput>;
   _metadata?: InputMaybe<IContentMetadataWhereInput>;
@@ -747,6 +811,7 @@ export type ContentUrl = {
   __typename?: 'ContentUrl';
   base?: Maybe<Scalars['String']['output']>;
   default?: Maybe<Scalars['String']['output']>;
+  graph?: Maybe<Scalars['String']['output']>;
   hierarchical?: Maybe<Scalars['String']['output']>;
   internal?: Maybe<Scalars['String']['output']>;
   type?: Maybe<Scalars['String']['output']>;
@@ -756,6 +821,7 @@ export type ContentUrlAutocomplete = {
   __typename?: 'ContentUrlAutocomplete';
   base?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
   default?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  graph?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
   hierarchical?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
   internal?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
   type?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
@@ -769,6 +835,12 @@ export type ContentUrlAutocompleteBaseArgs = {
 
 
 export type ContentUrlAutocompleteDefaultArgs = {
+  limit?: Scalars['Int']['input'];
+  value: Scalars['String']['input'];
+};
+
+
+export type ContentUrlAutocompleteGraphArgs = {
   limit?: Scalars['Int']['input'];
   value: Scalars['String']['input'];
 };
@@ -795,6 +867,7 @@ export type ContentUrlFacet = {
   __typename?: 'ContentUrlFacet';
   base?: Maybe<Array<Maybe<StringFacet>>>;
   default?: Maybe<Array<Maybe<StringFacet>>>;
+  graph?: Maybe<Array<Maybe<StringFacet>>>;
   hierarchical?: Maybe<Array<Maybe<StringFacet>>>;
   internal?: Maybe<Array<Maybe<StringFacet>>>;
   type?: Maybe<Array<Maybe<StringFacet>>>;
@@ -810,6 +883,14 @@ export type ContentUrlFacetBaseArgs = {
 
 
 export type ContentUrlFacetDefaultArgs = {
+  filters?: InputMaybe<Array<Scalars['String']['input']>>;
+  limit?: Scalars['Int']['input'];
+  orderBy?: InputMaybe<OrderBy>;
+  orderType?: InputMaybe<OrderByFacetType>;
+};
+
+
+export type ContentUrlFacetGraphArgs = {
   filters?: InputMaybe<Array<Scalars['String']['input']>>;
   limit?: Scalars['Int']['input'];
   orderBy?: InputMaybe<OrderBy>;
@@ -843,6 +924,7 @@ export type ContentUrlFacetTypeArgs = {
 export type ContentUrlOrderByInput = {
   base?: InputMaybe<OrderBy>;
   default?: InputMaybe<OrderBy>;
+  graph?: InputMaybe<OrderBy>;
   hierarchical?: InputMaybe<OrderBy>;
   internal?: InputMaybe<OrderBy>;
   type?: InputMaybe<OrderBy>;
@@ -851,6 +933,7 @@ export type ContentUrlOrderByInput = {
 export type ContentUrlWhereInput = {
   base?: InputMaybe<StringFilterInput>;
   default?: InputMaybe<StringFilterInput>;
+  graph?: InputMaybe<StringFilterInput>;
   hierarchical?: InputMaybe<StringFilterInput>;
   internal?: InputMaybe<StringFilterInput>;
   type?: InputMaybe<StringFilterInput>;
@@ -1681,6 +1764,7 @@ export type Query = {
   BlankSection?: Maybe<BlankSectionOutput>;
   CityBlock?: Maybe<CityBlockOutput>;
   CityExperience?: Maybe<CityExperienceOutput>;
+  CityOverview?: Maybe<CityOverviewOutput>;
   CityPage?: Maybe<CityPageOutput>;
   CityPageSettings?: Maybe<CityPageSettingsOutput>;
   Data?: Maybe<DataOutput>;
@@ -1741,6 +1825,17 @@ export type QueryCityExperienceArgs = {
   orderBy?: InputMaybe<CityExperienceOrderByInput>;
   skip?: Scalars['Int']['input'];
   where?: InputMaybe<CityExperienceWhereInput>;
+};
+
+
+export type QueryCityOverviewArgs = {
+  cursor?: InputMaybe<Scalars['String']['input']>;
+  ids?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  limit?: Scalars['Int']['input'];
+  locale?: InputMaybe<Array<InputMaybe<Locales>>>;
+  orderBy?: InputMaybe<CityOverviewOrderByInput>;
+  skip?: Scalars['Int']['input'];
+  where?: InputMaybe<CityOverviewWhereInput>;
 };
 
 
@@ -1925,6 +2020,7 @@ export type QueryRef = {
   BlankSection?: Maybe<BlankSectionOutput>;
   CityBlock?: Maybe<CityBlockOutput>;
   CityExperience?: Maybe<CityExperienceOutput>;
+  CityOverview?: Maybe<CityOverviewOutput>;
   CityPage?: Maybe<CityPageOutput>;
   CityPageSettings?: Maybe<CityPageSettingsOutput>;
   Data?: Maybe<DataOutput>;
@@ -1985,6 +2081,17 @@ export type QueryRefCityExperienceArgs = {
   orderBy?: InputMaybe<CityExperienceOrderByInput>;
   skip?: Scalars['Int']['input'];
   where?: InputMaybe<CityExperienceWhereInput>;
+};
+
+
+export type QueryRefCityOverviewArgs = {
+  cursor?: InputMaybe<Scalars['String']['input']>;
+  ids?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  limit?: Scalars['Int']['input'];
+  locale?: InputMaybe<Array<InputMaybe<Locales>>>;
+  orderBy?: InputMaybe<CityOverviewOrderByInput>;
+  skip?: Scalars['Int']['input'];
+  where?: InputMaybe<CityOverviewWhereInput>;
 };
 
 
@@ -2712,6 +2819,34 @@ export type _IContent_LinkArgs = {
   type?: InputMaybe<LinkTypes>;
 };
 
+export type _IContentAutocomplete = {
+  __typename?: '_IContentAutocomplete';
+  _metadata?: Maybe<IContentMetadataAutocomplete>;
+};
+
+export type _IContentFacet = {
+  __typename?: '_IContentFacet';
+  _metadata?: Maybe<IContentMetadataFacet>;
+};
+
+export type _IContentOrderByInput = {
+  _metadata?: InputMaybe<IContentMetadataOrderByInput>;
+  _minimumScore?: InputMaybe<Scalars['Float']['input']>;
+  _modified?: InputMaybe<OrderBy>;
+  _ranking?: InputMaybe<Ranking>;
+  /** The value needs to be a positive value, but cannot exceed the maximum value of an integer. In case it is exceeded, the maximum of an integer is used. In case of a negative value, semantic search will be disabled. */
+  _semanticWeight?: InputMaybe<Scalars['Float']['input']>;
+};
+
+export type _IContentWhereInput = {
+  _and?: InputMaybe<Array<InputMaybe<_IContentWhereInput>>>;
+  _fulltext?: InputMaybe<SearchableStringFilterInput>;
+  _metadata?: InputMaybe<IContentMetadataWhereInput>;
+  _modified?: InputMaybe<DateFilterInput>;
+  _not?: InputMaybe<Array<InputMaybe<_IContentWhereInput>>>;
+  _or?: InputMaybe<Array<InputMaybe<_IContentWhereInput>>>;
+};
+
 export type _IExperience = {
   /** @deprecated Use `_link` field instead */
   _children?: Maybe<QueryRef>;
@@ -3206,7 +3341,7 @@ export enum System_Locales {
 export type CompositionComponentNodeFragment = { __typename?: 'CompositionComponentNode', key?: string | null, component?: { __typename?: 'BlankSection', _metadata?: { __typename?: 'ContentMetadata', types?: Array<string | null> | null } | { __typename?: 'InstanceMetadata', types?: Array<string | null> | null } | { __typename?: 'ItemMetadata', types?: Array<string | null> | null } | { __typename?: 'MediaMetadata', types?: Array<string | null> | null } | null } | (
     { __typename?: 'CityBlock', _metadata?: { __typename?: 'ContentMetadata', types?: Array<string | null> | null } | { __typename?: 'InstanceMetadata', types?: Array<string | null> | null } | { __typename?: 'ItemMetadata', types?: Array<string | null> | null } | { __typename?: 'MediaMetadata', types?: Array<string | null> | null } | null }
     & { ' $fragmentRefs'?: { 'CityElementFragment': CityElementFragment } }
-  ) | { __typename?: 'CityPageSettings', _metadata?: { __typename?: 'ContentMetadata', types?: Array<string | null> | null } | { __typename?: 'InstanceMetadata', types?: Array<string | null> | null } | { __typename?: 'ItemMetadata', types?: Array<string | null> | null } | { __typename?: 'MediaMetadata', types?: Array<string | null> | null } | null } | { __typename?: '_Component', _metadata?: { __typename?: 'ContentMetadata', types?: Array<string | null> | null } | { __typename?: 'InstanceMetadata', types?: Array<string | null> | null } | { __typename?: 'ItemMetadata', types?: Array<string | null> | null } | { __typename?: 'MediaMetadata', types?: Array<string | null> | null } | null } | { __typename?: '_Section', _metadata?: { __typename?: 'ContentMetadata', types?: Array<string | null> | null } | { __typename?: 'InstanceMetadata', types?: Array<string | null> | null } | { __typename?: 'ItemMetadata', types?: Array<string | null> | null } | { __typename?: 'MediaMetadata', types?: Array<string | null> | null } | null } | null } & { ' $fragmentName'?: 'CompositionComponentNodeFragment' };
+  ) | { __typename?: 'CityOverview', _metadata?: { __typename?: 'ContentMetadata', types?: Array<string | null> | null } | { __typename?: 'InstanceMetadata', types?: Array<string | null> | null } | { __typename?: 'ItemMetadata', types?: Array<string | null> | null } | { __typename?: 'MediaMetadata', types?: Array<string | null> | null } | null } | { __typename?: 'CityPageSettings', _metadata?: { __typename?: 'ContentMetadata', types?: Array<string | null> | null } | { __typename?: 'InstanceMetadata', types?: Array<string | null> | null } | { __typename?: 'ItemMetadata', types?: Array<string | null> | null } | { __typename?: 'MediaMetadata', types?: Array<string | null> | null } | null } | { __typename?: '_Component', _metadata?: { __typename?: 'ContentMetadata', types?: Array<string | null> | null } | { __typename?: 'InstanceMetadata', types?: Array<string | null> | null } | { __typename?: 'ItemMetadata', types?: Array<string | null> | null } | { __typename?: 'MediaMetadata', types?: Array<string | null> | null } | null } | { __typename?: '_Section', _metadata?: { __typename?: 'ContentMetadata', types?: Array<string | null> | null } | { __typename?: 'InstanceMetadata', types?: Array<string | null> | null } | { __typename?: 'ItemMetadata', types?: Array<string | null> | null } | { __typename?: 'MediaMetadata', types?: Array<string | null> | null } | null } | null } & { ' $fragmentName'?: 'CompositionComponentNodeFragment' };
 
 export type VisualBuilderQueryVariables = Exact<{
   url?: InputMaybe<Scalars['String']['input']>;
@@ -3222,7 +3357,7 @@ export type VisualBuilderQuery = { __typename?: 'Query', _Experience?: { __typen
               ) | { __typename?: 'CompositionNode' } | { __typename?: 'CompositionStructureNode' } | null> | null } | null> | null } | null> | null } | null> | null } | null, _metadata?: { __typename?: 'ContentMetadata', key?: string | null, version?: string | null } | { __typename?: 'InstanceMetadata', key?: string | null, version?: string | null } | { __typename?: 'ItemMetadata', key?: string | null, version?: string | null } | { __typename?: 'MediaMetadata', key?: string | null, version?: string | null } | null } | { __typename?: '_Experience', composition?: { __typename?: 'CompositionStructureNode', grids?: Array<{ __typename?: 'CompositionComponentNode' } | { __typename?: 'CompositionNode' } | { __typename?: 'CompositionStructureNode', key?: string | null, displaySettings?: Array<{ __typename?: 'CompositionDisplaySetting', key?: string | null, value?: string | null } | null> | null, rows?: Array<{ __typename?: 'CompositionComponentNode' } | { __typename?: 'CompositionNode' } | { __typename?: 'CompositionStructureNode', key?: string | null, columns?: Array<{ __typename?: 'CompositionComponentNode' } | { __typename?: 'CompositionNode' } | { __typename?: 'CompositionStructureNode', key?: string | null, elements?: Array<(
                 { __typename?: 'CompositionComponentNode' }
                 & { ' $fragmentRefs'?: { 'CompositionComponentNodeFragment': CompositionComponentNodeFragment } }
-              ) | { __typename?: 'CompositionNode' } | { __typename?: 'CompositionStructureNode' } | null> | null } | null> | null } | null> | null } | null> | null } | null, _metadata?: { __typename?: 'ContentMetadata', key?: string | null, version?: string | null } | { __typename?: 'InstanceMetadata', key?: string | null, version?: string | null } | { __typename?: 'ItemMetadata', key?: string | null, version?: string | null } | { __typename?: 'MediaMetadata', key?: string | null, version?: string | null } | null } | null> | null } | null };
+              ) | { __typename?: 'CompositionNode' } | { __typename?: 'CompositionStructureNode' } | null> | null } | null> | null } | null> | null } | null> | null } | null, _metadata?: { __typename?: 'ContentMetadata', key?: string | null, version?: string | null } | { __typename?: 'InstanceMetadata', key?: string | null, version?: string | null } | { __typename?: 'ItemMetadata', key?: string | null, version?: string | null } | { __typename?: 'MediaMetadata', key?: string | null, version?: string | null } | null } | null> | null } | null, CityPage?: { __typename?: 'CityPageOutput', items?: Array<{ __typename?: 'CityPage', CityReference?: { __typename?: 'BlankExperience' } | { __typename?: 'BlankSection' } | { __typename?: 'CityBlock', Title?: string | null, Image?: { __typename?: 'ContentReference', key?: string | null, url?: { __typename?: 'ContentUrl', default?: string | null } | null } | null, Description?: { __typename?: 'RichText', html?: string | null } | null, _metadata?: { __typename?: 'ContentMetadata', key?: string | null } | { __typename?: 'InstanceMetadata', key?: string | null } | { __typename?: 'ItemMetadata', key?: string | null } | { __typename?: 'MediaMetadata', key?: string | null } | null } | { __typename?: 'CityExperience' } | { __typename?: 'CityOverview' } | { __typename?: 'CityPage' } | { __typename?: 'CityPageSettings' } | { __typename?: 'GenericMedia' } | { __typename?: 'ImageMedia' } | { __typename?: 'SysContentFolder' } | { __typename?: 'VideoMedia' } | { __typename?: '_Component' } | { __typename?: '_Content' } | { __typename?: '_Experience' } | { __typename?: '_Folder' } | { __typename?: '_Image' } | { __typename?: '_Media' } | { __typename?: '_Page' } | { __typename?: '_Section' } | { __typename?: '_Video' } | null } | null> | null } | null };
 
 export type PreviewBuilderQueryVariables = Exact<{
   key?: InputMaybe<Scalars['String']['input']>;
@@ -3239,11 +3374,11 @@ export type PreviewBuilderQuery = { __typename?: 'Query', _Experience?: { __type
               ) | { __typename?: 'CompositionNode' } | { __typename?: 'CompositionStructureNode' } | null> | null } | null> | null } | null> | null } | null> | null } | null, _metadata?: { __typename?: 'ContentMetadata', key?: string | null, version?: string | null } | { __typename?: 'InstanceMetadata', key?: string | null, version?: string | null } | { __typename?: 'ItemMetadata', key?: string | null, version?: string | null } | { __typename?: 'MediaMetadata', key?: string | null, version?: string | null } | null } | { __typename?: '_Experience', composition?: { __typename?: 'CompositionStructureNode', grids?: Array<{ __typename?: 'CompositionComponentNode' } | { __typename?: 'CompositionNode' } | { __typename?: 'CompositionStructureNode', key?: string | null, displaySettings?: Array<{ __typename?: 'CompositionDisplaySetting', key?: string | null, value?: string | null } | null> | null, rows?: Array<{ __typename?: 'CompositionComponentNode' } | { __typename?: 'CompositionNode' } | { __typename?: 'CompositionStructureNode', key?: string | null, columns?: Array<{ __typename?: 'CompositionComponentNode' } | { __typename?: 'CompositionNode' } | { __typename?: 'CompositionStructureNode', key?: string | null, elements?: Array<(
                 { __typename?: 'CompositionComponentNode' }
                 & { ' $fragmentRefs'?: { 'CompositionComponentNodeFragment': CompositionComponentNodeFragment } }
-              ) | { __typename?: 'CompositionNode' } | { __typename?: 'CompositionStructureNode' } | null> | null } | null> | null } | null> | null } | null> | null } | null, _metadata?: { __typename?: 'ContentMetadata', key?: string | null, version?: string | null } | { __typename?: 'InstanceMetadata', key?: string | null, version?: string | null } | { __typename?: 'ItemMetadata', key?: string | null, version?: string | null } | { __typename?: 'MediaMetadata', key?: string | null, version?: string | null } | null } | null> | null } | null };
+              ) | { __typename?: 'CompositionNode' } | { __typename?: 'CompositionStructureNode' } | null> | null } | null> | null } | null> | null } | null> | null } | null, _metadata?: { __typename?: 'ContentMetadata', key?: string | null, version?: string | null } | { __typename?: 'InstanceMetadata', key?: string | null, version?: string | null } | { __typename?: 'ItemMetadata', key?: string | null, version?: string | null } | { __typename?: 'MediaMetadata', key?: string | null, version?: string | null } | null } | null> | null } | null, CityPage?: { __typename?: 'CityPageOutput', items?: Array<{ __typename?: 'CityPage', CityReference?: { __typename?: 'BlankExperience' } | { __typename?: 'BlankSection' } | { __typename?: 'CityBlock', Title?: string | null, Image?: { __typename?: 'ContentReference', key?: string | null, url?: { __typename?: 'ContentUrl', default?: string | null } | null } | null, Description?: { __typename?: 'RichText', html?: string | null } | null, _metadata?: { __typename?: 'ContentMetadata', key?: string | null } | { __typename?: 'InstanceMetadata', key?: string | null } | { __typename?: 'ItemMetadata', key?: string | null } | { __typename?: 'MediaMetadata', key?: string | null } | null } | { __typename?: 'CityExperience' } | { __typename?: 'CityOverview' } | { __typename?: 'CityPage' } | { __typename?: 'CityPageSettings' } | { __typename?: 'GenericMedia' } | { __typename?: 'ImageMedia' } | { __typename?: 'SysContentFolder' } | { __typename?: 'VideoMedia' } | { __typename?: '_Component' } | { __typename?: '_Content' } | { __typename?: '_Experience' } | { __typename?: '_Folder' } | { __typename?: '_Image' } | { __typename?: '_Media' } | { __typename?: '_Page' } | { __typename?: '_Section' } | { __typename?: '_Video' } | null } | null> | null } | null };
 
 export type CityElementFragment = { __typename?: 'CityBlock', Title?: string | null, Image?: { __typename?: 'ContentReference', url?: { __typename?: 'ContentUrl', default?: string | null } | null } | null, Description?: { __typename?: 'RichText', html?: string | null } | null } & { ' $fragmentName'?: 'CityElementFragment' };
 
 export const CityElementFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"cityElement"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CityBlock"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Image"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"default"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"Description"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"html"}}]}},{"kind":"Field","name":{"kind":"Name","value":"Title"}}]}}]} as unknown as DocumentNode<CityElementFragment, unknown>;
 export const CompositionComponentNodeFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"compositionComponentNode"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CompositionComponentNode"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"component"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"_metadata"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"types"}}]}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"cityElement"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"cityElement"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CityBlock"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Image"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"default"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"Description"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"html"}}]}},{"kind":"Field","name":{"kind":"Name","value":"Title"}}]}}]} as unknown as DocumentNode<CompositionComponentNodeFragment, unknown>;
-export const VisualBuilderDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"VisualBuilder"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"url"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"_Experience"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_metadata"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"url"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"default"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"url"}}}]}}]}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"composition"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"grids"},"name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CompositionStructureNode"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"displaySettings"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}},{"kind":"Field","alias":{"kind":"Name","value":"rows"},"name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CompositionStructureNode"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","alias":{"kind":"Name","value":"columns"},"name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CompositionStructureNode"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","alias":{"kind":"Name","value":"elements"},"name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"compositionComponentNode"}}]}}]}}]}}]}}]}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"_metadata"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"version"}}]}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"cityElement"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CityBlock"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Image"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"default"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"Description"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"html"}}]}},{"kind":"Field","name":{"kind":"Name","value":"Title"}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"compositionComponentNode"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CompositionComponentNode"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"component"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"_metadata"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"types"}}]}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"cityElement"}}]}}]}}]} as unknown as DocumentNode<VisualBuilderQuery, VisualBuilderQueryVariables>;
-export const PreviewBuilderDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"PreviewBuilder"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"key"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"version"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"_Experience"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_and"},"value":{"kind":"ListValue","values":[{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_metadata"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"key"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"key"}}}]}}]}}]},{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_metadata"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"version"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"version"}}}]}}]}}]}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"composition"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"grids"},"name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CompositionStructureNode"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"displaySettings"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}},{"kind":"Field","alias":{"kind":"Name","value":"rows"},"name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CompositionStructureNode"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","alias":{"kind":"Name","value":"columns"},"name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CompositionStructureNode"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","alias":{"kind":"Name","value":"elements"},"name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"compositionComponentNode"}}]}}]}}]}}]}}]}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"_metadata"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"version"}}]}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"cityElement"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CityBlock"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Image"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"default"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"Description"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"html"}}]}},{"kind":"Field","name":{"kind":"Name","value":"Title"}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"compositionComponentNode"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CompositionComponentNode"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"component"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"_metadata"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"types"}}]}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"cityElement"}}]}}]}}]} as unknown as DocumentNode<PreviewBuilderQuery, PreviewBuilderQueryVariables>;
+export const VisualBuilderDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"VisualBuilder"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"url"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"_Experience"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_metadata"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"url"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"default"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"url"}}}]}}]}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"composition"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"grids"},"name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CompositionStructureNode"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"displaySettings"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}},{"kind":"Field","alias":{"kind":"Name","value":"rows"},"name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CompositionStructureNode"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","alias":{"kind":"Name","value":"columns"},"name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CompositionStructureNode"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","alias":{"kind":"Name","value":"elements"},"name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"compositionComponentNode"}}]}}]}}]}}]}}]}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"_metadata"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"version"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"CityPage"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_metadata"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"url"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"default"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"url"}}}]}}]}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"CityReference"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CityBlock"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Title"}},{"kind":"Field","name":{"kind":"Name","value":"Image"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"url"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"default"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"Description"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"html"}}]}},{"kind":"Field","name":{"kind":"Name","value":"_metadata"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}}]}}]}}]}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"cityElement"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CityBlock"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Image"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"default"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"Description"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"html"}}]}},{"kind":"Field","name":{"kind":"Name","value":"Title"}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"compositionComponentNode"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CompositionComponentNode"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"component"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"_metadata"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"types"}}]}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"cityElement"}}]}}]}}]} as unknown as DocumentNode<VisualBuilderQuery, VisualBuilderQueryVariables>;
+export const PreviewBuilderDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"PreviewBuilder"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"key"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"version"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"_Experience"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_and"},"value":{"kind":"ListValue","values":[{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_metadata"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"key"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"key"}}}]}}]}}]},{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_metadata"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"version"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"version"}}}]}}]}}]}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"composition"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"grids"},"name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CompositionStructureNode"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"displaySettings"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}},{"kind":"Field","alias":{"kind":"Name","value":"rows"},"name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CompositionStructureNode"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","alias":{"kind":"Name","value":"columns"},"name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CompositionStructureNode"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","alias":{"kind":"Name","value":"elements"},"name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"compositionComponentNode"}}]}}]}}]}}]}}]}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"_metadata"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"version"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"CityPage"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_and"},"value":{"kind":"ListValue","values":[{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_metadata"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"key"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"key"}}}]}}]}}]},{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_metadata"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"version"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"version"}}}]}}]}}]}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"CityReference"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CityBlock"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Title"}},{"kind":"Field","name":{"kind":"Name","value":"Image"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"url"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"default"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"Description"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"html"}}]}},{"kind":"Field","name":{"kind":"Name","value":"_metadata"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}}]}}]}}]}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"cityElement"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CityBlock"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Image"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"default"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"Description"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"html"}}]}},{"kind":"Field","name":{"kind":"Name","value":"Title"}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"compositionComponentNode"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CompositionComponentNode"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"component"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"_metadata"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"types"}}]}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"cityElement"}}]}}]}}]} as unknown as DocumentNode<PreviewBuilderQuery, PreviewBuilderQueryVariables>;

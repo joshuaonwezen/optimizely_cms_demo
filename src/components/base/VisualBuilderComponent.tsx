@@ -7,87 +7,134 @@ import { onContentSaved } from "@/helpers/onContentSaved";
 import HeaderElementComponent from "../elements/HeaderElementComponent";
 
 export const VisualBuilder = graphql(/* GraphQL */ `
-  query VisualBuilder($url: String) {
-    _Experience(
-      where: { _metadata: { url: { default: { eq: $url } } } }
-    ) {
-      items {
-        composition {
-          grids: nodes {
-            ... on CompositionStructureNode {
-              key
-              displaySettings {
-                key
-                value
-              }
-              rows: nodes {
-                ... on CompositionStructureNode {
-                  key
-                  columns: nodes {
-                    ... on CompositionStructureNode {
-                      key
-                      elements: nodes {
-                        ...compositionComponentNode
-                      }
+    query VisualBuilder($url: String) {
+        _Experience(where: { _metadata: { url: { default: { eq: $url } } } }) {
+            items {
+                composition {
+                    grids: nodes {
+                        ... on CompositionStructureNode {
+                            key
+                            displaySettings {
+                                key
+                                value
+                            }
+                            rows: nodes {
+                                ... on CompositionStructureNode {
+                                    key
+                                    columns: nodes {
+                                        ... on CompositionStructureNode {
+                                            key
+                                            elements: nodes {
+                                                ...compositionComponentNode
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
-                  }
                 }
-              }
+                _metadata {
+                    key
+                    version
+                }
             }
-          }
         }
-        _metadata {
-          key
-          version
+        CityPage(where: { _metadata: { url: { default: { eq: $url } } } }) {
+            items {
+                CityReference {
+                    ... on CityBlock {
+                        Title
+                        Image {
+                            key
+                            url {
+                                default
+                            }
+                        }
+                        Description {
+                            html
+                        }
+                        _metadata {
+                            key
+                        }
+                    }
+                }
+            }
         }
-      }
     }
-  }
 `);
 
-
-export const PreviewBuilder = graphql(/* GraphQL */ ` 
-  query PreviewBuilder($key: String, $version: String) {
-    _Experience(
-      where: {
-        _and: [
-          { _metadata: { key: { eq: $key } } },
-          { _metadata: { version: { eq: $version } } }
-        ]
-      }
-    ) {
-      items {
-        composition {
-          grids: nodes {
-            ... on CompositionStructureNode {
-              key
-              displaySettings {
-                key
-                value
-              }
-              rows: nodes {
-                ... on CompositionStructureNode {
-                  key
-                  columns: nodes {
-                    ... on CompositionStructureNode {
-                      key
-                      elements: nodes {
-                        ...compositionComponentNode
-                      }
-                    }
-                  }
-                }
-              }
+export const PreviewBuilder = graphql(/* GraphQL */ `
+    query PreviewBuilder($key: String, $version: String) {
+        _Experience(
+            where: {
+                _and: [
+                    { _metadata: { key: { eq: $key } } }
+                    { _metadata: { version: { eq: $version } } }
+                ]
             }
-          }
+        ) {
+            items {
+                composition {
+                    grids: nodes {
+                        ... on CompositionStructureNode {
+                            key
+                            displaySettings {
+                                key
+                                value
+                            }
+                            rows: nodes {
+                                ... on CompositionStructureNode {
+                                    key
+                                    columns: nodes {
+                                        ... on CompositionStructureNode {
+                                            key
+                                            elements: nodes {
+                                                ...compositionComponentNode
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                _metadata {
+                    key
+                    version
+                }
+            }
         }
-        _metadata {
-          key
-          version
+
+        CityPage(
+            where: {
+                _and: [
+                    { _metadata: { key: { eq: $key } } }
+                    { _metadata: { version: { eq: $version } } }
+                ]
+            }
+        ) {
+            items {
+                CityReference {
+                    ... on CityBlock {
+                        Title
+                        Image {
+                            key
+                            url {
+                                default
+                            }
+                        }
+                        Description {
+                            html
+                        }
+                        _metadata {
+                            key
+                        }
+                    }
+                }
+            }
         }
-      }
     }
-  }
 `);
 
 interface VisualBuilderProps {
@@ -119,11 +166,11 @@ const VisualBuilderComponent: FC<VisualBuilderProps> = ({
 
     // Select the correct query based on preview mode
     const { data, refetch, error } = useQuery(
-      isPreview ? PreviewBuilder : VisualBuilder,
-      {
-        variables: variables,
-        notifyOnNetworkStatusChange: true,
-      }
+        isPreview ? PreviewBuilder : VisualBuilder,
+        {
+            variables: variables,
+            notifyOnNetworkStatusChange: true,
+        }
     );
     if (error) {
         console.error("GraphQL Error:", error.message);
@@ -146,26 +193,27 @@ const VisualBuilderComponent: FC<VisualBuilderProps> = ({
                 version = contentIdArray[contentIdArray.length - 1];
                 variables.version = version;
             }
-            console.log(variables, isPreview)
+            console.log(variables, isPreview);
             refetch(variables);
         });
     }, []);
 
     const experiences = data?._Experience?.items;
-    if (!experiences) {
+    const pages = data?.CityPage?.items;
+
+    if (!experiences && !pages) {
         return null;
     }
 
     const experience: any = experiences[experiences.length - 1];
+    const page: any = pages[pages.length - 1];
 
-    if (!experience) {
+    if (!experience && !page) {
         return null;
     }
 
-    console.log(experience)
-    
-    return (
-        <div className="relative w-full flex-1 vb:outline">
+    if (!page) {
+        return (
             <div className="relative w-full flex-1 vb:outline">
                 <HeaderElementComponent></HeaderElementComponent>
                 {experience?.composition?.grids?.map((grid: any) => {
@@ -214,8 +262,34 @@ const VisualBuilderComponent: FC<VisualBuilderProps> = ({
                     );
                 })}
             </div>
-        </div>
-    );
+        );
+    } else {
+        return (
+            <div className="relative w-full flex-1 vb:outline">
+                <HeaderElementComponent></HeaderElementComponent>
+                <div
+                    key={page?.CityReference._metadata.key}
+                    className={`relative w-full flex flex-row flex-colflex-nowrap justify-start vb:grid`}
+                    data-epi-block-id={page?.CityReference._metadata.key}>
+                    <div className="flex-1 flex flex-row flex-nowrap justify-start vb:row">
+                        <div className="flex-1 flex flex-col flex-nowrap justify-start vb:col">
+                            <div
+                                data-epi-block-id={
+                                    page?.CityReference._metadata.key
+                                }
+                                key={page?.CityReference._metadata.key}>
+                                <CompositionNodeComponent
+                                    compositionComponentNode={
+                                        page?.CityReference
+                                    }
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 };
 
 export default VisualBuilderComponent;

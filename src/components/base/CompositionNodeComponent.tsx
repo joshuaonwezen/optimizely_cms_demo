@@ -22,7 +22,7 @@ const CompositionComponentNodeComponent = (props: {
     compositionComponentNode: FragmentType<typeof CompositionComponentNodeFragment>
 }) => {
     const compositionComponentNode = useFragment(CompositionComponentNodeFragment, props.compositionComponentNode)
-    const component = compositionComponentNode.component
+    const component = compositionComponentNode.component ?? compositionComponentNode
     switch (component?.__typename) {
         // case "ParagraphElement":
         //     return <ParagraphElementComponent paragraphElement={component}/>

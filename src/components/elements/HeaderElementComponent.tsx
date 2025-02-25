@@ -50,13 +50,13 @@ const HeaderElementComponent = () => {
         </div>
         {/* Navigation Links */}
         <nav className="hidden md:flex space-x-6">
-          <a href="/en/cities" className="hover:underline">
+          <a href="/en/" className="hover:underline">
             Cities
           </a>
-          <a href="#" className="hover:underline">
+          <a href="/en/" className="hover:underline">
             Links
           </a>
-          <a href="#" className="hover:underline">
+          <a href="/en/" className="hover:underline">
             Resources
           </a>
         </nav>
