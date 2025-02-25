@@ -201,17 +201,18 @@ const VisualBuilderComponent: FC<VisualBuilderProps> = ({
     if (data) console.log("GraphQL response data:", data);
   }, [data]);
 
-  if(isPreview){
-    useEffect(() => {
-      onContentSaved((_) => {
-        const contentIdArray = _.contentLink.split("_");
-        if (contentIdArray.length > 1) {
-          const newVersion = contentIdArray[contentIdArray.length - 1];
-          refetch({ ...variables, version: newVersion });
-        }
-      });
-    }, [refetch, variables]);
-  }
+  useEffect(() => {
+    onContentSaved((_) => {
+      const contentIdArray = _.contentLink.split("_");
+      if (contentIdArray.length > 1) {
+        const newVersion = contentIdArray[contentIdArray.length - 1];
+        const updatedVariables = isPreview
+          ? { ...variables, version: newVersion }
+          : variables;
+        refetch(updatedVariables);
+      }
+    });
+  }, [refetch, variables, isPreview]);
 
   const getFirstItem = (items: any[]) => items?.[0] ?? null;
 
