@@ -200,17 +200,19 @@ const VisualBuilderComponent: FC<VisualBuilderProps> = ({
 
     const experiences = data?._Experience?.items;
     const pages = data?.CityPage?.items;
-
-    if (!experiences && !pages) {
-        return null;
+    
+    // Check if at least one array exists and has items
+    if ((!experiences || experiences.length === 0) && (!pages || pages.length === 0)) {
+      return null;
     }
-
-    const experience: any = experiences[experiences.length - 1];
-    const page: any = pages[pages.length - 1];
-
+    
+    const experience = experiences && experiences.length > 0 ? experiences[experiences.length - 1] : null;
+    const page = pages && pages.length > 0 ? pages[pages.length - 1] : null;
+    
     if (!experience && !page) {
-        return null;
+      return null;
     }
+    
 
     if (!page) {
         return (
