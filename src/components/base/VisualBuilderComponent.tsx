@@ -265,7 +265,7 @@ const VisualBuilderComponent: FC<VisualBuilderProps> = ({
                 })}
             </div>
         );
-    } else {
+    } else if(page?.CityReference) {
         return (
             <div className="relative w-full flex-1 vb:outline">
                 <HeaderElementComponent></HeaderElementComponent>
