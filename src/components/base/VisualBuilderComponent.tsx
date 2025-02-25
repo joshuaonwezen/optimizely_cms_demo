@@ -218,8 +218,16 @@ const VisualBuilderComponent: FC<VisualBuilderProps> = ({
 
   const experiences = useMemo(() => (!isSearchMode ? data?._Experience?.items ?? [] : []), [data, isSearchMode]);
   const pages = useMemo(() => (!isSearchMode ? data?.CityPage?.items ?? [] : []), [data, isSearchMode]);
-  const searchResults = useMemo(() => (isSearchMode ? data?._Component?.items ?? [] : []), [data, isSearchMode]);
-
+  
+  function isSearchResultsQuery(data: any): data is { _Component: { items: any[] } } {
+    return !!data?._Component;
+  }
+  
+  const searchResults = useMemo(
+    () => (isSearchMode && isSearchResultsQuery(data) ? data._Component?.items ?? [] : []),
+    [data, isSearchMode]
+  );
+  
   const experience = getFirstItem(experiences);
   const page = getFirstItem(pages);
   const searchResult = getFirstItem(searchResults);
