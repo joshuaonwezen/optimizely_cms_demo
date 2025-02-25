@@ -276,6 +276,11 @@ const VisualBuilderComponent: FC<VisualBuilderProps> = ({
         page.CityReference.__typename === "CityBlock"
     ) {
         const cityBlock = page.CityReference;
+        const compositionComponentNode = {
+          component: {
+            ...cityBlock,
+          },
+        };
         const _metadata = cityBlock._metadata;
         if (!_metadata) {
             return null;
@@ -293,7 +298,7 @@ const VisualBuilderComponent: FC<VisualBuilderProps> = ({
                                 data-epi-block-id={_metadata.key}
                                 key={_metadata.key}>
                                 <CompositionNodeComponent
-                                    compositionComponentNode={cityBlock}
+                                    compositionComponentNode={compositionComponentNode}
                                 />
                             </div>
                         </div>
