@@ -200,19 +200,24 @@ const VisualBuilderComponent: FC<VisualBuilderProps> = ({
 
     const experiences = data?._Experience?.items;
     const pages = data?.CityPage?.items;
-    
+
     // Check if at least one array exists and has items
-    if ((!experiences || experiences.length === 0) && (!pages || pages.length === 0)) {
-      return null;
+    if (
+        (!experiences || experiences.length === 0) &&
+        (!pages || pages.length === 0)
+    ) {
+        return null;
     }
-    
-    const experience = experiences && experiences.length > 0 ? experiences[experiences.length - 1] : null;
+
+    const experience =
+        experiences && experiences.length > 0
+            ? experiences[experiences.length - 1]
+            : null;
     const page = pages && pages.length > 0 ? pages[pages.length - 1] : null;
-    
+
     if (!experience && !page) {
-      return null;
+        return null;
     }
-    
 
     if (!page) {
         return (
@@ -265,25 +270,30 @@ const VisualBuilderComponent: FC<VisualBuilderProps> = ({
                 })}
             </div>
         );
-    } else if(page?.CityReference) {
+    } else if (
+        page &&
+        page.CityReference &&
+        page.CityReference.__typename === "CityBlock"
+    ) {
+        const cityBlock = page.CityReference;
+        const _metadata = cityBlock._metadata;
+        if (!_metadata) {
+            return null;
+        }
         return (
             <div className="relative w-full flex-1 vb:outline">
-                <HeaderElementComponent></HeaderElementComponent>
+                <HeaderElementComponent />
                 <div
-                    key={page?.CityReference._metadata.key}
-                    className={`relative w-full flex flex-row flex-colflex-nowrap justify-start vb:grid`}
-                    data-epi-block-id={page?.CityReference._metadata.key}>
+                    key={_metadata.key}
+                    className="relative w-full flex flex-row flex-colflex-nowrap justify-start vb:grid"
+                    data-epi-block-id={_metadata.key}>
                     <div className="flex-1 flex flex-row flex-nowrap justify-start vb:row">
                         <div className="flex-1 flex flex-col flex-nowrap justify-start vb:col">
                             <div
-                                data-epi-block-id={
-                                    page?.CityReference._metadata.key
-                                }
-                                key={page?.CityReference._metadata.key}>
+                                data-epi-block-id={_metadata.key}
+                                key={_metadata.key}>
                                 <CompositionNodeComponent
-                                    compositionComponentNode={
-                                        page?.CityReference
-                                    }
+                                    compositionComponentNode={cityBlock}
                                 />
                             </div>
                         </div>
