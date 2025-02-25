@@ -5,6 +5,7 @@ import { graphql } from "@/graphql";
 import CompositionNodeComponent from "./CompositionNodeComponent";
 import { onContentSaved } from "@/helpers/onContentSaved";
 import HeaderElementComponent from "../elements/HeaderElementComponent";
+import NoSearchResults from "../elements/NoSearchResults";
 
 export const VisualBuilder = graphql(/* GraphQL */ `
     query VisualBuilder($url: String) {
@@ -137,16 +138,82 @@ export const PreviewBuilder = graphql(/* GraphQL */ `
     }
 `);
 
+export const SearchResults = graphql(/* GraphQL */ `
+  query SearchResults($searchQuery: String) {
+    _Experience(
+      orderBy: { _ranking: SEMANTIC, _semanticWeight: 0.5 }
+      where: { _fulltext: { match: $searchQuery } }
+    ) {
+            items {
+                composition {
+                    grids: nodes {
+                        ... on CompositionStructureNode {
+                            key
+                            displaySettings {
+                                key
+                                value
+                            }
+                            rows: nodes {
+                                ... on CompositionStructureNode {
+                                    key
+                                    columns: nodes {
+                                        ... on CompositionStructureNode {
+                                            key
+                                            elements: nodes {
+                                                ...compositionComponentNode
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                _metadata {
+                    key
+                    version
+                }
+            }
+        }
+        CityPage(
+          orderBy: { _ranking: SEMANTIC, _semanticWeight: 0.5 }
+          where: { _fulltext: { match: $searchQuery } }
+        ) {
+            items {
+                CityReference {
+                    ... on CityBlock {
+                        Title
+                        Image {
+                            key
+                            url {
+                                default
+                            }
+                        }
+                        Description {
+                            html
+                        }
+                        _metadata {
+                            key
+                        }
+                    }
+                }
+            }
+        }
+    }
+`);
+
 interface VisualBuilderProps {
     contentKey?: string;
     version?: string;
     url?: string;
+    searchQuery?: string;
 }
 
 const VisualBuilderComponent: FC<VisualBuilderProps> = ({
     version,
     contentKey,
     url,
+    searchQuery
 }) => {
     const variables: Record<string, unknown> = {};
     if (version) {
@@ -160,18 +227,24 @@ const VisualBuilderComponent: FC<VisualBuilderProps> = ({
     if (url) {
         variables.url = url;
     }
+    
+    if (searchQuery) {
+      variables.searchQuery = searchQuery;
+  }
 
-    // Check if variables.key is defined
-    const isPreview = variables.key !== undefined;
+    // Check conditions for selecting the correct query
+    const isSearchMode = variables.searchQuery !== undefined;
+    const isPreview = variables.key !== undefined && !isSearchMode;
 
-    // Select the correct query based on preview mode
+    // Select the correct query based on the mode
     const { data, refetch, error } = useQuery(
-        isPreview ? PreviewBuilder : VisualBuilder,
+        isSearchMode ? SearchResults : isPreview ? PreviewBuilder : VisualBuilder,
         {
             variables: variables,
             notifyOnNetworkStatusChange: true,
         }
     );
+
     if (error) {
         console.error("GraphQL Error:", error.message);
     }
@@ -207,7 +280,14 @@ const VisualBuilderComponent: FC<VisualBuilderProps> = ({
     const experience = getLastItem(experiences);
     const page = getLastItem(pages);
 
-    if (!experience && !page) return null;
+    if (!experience && !page) {
+      return (
+        <div className="relative w-full flex-1 vb:outline">
+            <HeaderElementComponent />
+            <NoSearchResults/>
+        </div>
+      )
+    }
 
        // Render grids for an experience
        const renderExperienceGrids = (experience: any) => (

@@ -1,5 +1,16 @@
-const HeaderElementComponent = () => {
+import { useState } from "react";
+import { useRouter } from "next/router";
 
+const HeaderElementComponent = () => {
+  const [searchTerm, setSearchTerm] = useState("");
+  const router = useRouter();
+
+  const handleSearchSubmit = (event: any) => {
+    event.preventDefault();
+    if (searchTerm.trim()) {
+      router.push(`/search?query=${encodeURIComponent(searchTerm.trim())}`);
+    }
+  };
   return (
     <header className="text-white">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
@@ -49,7 +60,7 @@ const HeaderElementComponent = () => {
           </svg>
         </div>
         {/* Navigation Links */}
-        <nav className="hidden md:flex space-x-6">
+        <nav className="hidden md:flex space-x-6 ml-6">
           <a href="/en/" className="hover:underline">
             Cities
           </a>
@@ -60,6 +71,19 @@ const HeaderElementComponent = () => {
             Resources
           </a>
         </nav>
+        {/* Search Bar */}
+        <form
+          onSubmit={handleSearchSubmit}
+          className="hidden md:flex flex-1 justify-center mx-8"
+        >
+          <input
+            type="text"
+            placeholder="Search..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full max-w-md px-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-black"
+          />
+        </form>
         {/* CTA Button */}
         <div>
           <button className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-full">

@@ -7,6 +7,7 @@ export default function Home() {
     let version: string | undefined;
     let key: string | undefined;
     let url: string | undefined;
+    let searchQuery: string | undefined;
 
     if (typeof window !== "undefined" && window.location !== undefined) {
         let locationUrl = window.location.toString();
@@ -37,6 +38,16 @@ export default function Home() {
             } catch {
                 version = undefined;   
             }
+        } else if(locationUrl.indexOf("/search?") !== -1){
+            const url = new URL(locationUrl);
+            try {
+                const urlKey = url.searchParams.get("query");
+                if (urlKey) {
+                    searchQuery = urlKey;
+                }
+            } catch {
+                searchQuery = undefined;   
+            }   
         } else {
             const contentId = window?.location?.pathname || "";
             url = contentId.endsWith("/") ? contentId : contentId + "/";
@@ -45,7 +56,7 @@ export default function Home() {
     
     return (
         <main className={`flex min-h-screen flex-col items-center px-12 justify-between ${inter.className}`}>
-            <VisualBuilderComponent version={version} contentKey={key} url={url}/>
+            <VisualBuilderComponent version={version} contentKey={key} url={url} searchQuery={searchQuery}/>
         </main>
         // </>
     );
