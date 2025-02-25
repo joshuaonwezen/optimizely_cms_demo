@@ -2,7 +2,7 @@ import { FragmentType, useFragment } from '../../graphql/fragment-masking'
 import { graphql } from '@/graphql'
 // import ParagraphElementComponent from '../elements/ParagraphElementComponent'
 import CityElementComponent from '../elements/CityElementComponent'
-import NoSearchResults from '../elements/NoSearchResults'
+import NoSearchResults from '../elements/NoSearchResultsComponent'
 // import FooterElementComponent from '../elements/FooterElementComponent'
 // import HeaderElementComponent from '../elements/HeaderElementComponent'
 
@@ -26,8 +26,6 @@ const CompositionComponentNodeComponent = (props: {
     const component = compositionComponentNode.component ?? compositionComponentNode
 
     switch (component?.__typename) {
-        // case "ParagraphElement":
-        //     return <ParagraphElementComponent paragraphElement={component}/>
         case "CityBlock":
             return <CityElementComponent cityElement={component}/>
         // case "HeaderElement":
