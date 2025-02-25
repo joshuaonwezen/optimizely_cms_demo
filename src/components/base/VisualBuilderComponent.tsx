@@ -1,12 +1,11 @@
 import React, { FC, useEffect } from "react";
 import { useQuery } from "@apollo/client";
-
 import { graphql } from "@/graphql";
 import CompositionNodeComponent from "./CompositionNodeComponent";
 import { onContentSaved } from "@/helpers/onContentSaved";
 import HeaderElementComponent from "../elements/HeaderElementComponent";
 
-export const VisualBuilder = graphql(/* GraphQL */ `
+export const VisualBuilderQuery = graphql(/* GraphQL */ `
     query VisualBuilder($url: String) {
         _Experience(where: { _metadata: { url: { default: { eq: $url } } } }) {
             items {
@@ -64,7 +63,7 @@ export const VisualBuilder = graphql(/* GraphQL */ `
     }
 `);
 
-export const PreviewBuilder = graphql(/* GraphQL */ `
+export const PreviewBuilderQuery = graphql(/* GraphQL */ `
     query PreviewBuilder($key: String, $version: String) {
         _Experience(
             where: {
@@ -143,124 +142,73 @@ interface VisualBuilderProps {
     url?: string;
 }
 
-const VisualBuilderComponent: FC<VisualBuilderProps> = ({
-    version,
-    contentKey,
-    url,
-}) => {
-    const variables: Record<string, unknown> = {};
-    if (version) {
-        variables.version = version;
-    }
+const VisualBuilderComponent: FC<VisualBuilderProps> = ({ version, contentKey, url }) => {
+    const variables: Record<string, unknown> = {
+        ...(version && { version }),
+        ...(contentKey && { key: contentKey }),
+        ...(url && { url }),
+    };
 
-    if (contentKey) {
-        variables.key = contentKey;
-    }
-
-    if (url) {
-        variables.url = url;
-    }
-
-    // Check if variables.key is defined
-    const isPreview = variables.key !== undefined;
-
-    // Select the correct query based on preview mode
-    const { data, refetch, error } = useQuery(
-        isPreview ? PreviewBuilder : VisualBuilder,
-        {
-            variables: variables,
-            notifyOnNetworkStatusChange: true,
-        }
-    );
-    if (error) {
-        console.error("GraphQL Error:", error.message);
-    }
+    const isPreview = !!variables.key;
+    const { data, refetch, error } = useQuery(isPreview ? PreviewBuilderQuery : VisualBuilderQuery, {
+        variables,
+        notifyOnNetworkStatusChange: true,
+    });
 
     useEffect(() => {
-        if (data) {
-            console.log("GraphQL response data:", data);
-        }
+        if (data) console.log("GraphQL response data:", data);
     }, [data]);
 
+    useEffect(() => {
+        onContentSaved((event) => {
+            const contentIdArray = event.contentLink.split("_");
+            if (contentIdArray.length > 1) {
+                const newVersion = contentIdArray[contentIdArray.length - 1];
+                refetch({ ...variables, version: newVersion });
+            }
+        });
+    }, [refetch]);
+
     if (error) {
         console.error("GraphQL Error:", error.message);
-    }
-
-    useEffect(() => {
-        onContentSaved((_) => {
-            const contentIdArray = _.contentLink.split("_");
-            if (contentIdArray.length > 1) {
-                version = contentIdArray[contentIdArray.length - 1];
-                variables.version = version;
-            }
-            console.log(variables, isPreview);
-            refetch(variables);
-        });
-    }, []);
-
-    const experiences = data?._Experience?.items;
-    const pages = data?.CityPage?.items;
-
-    // Check if at least one array exists and has items
-    if (
-        (!experiences || experiences.length === 0) &&
-        (!pages || pages.length === 0)
-    ) {
         return null;
     }
 
-    const experience =
-        experiences && experiences.length > 0
-            ? experiences[experiences.length - 1]
-            : null;
-    const page = pages && pages.length > 0 ? pages[pages.length - 1] : null;
+    const experiences = data?._Experience?.items || [];
+    const pages = data?.CityPage?.items || [];
 
-    if (!experience && !page) {
-        return null;
-    }
+    if (experiences.length === 0 && pages.length === 0) return null;
+
+    const experience = experiences[experiences.length - 1] || null;
+    const page = pages[pages.length - 1] || null;
+
+    if (!experience && !page) return null;
 
     if (!page) {
         return (
             <div className="relative w-full flex-1 vb:outline">
-                <HeaderElementComponent></HeaderElementComponent>
+                <HeaderElementComponent />
                 {experience?.composition?.grids?.map((grid: any) => {
                     const displaySetting = grid.displaySettings?.find(
                         (setting: any) => setting.key === "defaultBlogStyles"
                     );
 
-                    // Determine the class based on the display setting's value
-                    const flexDirection =
-                        displaySetting?.value === "Row"
-                            ? "flex-row"
-                            : "flex-col";
+                    const flexDirection = displaySetting?.value === "Row" ? "flex-row" : "flex-col";
                     return (
                         <div
                             key={grid.key}
-                            className={`relative w-full flex ${flexDirection} flex-colflex-nowrap justify-start vb:grid`}
-                            data-epi-block-id={grid.key}>
+                            className={`relative w-full flex ${flexDirection} flex-nowrap justify-start vb:grid`}
+                            data-epi-block-id={grid.key}
+                        >
                             {grid.rows?.map((row: any) => (
-                                <div
-                                    key={row.key}
-                                    className="flex-1 flex flex-row flex-nowrap justify-start vb:row">
+                                <div key={row.key} className="flex-1 flex flex-row flex-nowrap justify-start vb:row">
                                     {row.columns?.map((column: any) => (
-                                        <div
-                                            className="flex-1 flex flex-col flex-nowrap justify-start vb:col"
-                                            key={column.key}>
-                                            {column.elements?.map(
-                                                (element: any) => (
-                                                    <div
-                                                        data-epi-block-id={
-                                                            element?.key
-                                                        }
-                                                        key={element?.key}>
-                                                        <CompositionNodeComponent
-                                                            compositionComponentNode={
-                                                                element
-                                                            }
-                                                        />
-                                                    </div>
-                                                )
-                                            )}
+                                        <div className="flex-1 flex flex-col flex-nowrap justify-start vb:col" key={column.key}>
+                                            {column.elements?.map((element: any) => (
+                                                <div data-epi-block-id={element?.key} key={element?.key}>
+                                                    <CompositionNodeComponent compositionComponentNode={element} />
+                                                </div>
+                                            ))}
                                         </div>
                                     ))}
                                 </div>
@@ -270,36 +218,26 @@ const VisualBuilderComponent: FC<VisualBuilderProps> = ({
                 })}
             </div>
         );
-    } else if (
-        page &&
-        page.CityReference &&
-        page.CityReference.__typename === "CityBlock"
-    ) {
+    } else if (page.CityReference?.__typename === "CityBlock") {
         const cityBlock = page.CityReference;
-        const compositionComponentNode = {
-          component: {
-            ...cityBlock,
-          },
+        const compositionComponentNode: any = {
+            component: { ...cityBlock },
         };
-        const _metadata = cityBlock._metadata;
-        if (!_metadata) {
-            return null;
-        }
+
+        if (!cityBlock._metadata) return null;
+
         return (
             <div className="relative w-full flex-1 vb:outline">
                 <HeaderElementComponent />
                 <div
-                    key={_metadata.key}
-                    className="relative w-full flex flex-row flex-colflex-nowrap justify-start vb:grid"
-                    data-epi-block-id={_metadata.key}>
+                    key={cityBlock._metadata.key}
+                    className="relative w-full flex flex-row flex-nowrap justify-start vb:grid"
+                    data-epi-block-id={cityBlock._metadata.key}
+                >
                     <div className="flex-1 flex flex-row flex-nowrap justify-start vb:row">
                         <div className="flex-1 flex flex-col flex-nowrap justify-start vb:col">
-                            <div
-                                data-epi-block-id={_metadata.key}
-                                key={_metadata.key}>
-                                <CompositionNodeComponent
-                                    compositionComponentNode={compositionComponentNode}
-                                />
+                            <div data-epi-block-id={cityBlock._metadata.key} key={cityBlock._metadata.key}>
+                                <CompositionNodeComponent compositionComponentNode={compositionComponentNode} />
                             </div>
                         </div>
                     </div>
@@ -307,6 +245,8 @@ const VisualBuilderComponent: FC<VisualBuilderProps> = ({
             </div>
         );
     }
+
+    return null;
 };
 
 export default VisualBuilderComponent;
