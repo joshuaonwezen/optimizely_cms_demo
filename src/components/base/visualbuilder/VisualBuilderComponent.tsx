@@ -45,9 +45,11 @@ const VisualBuilderComponent: FC<VisualBuilderProps> = ({
   );
 
   useEffect(() => {
-    let debounceTimer: NodeJS.Timeout;
+    let debounceTimer: NodeJS.Timeout | null = null;
+  
     const handleContentSaved = (event: any) => {
-      clearTimeout(debounceTimer);
+      if (debounceTimer) clearTimeout(debounceTimer);
+  
       debounceTimer = setTimeout(() => {
         const contentIdArray = event.contentLink.split("_");
         if (contentIdArray.length > 1) {
@@ -56,10 +58,15 @@ const VisualBuilderComponent: FC<VisualBuilderProps> = ({
         }
       }, 1000);
     };
-
-    onContentSaved(handleContentSaved);
-    return () => clearTimeout(debounceTimer);
+  
+    const unsubscribe: any = onContentSaved(handleContentSaved);
+    console.log("Unsubscribe", unsubscribe)
+    return () => {
+      if (debounceTimer) clearTimeout(debounceTimer);
+      if (unsubscribe) unsubscribe();
+    };
   }, [refetch, variables, isPreview]);
+  
 
   const processedData = useMemo(() => {
     const experiences = !isSearchMode ? data?._Experience?.items ?? [] : [];
