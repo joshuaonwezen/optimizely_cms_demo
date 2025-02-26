@@ -18,6 +18,10 @@ interface VisualBuilderProps {
   searchQuery?: string;
 }
 
+type CompositionNodeType = {
+  _metadata: { key: string };
+};
+
 const VisualBuilderComponent: FC<VisualBuilderProps> = ({
   version,
   contentKey,
@@ -116,7 +120,7 @@ const VisualBuilderComponent: FC<VisualBuilderProps> = ({
           >
             <div className="flex-1 flex flex-row flex-nowrap justify-start vb:row">
               <div className="flex-1 flex flex-col flex-nowrap justify-start vb:col">
-                <CompositionNodeComponent compositionComponentNode={{ component: { ...cityBlock } }} />
+                <CompositionNodeComponent compositionComponentNode={cityBlock} />
               </div>
             </div>
           </div>
@@ -126,7 +130,6 @@ const VisualBuilderComponent: FC<VisualBuilderProps> = ({
     []
   );
 
-  console.log("Render");
 
   if (loading) {
     return (
