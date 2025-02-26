@@ -26,12 +26,18 @@ function isInEditMode() {
     return !!getPreviewToken();
 }
 
-export function onContentSaved(callback: ((message: ContentSavedEventArgs) => void )) {
+export function onContentSaved(callback: (message: ContentSavedEventArgs) => void) {
     if (!isInEditMode()) {
-        return;
+        return () => {};
     }
 
-    window.addEventListener("optimizely:cms:contentSaved", (event: any) => {
+    const handler = (event: any) => {
         callback(event.detail);
-    });
+    };
+
+    window.addEventListener("optimizely:cms:contentSaved", handler);
+
+    return () => {
+        window.removeEventListener("optimizely:cms:contentSaved", handler);
+    };
 }
