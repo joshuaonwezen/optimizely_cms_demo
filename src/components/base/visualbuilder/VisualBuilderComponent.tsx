@@ -38,6 +38,7 @@ const VisualBuilderComponent: FC<VisualBuilderProps> = ({
 
   const isInIframe = typeof window !== "undefined" && window.self !== window.top;
   const normalizedUrl = isInIframe ? normalizeUrl(document.referrer) : normalizeUrl(url);
+  console.log("IFRAME", document.referrer, url, normalizeUrl(document.referrer), normalizeUrl(url))
   
   const variables = useMemo(
     () => ({
