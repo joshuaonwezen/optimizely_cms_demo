@@ -56,7 +56,7 @@ const VisualBuilderComponent: FC<VisualBuilderProps> = ({
           const newVersion = contentIdArray.at(-1);
           refetch(isPreview ? { ...variables, version: newVersion } : variables);
         }
-      }, 1000);
+      }, 300);
     };
   
     const unsubscribe: any = onContentSaved(handleContentSaved);
