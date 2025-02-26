@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useMemo } from "react";
+import React, { FC, useEffect, useMemo, useCallback } from "react";
 import { useQuery } from "@apollo/client";
 
 import { VisualBuilder } from "../visualbuilder/queries/VisualBuilderQuery";
@@ -25,47 +25,108 @@ const VisualBuilderComponent: FC<VisualBuilderProps> = ({
   searchQuery,
 }) => {
   const variables = useMemo(
-    () => ({
-      ...(version && { version }),
-      ...(contentKey && { key: contentKey }),
-      ...(url && { url }),
-      ...(searchQuery && { searchQuery }),
-    }),
+    () => ({ version, key: contentKey, url, searchQuery }),
     [version, contentKey, url, searchQuery]
   );
 
-  const isSearchMode = !!searchQuery;
-  const isPreview = !!contentKey && !isSearchMode;
+  const isSearchMode = Boolean(searchQuery);
+  const isPreview = Boolean(contentKey && !isSearchMode);
 
   const { data, refetch, error, loading } = useQuery(
     isSearchMode ? SearchResultsCities : isPreview ? Preview : VisualBuilder,
     {
       variables,
       notifyOnNetworkStatusChange: true,
+      fetchPolicy: "cache-and-network",
     }
   );
 
   useEffect(() => {
-    onContentSaved((_) => {
-      const contentIdArray = _.contentLink.split("_");
-      if (contentIdArray.length > 1) {
-        const newVersion = contentIdArray[contentIdArray.length - 1];
-        refetch(isPreview ? { ...variables, version: newVersion } : variables);
-      }
-    });
+    let debounceTimer: NodeJS.Timeout;
+    const handleContentSaved = (event: any) => {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => {
+        const contentIdArray = event.contentLink.split("_");
+        if (contentIdArray.length > 1) {
+          const newVersion = contentIdArray.at(-1);
+          refetch(isPreview ? { ...variables, version: newVersion } : variables);
+        }
+      }, 300);
+    };
+
+    onContentSaved(handleContentSaved);
+    return () => clearTimeout(debounceTimer);
   }, [refetch, variables, isPreview]);
 
-  const experiences = useMemo(() => (!isSearchMode ? data?._Experience?.items ?? [] : []), [data, isSearchMode]);
-  const pages = useMemo(() => (!isSearchMode ? data?.CityPage?.items ?? [] : []), [data, isSearchMode]);
+  const processedData = useMemo(() => {
+    const experiences = !isSearchMode ? data?._Experience?.items ?? [] : [];
+    const pages = !isSearchMode ? data?.CityPage?.items ?? [] : [];
+    const searchResults = isSearchMode && isSearchResultsQuery(data) ? data._Component?.items ?? [] : [];
 
-  const searchResults = useMemo(
-    () => (isSearchMode && isSearchResultsQuery(data) ? data._Component?.items ?? [] : []),
-    [data, isSearchMode]
+    return {
+      experience: getFirstItem(experiences),
+      page: getFirstItem(pages),
+      searchResult: getFirstItem(searchResults),
+    };
+  }, [data, isSearchMode]);
+
+  const renderExperienceGrids = useCallback(
+    (experience: any) => (
+      <div className="relative w-full flex-1 vb:outline">
+        <HeaderElementComponent />
+        {experience?.composition?.grids?.map((grid: any) => (
+          <div
+            key={grid.key}
+            className={`relative w-full flex ${
+              grid.displaySettings?.find((setting: any) => setting.key === "defaultBlogStyles")?.value === "Row"
+                ? "flex-row"
+                : "flex-col"
+            } flex-colflex-nowrap justify-start vb:grid`}
+            data-epi-block-id={grid.key}
+          >
+            {grid.rows?.map((row: any) => (
+              <div key={row.key} className="flex-1 flex flex-row flex-nowrap justify-start vb:row">
+                {row.columns?.map((column: any) => (
+                  <div className="flex-1 flex flex-col flex-nowrap justify-start vb:col" key={column.key}>
+                    {column.elements?.map((element: any) => (
+                      <div data-epi-block-id={element?.key} key={element?.key}>
+                        <CompositionNodeComponent compositionComponentNode={element} />
+                      </div>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+    ),
+    []
   );
 
-  const experience = getFirstItem(experiences);
-  const page = getFirstItem(pages);
-  const searchResult = getFirstItem(searchResults);
+  const renderCityPage = useCallback(
+    (cityBlock: any) => (
+      cityBlock?._metadata && (
+        <div className="relative w-full flex-1 vb:outline">
+          <HeaderElementComponent />
+          <div
+            key={cityBlock._metadata.key}
+            className="relative w-full flex flex-row flex-colflex-nowrap justify-start vb:grid"
+            data-epi-block-id={cityBlock._metadata.key}
+          >
+            <div className="flex-1 flex flex-row flex-nowrap justify-start vb:row">
+              <div className="flex-1 flex flex-col flex-nowrap justify-start vb:col">
+                <CompositionNodeComponent compositionComponentNode={{ component: { ...cityBlock } }} />
+              </div>
+            </div>
+          </div>
+        </div>
+      )
+    ),
+    []
+  );
+
+  console.log("Render");
 
   if (loading) {
     return (
@@ -76,7 +137,7 @@ const VisualBuilderComponent: FC<VisualBuilderProps> = ({
     );
   }
 
-  if (!experience && !page && !searchResult) {
+  if (!processedData.experience && !processedData.page && !processedData.searchResult) {
     return (
       <div className="relative w-full flex-1 vb:outline">
         <HeaderElementComponent />
@@ -85,71 +146,16 @@ const VisualBuilderComponent: FC<VisualBuilderProps> = ({
     );
   }
 
-  const renderExperienceGrids = (experience: any) => (
-    <div className="relative w-full flex-1 vb:outline">
-      <HeaderElementComponent />
-      {experience?.composition?.grids?.map((grid: any) => (
-        <div
-          key={grid.key}
-          className={`relative w-full flex ${
-            grid.displaySettings?.find((setting: any) => setting.key === "defaultBlogStyles")?.value === "Row"
-              ? "flex-row"
-              : "flex-col"
-          } flex-colflex-nowrap justify-start vb:grid`}
-          data-epi-block-id={grid.key}
-        >
-          {grid.rows?.map((row: any) => (
-            <div key={row.key} className="flex-1 flex flex-row flex-nowrap justify-start vb:row">
-              {row.columns?.map((column: any) => (
-                <div className="flex-1 flex flex-col flex-nowrap justify-start vb:col" key={column.key}>
-                  {column.elements?.map((element: any) => (
-                    <div data-epi-block-id={element?.key} key={element?.key}>
-                      <CompositionNodeComponent compositionComponentNode={element} />
-                    </div>
-                  ))}
-                </div>
-              ))}
-            </div>
-          ))}
-        </div>
-      ))}
-    </div>
-  );
-
-  const renderCityPage = (cityBlock: any) => {
-    if (!cityBlock?._metadata) return null;
-    const compositionComponentNode: any = { component: { ...cityBlock } };
-
-    return (
-      <div className="relative w-full flex-1 vb:outline">
-        <HeaderElementComponent />
-        <div
-          key={cityBlock._metadata.key}
-          className="relative w-full flex flex-row flex-colflex-nowrap justify-start vb:grid"
-          data-epi-block-id={cityBlock._metadata.key}
-        >
-          <div className="flex-1 flex flex-row flex-nowrap justify-start vb:row">
-            <div className="flex-1 flex flex-col flex-nowrap justify-start vb:col">
-              <div data-epi-block-id={cityBlock._metadata.key}>
-                <CompositionNodeComponent compositionComponentNode={compositionComponentNode} />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  if (experience) return renderExperienceGrids(experience);
+  if (processedData.experience) return renderExperienceGrids(processedData.experience);
 
   if (
-    (page && page?.CityReference?.__typename === "CityBlock") ||
-    (searchResult && searchResult?.__typename === "CityBlock")
+    (processedData.page && processedData.page?.CityReference?.__typename === "CityBlock") ||
+    (processedData.searchResult && processedData.searchResult?.__typename === "CityBlock")
   ) {
-    return renderCityPage(page?.CityReference ?? searchResult);
+    return renderCityPage(processedData.page?.CityReference ?? processedData.searchResult);
   }
 
   return null;
 };
 
-export default VisualBuilderComponent;
+export default React.memo(VisualBuilderComponent);
