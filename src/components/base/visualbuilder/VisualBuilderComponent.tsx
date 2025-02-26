@@ -35,12 +35,15 @@ const VisualBuilderComponent: FC<VisualBuilderProps> = ({
       return inputUrl;
     }
   };
+
+  const isInIframe = typeof window !== "undefined" && window.self !== window.top;
+  const normalizedUrl = isInIframe ? normalizeUrl(document.referrer) : normalizeUrl(url);
   
   const variables = useMemo(
     () => ({
       version,
       key: contentKey,
-      url: normalizeUrl(url), // ✅ Normalize here
+      url: normalizedUrl,
       searchQuery,
     }),
     [version, contentKey, url, searchQuery]
