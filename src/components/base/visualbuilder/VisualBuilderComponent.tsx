@@ -18,10 +18,6 @@ interface VisualBuilderProps {
   searchQuery?: string;
 }
 
-type CompositionNodeType = {
-  _metadata: { key: string };
-};
-
 const VisualBuilderComponent: FC<VisualBuilderProps> = ({
   version,
   contentKey,
@@ -55,7 +51,7 @@ const VisualBuilderComponent: FC<VisualBuilderProps> = ({
           const newVersion = contentIdArray.at(-1);
           refetch(isPreview ? { ...variables, version: newVersion } : variables);
         }
-      }, 300);
+      }, 1000);
     };
 
     onContentSaved(handleContentSaved);
