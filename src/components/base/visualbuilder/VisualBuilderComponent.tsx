@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useMemo, useCallback } from "react";
+import React, { FC, useEffect, useMemo, useCallback, useState } from "react";
 import { useQuery } from "@apollo/client";
 
 import { VisualBuilder } from "../visualbuilder/queries/VisualBuilderQuery";
@@ -24,6 +24,8 @@ const VisualBuilderComponent: FC<VisualBuilderProps> = ({
   url,
   searchQuery,
 }) => {
+  const [hasLoaded, setHasLoaded] = useState(false);
+
   const variables = useMemo(
     () => ({ version, key: contentKey, url, searchQuery }),
     [version, contentKey, url, searchQuery]
@@ -38,6 +40,7 @@ const VisualBuilderComponent: FC<VisualBuilderProps> = ({
       variables,
       notifyOnNetworkStatusChange: true,
       fetchPolicy: "cache-and-network",
+      onCompleted: () => setHasLoaded(true), // Mark as loaded when data arrives
     }
   );
 
@@ -105,7 +108,7 @@ const VisualBuilderComponent: FC<VisualBuilderProps> = ({
   );
 
   const renderCityPage = useCallback(
-    (cityBlock: any) => (
+    (cityBlock: any) =>
       cityBlock?._metadata && (
         <div className="relative w-full flex-1 vb:outline">
           <HeaderElementComponent />
@@ -121,13 +124,11 @@ const VisualBuilderComponent: FC<VisualBuilderProps> = ({
             </div>
           </div>
         </div>
-      )
-    ),
+      ),
     []
   );
 
-
-  if (loading) {
+  if (loading && !hasLoaded) {
     return (
       <div className="relative w-full flex-1 vb:outline">
         <HeaderElementComponent />
