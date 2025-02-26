@@ -26,15 +26,30 @@ const VisualBuilderComponent: FC<VisualBuilderProps> = ({
 }) => {
   const [hasLoaded, setHasLoaded] = useState(false);
 
+  const normalizeUrl = (inputUrl: string | undefined) => {
+    if (!inputUrl) return "/";
+    try {
+      const url = new URL(inputUrl, window.location.origin);
+      return url.pathname;
+    } catch (error) {
+      return inputUrl;
+    }
+  };
+  
   const variables = useMemo(
-    () => ({ version, key: contentKey, url, searchQuery }),
+    () => ({
+      version,
+      key: contentKey,
+      url: normalizeUrl(url), // ✅ Normalize here
+      searchQuery,
+    }),
     [version, contentKey, url, searchQuery]
   );
+  
 
   const isSearchMode = Boolean(searchQuery);
   const isPreview = Boolean(contentKey && !isSearchMode);
-  const isInIframe = typeof window !== "undefined" ? window.self !== window.top : false;
-  console.log("IFRAME", isInIframe)
+
   const { data, refetch, error, loading } = useQuery(
     isSearchMode ? SearchResultsCities : isPreview ? Preview : VisualBuilder,
     {
@@ -45,16 +60,6 @@ const VisualBuilderComponent: FC<VisualBuilderProps> = ({
     }
   );
 
-  useEffect(() => {
-    if (isInIframe) {
-      window.addEventListener("load", () => {
-        console.log('reload please')
-        setTimeout(function(){
-          refetch(variables);
-        }, 1000)
-      });
-    }
-  }, [isInIframe, refetch, variables]);  
 
   useEffect(() => {
     let debounceTimer: NodeJS.Timeout | null = null;
