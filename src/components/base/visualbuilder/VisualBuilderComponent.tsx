@@ -34,7 +34,7 @@ const VisualBuilderComponent: FC<VisualBuilderProps> = ({
   const isSearchMode = Boolean(searchQuery);
   const isPreview = Boolean(contentKey && !isSearchMode);
   const isInIframe = window.self !== window.top;
-
+  console.log("IFRAME", isInIframe)
   const { data, refetch, error, loading } = useQuery(
     isSearchMode ? SearchResultsCities : isPreview ? Preview : VisualBuilder,
     {
@@ -48,7 +48,10 @@ const VisualBuilderComponent: FC<VisualBuilderProps> = ({
   useEffect(() => {
     if (isInIframe) {
       window.addEventListener("load", () => {
-        refetch(variables);
+        console.log('reload please')
+        setTimeout(function(){
+          refetch(variables);
+        }, 1000)
       });
     }
   }, [isInIframe, refetch, variables]);  
