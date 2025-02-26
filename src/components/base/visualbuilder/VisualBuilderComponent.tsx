@@ -33,6 +33,7 @@ const VisualBuilderComponent: FC<VisualBuilderProps> = ({
 
   const isSearchMode = Boolean(searchQuery);
   const isPreview = Boolean(contentKey && !isSearchMode);
+  const isInIframe = window.self !== window.top;
 
   const { data, refetch, error, loading } = useQuery(
     isSearchMode ? SearchResultsCities : isPreview ? Preview : VisualBuilder,
@@ -43,6 +44,14 @@ const VisualBuilderComponent: FC<VisualBuilderProps> = ({
       onCompleted: () => setHasLoaded(true), // Mark as loaded when data arrives
     }
   );
+
+  useEffect(() => {
+    if (isInIframe) {
+      window.addEventListener("load", () => {
+        refetch(variables);
+      });
+    }
+  }, [isInIframe, refetch, variables]);  
 
   useEffect(() => {
     let debounceTimer: NodeJS.Timeout | null = null;
@@ -56,11 +65,10 @@ const VisualBuilderComponent: FC<VisualBuilderProps> = ({
           const newVersion = contentIdArray.at(-1);
           refetch(isPreview ? { ...variables, version: newVersion } : variables);
         }
-      }, 300);
+      }, 1000);
     };
   
     const unsubscribe: any = onContentSaved(handleContentSaved);
-    console.log("Unsubscribe", unsubscribe)
     return () => {
       if (debounceTimer) clearTimeout(debounceTimer);
       if (unsubscribe) unsubscribe();
