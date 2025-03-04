@@ -26,7 +26,7 @@ const VisualBuilderComponent: FC<VisualBuilderProps> = ({
 }) => {
   const [hasLoaded, setHasLoaded] = useState(false);
 
-  function extractPath(url) {
+  function extractPath(url: string) {
     // Decode the URL first
     const decodedUrl = decodeURIComponent(url);
     // Use regex or string methods to extract the relevant part
