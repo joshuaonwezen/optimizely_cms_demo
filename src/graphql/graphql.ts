@@ -72,6 +72,7 @@ export type BlankExperienceOutput = {
   autocomplete?: Maybe<BlankExperienceAutocomplete>;
   cursor?: Maybe<Scalars['String']['output']>;
   facets?: Maybe<BlankExperienceFacet>;
+  item?: Maybe<BlankExperience>;
   items?: Maybe<Array<Maybe<BlankExperience>>>;
   total?: Maybe<Scalars['Int']['output']>;
 };
@@ -142,6 +143,7 @@ export type BlankSectionOutput = {
   autocomplete?: Maybe<BlankSectionAutocomplete>;
   cursor?: Maybe<Scalars['String']['output']>;
   facets?: Maybe<BlankSectionFacet>;
+  item?: Maybe<BlankSection>;
   items?: Maybe<Array<Maybe<BlankSection>>>;
   total?: Maybe<Scalars['Int']['output']>;
 };
@@ -217,6 +219,7 @@ export type CityBlockOutput = {
   autocomplete?: Maybe<CityBlockAutocomplete>;
   cursor?: Maybe<Scalars['String']['output']>;
   facets?: Maybe<CityBlockFacet>;
+  item?: Maybe<CityBlock>;
   items?: Maybe<Array<Maybe<CityBlock>>>;
   total?: Maybe<Scalars['Int']['output']>;
 };
@@ -299,6 +302,7 @@ export type CityExperienceOutput = {
   autocomplete?: Maybe<CityExperienceAutocomplete>;
   cursor?: Maybe<Scalars['String']['output']>;
   facets?: Maybe<CityExperienceFacet>;
+  item?: Maybe<CityExperience>;
   items?: Maybe<Array<Maybe<CityExperience>>>;
   total?: Maybe<Scalars['Int']['output']>;
 };
@@ -381,6 +385,7 @@ export type CityOverviewOutput = {
   autocomplete?: Maybe<CityOverviewAutocomplete>;
   cursor?: Maybe<Scalars['String']['output']>;
   facets?: Maybe<CityOverviewFacet>;
+  item?: Maybe<CityOverview>;
   items?: Maybe<Array<Maybe<CityOverview>>>;
   total?: Maybe<Scalars['Int']['output']>;
 };
@@ -452,6 +457,7 @@ export type CityPageOutput = {
   autocomplete?: Maybe<CityPageAutocomplete>;
   cursor?: Maybe<Scalars['String']['output']>;
   facets?: Maybe<CityPageFacet>;
+  item?: Maybe<CityPage>;
   items?: Maybe<Array<Maybe<CityPage>>>;
   total?: Maybe<Scalars['Int']['output']>;
 };
@@ -510,6 +516,7 @@ export type CityPageSettingsOutput = {
   autocomplete?: Maybe<CityPageSettingsAutocomplete>;
   cursor?: Maybe<Scalars['String']['output']>;
   facets?: Maybe<CityPageSettingsFacet>;
+  item?: Maybe<CityPageSettings>;
   items?: Maybe<Array<Maybe<CityPageSettings>>>;
   total?: Maybe<Scalars['Int']['output']>;
 };
@@ -972,6 +979,7 @@ export type DataOrderByInput = {
 export type DataOutput = {
   __typename?: 'DataOutput';
   cursor?: Maybe<Scalars['String']['output']>;
+  item?: Maybe<IData>;
   items?: Maybe<Array<Maybe<IData>>>;
   total?: Maybe<Scalars['Int']['output']>;
 };
@@ -1079,6 +1087,7 @@ export type GenericMediaOutput = {
   autocomplete?: Maybe<GenericMediaAutocomplete>;
   cursor?: Maybe<Scalars['String']['output']>;
   facets?: Maybe<GenericMediaFacet>;
+  item?: Maybe<GenericMedia>;
   items?: Maybe<Array<Maybe<GenericMedia>>>;
   total?: Maybe<Scalars['Int']['output']>;
 };
@@ -1596,6 +1605,7 @@ export type ImageMediaOutput = {
   autocomplete?: Maybe<ImageMediaAutocomplete>;
   cursor?: Maybe<Scalars['String']['output']>;
   facets?: Maybe<ImageMediaFacet>;
+  item?: Maybe<ImageMedia>;
   items?: Maybe<Array<Maybe<ImageMedia>>>;
   total?: Maybe<Scalars['Int']['output']>;
 };
@@ -2427,6 +2437,7 @@ export type SysContentFolderOutput = {
   autocomplete?: Maybe<SysContentFolderAutocomplete>;
   cursor?: Maybe<Scalars['String']['output']>;
   facets?: Maybe<SysContentFolderFacet>;
+  item?: Maybe<SysContentFolder>;
   items?: Maybe<Array<Maybe<SysContentFolder>>>;
   total?: Maybe<Scalars['Int']['output']>;
 };
@@ -2492,6 +2503,7 @@ export type VideoMediaOutput = {
   autocomplete?: Maybe<VideoMediaAutocomplete>;
   cursor?: Maybe<Scalars['String']['output']>;
   facets?: Maybe<VideoMediaFacet>;
+  item?: Maybe<VideoMedia>;
   items?: Maybe<Array<Maybe<VideoMedia>>>;
   total?: Maybe<Scalars['Int']['output']>;
 };
@@ -2557,6 +2569,7 @@ export type _ComponentOutput = {
   autocomplete?: Maybe<_ComponentAutocomplete>;
   cursor?: Maybe<Scalars['String']['output']>;
   facets?: Maybe<_ComponentFacet>;
+  item?: Maybe<_IComponent>;
   items?: Maybe<Array<Maybe<_IComponent>>>;
   total?: Maybe<Scalars['Int']['output']>;
 };
@@ -2622,6 +2635,7 @@ export type _ContentOutput = {
   autocomplete?: Maybe<_ContentAutocomplete>;
   cursor?: Maybe<Scalars['String']['output']>;
   facets?: Maybe<_ContentFacet>;
+  item?: Maybe<_IContent>;
   items?: Maybe<Array<Maybe<_IContent>>>;
   total?: Maybe<Scalars['Int']['output']>;
 };
@@ -2691,6 +2705,7 @@ export type _ExperienceOutput = {
   autocomplete?: Maybe<_ExperienceAutocomplete>;
   cursor?: Maybe<Scalars['String']['output']>;
   facets?: Maybe<_ExperienceFacet>;
+  item?: Maybe<_IExperience>;
   items?: Maybe<Array<Maybe<_IExperience>>>;
   total?: Maybe<Scalars['Int']['output']>;
 };
@@ -2757,6 +2772,7 @@ export type _FolderOutput = {
   autocomplete?: Maybe<_FolderAutocomplete>;
   cursor?: Maybe<Scalars['String']['output']>;
   facets?: Maybe<_FolderFacet>;
+  item?: Maybe<_IFolder>;
   items?: Maybe<Array<Maybe<_IFolder>>>;
   total?: Maybe<Scalars['Int']['output']>;
 };
@@ -3050,6 +3066,7 @@ export type _ImageOutput = {
   autocomplete?: Maybe<_ImageAutocomplete>;
   cursor?: Maybe<Scalars['String']['output']>;
   facets?: Maybe<_ImageFacet>;
+  item?: Maybe<_IImage>;
   items?: Maybe<Array<Maybe<_IImage>>>;
   total?: Maybe<Scalars['Int']['output']>;
 };
@@ -3115,6 +3132,7 @@ export type _MediaOutput = {
   autocomplete?: Maybe<_MediaAutocomplete>;
   cursor?: Maybe<Scalars['String']['output']>;
   facets?: Maybe<_MediaFacet>;
+  item?: Maybe<_IMedia>;
   items?: Maybe<Array<Maybe<_IMedia>>>;
   total?: Maybe<Scalars['Int']['output']>;
 };
@@ -3180,6 +3198,7 @@ export type _PageOutput = {
   autocomplete?: Maybe<_PageAutocomplete>;
   cursor?: Maybe<Scalars['String']['output']>;
   facets?: Maybe<_PageFacet>;
+  item?: Maybe<_IPage>;
   items?: Maybe<Array<Maybe<_IPage>>>;
   total?: Maybe<Scalars['Int']['output']>;
 };
@@ -3249,6 +3268,7 @@ export type _SectionOutput = {
   autocomplete?: Maybe<_SectionAutocomplete>;
   cursor?: Maybe<Scalars['String']['output']>;
   facets?: Maybe<_SectionFacet>;
+  item?: Maybe<_ISection>;
   items?: Maybe<Array<Maybe<_ISection>>>;
   total?: Maybe<Scalars['Int']['output']>;
 };
@@ -3315,6 +3335,7 @@ export type _VideoOutput = {
   autocomplete?: Maybe<_VideoAutocomplete>;
   cursor?: Maybe<Scalars['String']['output']>;
   facets?: Maybe<_VideoFacet>;
+  item?: Maybe<_IVideo>;
   items?: Maybe<Array<Maybe<_IVideo>>>;
   total?: Maybe<Scalars['Int']['output']>;
 };
