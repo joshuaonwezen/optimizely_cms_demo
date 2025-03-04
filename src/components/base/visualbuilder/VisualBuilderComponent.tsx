@@ -26,20 +26,17 @@ const VisualBuilderComponent: FC<VisualBuilderProps> = ({
 }) => {
   const [hasLoaded, setHasLoaded] = useState(false);
 
-  const normalizeUrl = (inputUrl: string | undefined) => {
-    console.log(inputUrl)
-    if (!inputUrl) return "/en";
-    try {
-      const url = new URL(inputUrl, window.location.origin);
-      return url.pathname;
-    } catch (error) {
-      return inputUrl;
-    }
-  };
+  function extractPath(url) {
+    // Decode the URL first
+    const decodedUrl = decodeURIComponent(url);
+    // Use regex or string methods to extract the relevant part
+    const match = decodedUrl.match(/\/en\/.*/);
+    return match ? match[0] : null; // Return the matched portion or null if not found
+}
 
   const isInIframe = typeof window !== "undefined" && window.self !== window.top;
-  // const normalizedUrl = isInIframe ? normalizeUrl(document.referrer) : normalizeUrl(url);
-  const normalizedUrl = url;  
+  const normalizedUrl = isInIframe ? extractPath(url) : url;
+  
   const variables = useMemo(
     () => ({
       version,
