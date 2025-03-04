@@ -28,7 +28,7 @@ const VisualBuilderComponent: FC<VisualBuilderProps> = ({
 
   const normalizeUrl = (inputUrl: string | undefined) => {
     console.log(inputUrl)
-    if (!inputUrl) return "/";
+    if (!inputUrl) return "/en";
     try {
       const url = new URL(inputUrl, window.location.origin);
       return url.pathname;
@@ -39,7 +39,7 @@ const VisualBuilderComponent: FC<VisualBuilderProps> = ({
 
   const isInIframe = typeof window !== "undefined" && window.self !== window.top;
   console.log(window.location, document.referrer)
-  const normalizedUrl = isInIframe ? normalizeUrl(document.referrer) : normalizeUrl(url);
+  const normalizedUrl = window.location
   console.log("IFRAME", document.referrer, url, normalizeUrl(document.referrer), normalizeUrl(url))
   
   const variables = useMemo(
