@@ -35,13 +35,13 @@ const VisualBuilderComponent: FC<VisualBuilderProps> = ({
 }
 
   const isInIframe = typeof window !== "undefined" && window.self !== window.top;
-  const normalizedUrl = isInIframe ? extractPath(url) : url;
+  const urlPath = isInIframe && url ? extractPath(url) : url;
   
   const variables = useMemo(
     () => ({
       version,
       key: contentKey,
-      url: normalizedUrl,
+      url: urlPath,
       searchQuery,
     }),
     [version, contentKey, url, searchQuery]
