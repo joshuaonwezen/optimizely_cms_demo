@@ -1,7 +1,7 @@
 import { graphql } from "@/graphql";
 
 export const SearchResultsCities = graphql(/* GraphQL */ `
-  query SearchResultsCities($searchQuery: String, $orderBy: ComponentOrderByInput) {
+  query SearchResultsCities($searchQuery: String, $orderBy: _ComponentOrderByInput) {
     _Component(
       orderBy: $orderBy
       where: {
