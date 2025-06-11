@@ -1,12 +1,13 @@
 import { graphql } from "@/graphql";
 
 export const Preview = graphql(/* GraphQL */ `
-  query Preview($key: String, $version: String) {
+  query Preview($key: String, $version: String, $locale: String) {
     _Experience(
       where: {
         _and: [
           { _metadata: { key: { eq: $key } } }
           { _metadata: { version: { eq: $version } } }
+          { _metadata: { locale: { eq: $locale } } }
         ]
       }
     ) {

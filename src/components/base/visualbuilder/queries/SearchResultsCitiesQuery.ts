@@ -1,9 +1,9 @@
 import { graphql } from "@/graphql";
 
 export const SearchResultsCities = graphql(/* GraphQL */ `
-  query SearchResultsCities($searchQuery: String) {
+  query SearchResultsCities($searchQuery: String, $orderBy: ComponentOrderByInput) {
     _Component(
-      orderBy: { _ranking: SEMANTIC, _semanticWeight: 0.9 }
+      orderBy: $orderBy
       where: {
         _fulltext: { match: $searchQuery }
       }

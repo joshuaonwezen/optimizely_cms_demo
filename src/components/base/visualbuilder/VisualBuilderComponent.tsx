@@ -1,9 +1,10 @@
 import React, { FC, useEffect, useMemo, useCallback, useState } from "react";
+import { useDecision } from "@optimizely/react-sdk";
 import { useQuery } from "@apollo/client";
 
 import { VisualBuilder } from "../visualbuilder/queries/VisualBuilderQuery";
 import { Preview } from "../visualbuilder/queries/PreviewQuery";
-import { SearchResultsCities } from "./queries/SearchResultsCitiesQuery";
+import { SearchResultsCitiesDocument } from "@/graphql/graphql";
 import { getFirstItem, isSearchResultsQuery } from "./VisualBuilderUtils";
 import CompositionNodeComponent from "../CompositionNodeComponent";
 import { onContentSaved } from "@/helpers/onContentSaved";
@@ -51,16 +52,31 @@ const VisualBuilderComponent: FC<VisualBuilderProps> = ({
   const isSearchMode = Boolean(searchQuery);
   const isPreview = Boolean(contentKey && !isSearchMode);
 
-  const { data, refetch, error, loading } = useQuery(
-    isSearchMode ? SearchResultsCities : isPreview ? Preview : VisualBuilder,
-    {
-      variables,
-      notifyOnNetworkStatusChange: true,
-      fetchPolicy: "cache-and-network",
-      onCompleted: () => setHasLoaded(true), // Mark as loaded when data arrives
-    }
-  );
+  // Use Optimizely feature flag
+  const [searchRanking] = useDecision("semantic_search_ranking");
 
+  // Build orderBy variable based on flag
+  const orderBy = searchRanking.enabled
+    ? { _ranking: "RELEVANCE" }
+    : { _ranking: "SEMANTIC", _semanticWeight: 0.9 };
+
+  // Choose the correct query and variables
+  const queryDocument = isSearchMode
+    ? SearchResultsCitiesDocument
+    : isPreview
+      ? Preview
+      : VisualBuilder;
+
+  const queryVariables = isSearchMode
+    ? { ...variables, orderBy }
+    : variables;
+
+  const { data, refetch, error, loading } = useQuery(queryDocument, {
+    variables: queryVariables,
+    notifyOnNetworkStatusChange: true,
+    fetchPolicy: "cache-and-network",
+    onCompleted: () => setHasLoaded(true),
+  });
 
   useEffect(() => {
     let debounceTimer: NodeJS.Timeout | null = null;
