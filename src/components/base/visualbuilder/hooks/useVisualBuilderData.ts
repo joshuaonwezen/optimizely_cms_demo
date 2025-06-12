@@ -7,25 +7,29 @@ import { SearchResultsCitiesDocument } from "@/graphql/graphql";
 import { getFirstItem, isSearchResultsQuery } from "../VisualBuilderUtils";
 import { onContentSaved } from "@/helpers/onContentSaved";
 
+// Extract the path from a URL, matching /en/ and everything after
 function extractPath(url: string) {
   const decodedUrl = decodeURIComponent(url);
   const match = decodedUrl.match(/\/en\/.*/);
   return match ? match[0] : null;
 }
 
+// Get the orderBy object for the search query, using a feature flag if available
 function getOrderByFromFeatureFlag() {
   const [searchRanking] = useDecision("search_algorithm");
-  return searchRanking.enabled
-    ? { _ranking: "SEMANTIC", _semanticWeight: 0.9 }
-    : { _ranking: "RELEVANCE" };
+  const ranking = searchRanking?.variables?.search_algorithm;
+  // Return feature flag variable if it exists, otherwise return default ranking
+  return ranking ? ranking : { _ranking: "SEMANTIC", _semanticWeight: 0.9 };
 }
 
+// Determine which query mode to use: search, preview, or default
 function getQueryMode({ contentKey, searchQuery }: { contentKey?: string; searchQuery?: string }) {
   if (searchQuery) return "search";
   if (contentKey) return "preview";
   return "default";
 }
 
+// Select the correct query document and variables based on mode
 function getQueryAndVariables({ version, contentKey, url, searchQuery }: any, orderBy: any) {
   const mode = getQueryMode({ contentKey, searchQuery });
   const isInIframe = typeof window !== "undefined" && window.self !== window.top;
@@ -40,18 +44,21 @@ function getQueryAndVariables({ version, contentKey, url, searchQuery }: any, or
 
   switch (mode) {
     case "search":
+      // Use the search results query and include orderBy
       return {
         queryDocument: SearchResultsCitiesDocument,
         queryVariables: { ...variables, orderBy },
         mode,
       };
     case "preview":
+      // Use the preview query
       return {
         queryDocument: Preview,
         queryVariables: variables,
         mode,
       };
     default:
+      // Use the default visual builder query
       return {
         queryDocument: VisualBuilder,
         queryVariables: variables,
@@ -60,12 +67,15 @@ function getQueryAndVariables({ version, contentKey, url, searchQuery }: any, or
   }
 }
 
+// Main hook for fetching and processing visual builder data
 export function useVisualBuilderData(props: any) {
   const { version, contentKey, url, searchQuery } = props;
   const [hasLoaded, setHasLoaded] = useState(false);
 
+  // Get orderBy from feature flag or default
   const orderBy = getOrderByFromFeatureFlag();
 
+  // Select query and variables based on mode
   const { queryDocument, queryVariables, mode } = useMemo(
     () => getQueryAndVariables({ version, contentKey, url, searchQuery }, orderBy),
     [version, contentKey, url, searchQuery, orderBy]
@@ -73,6 +83,7 @@ export function useVisualBuilderData(props: any) {
   const isSearchMode = mode === "search";
   const isPreview = mode === "preview";
 
+  // Fetch data using Apollo useQuery
   const { data, refetch, error, loading } = useQuery(queryDocument, {
     variables: queryVariables,
     notifyOnNetworkStatusChange: true,
@@ -80,6 +91,7 @@ export function useVisualBuilderData(props: any) {
     onCompleted: () => setHasLoaded(true),
   });
 
+  // Listen for content save events and refetch data if needed
   useEffect(() => {
     let debounceTimer: NodeJS.Timeout | null = null;
     const handleContentSaved = (event: any) => {
@@ -99,6 +111,7 @@ export function useVisualBuilderData(props: any) {
     };
   }, [refetch, queryVariables, isPreview]);
 
+  // Process the returned data into a consistent structure
   const processedData = useMemo(() => {
     const experiences = !isSearchMode ? data?._Experience?.items ?? [] : [];
     const pages = !isSearchMode ? data?.CityPage?.items ?? [] : [];

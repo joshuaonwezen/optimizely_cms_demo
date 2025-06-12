@@ -8,7 +8,8 @@ const OptimizelyLogo = () => {
     viewBox="0 0 162 38"
     width="162"
     xmlns="http://www.w3.org/2000/svg"
-    className="w-28 lg:w-auto"
+    className="w-28 lg:w-auto -mt-2"
+    data-component="optimizely-logo-svg"
   >
     <title>Optimizely Logo</title>
     <path
