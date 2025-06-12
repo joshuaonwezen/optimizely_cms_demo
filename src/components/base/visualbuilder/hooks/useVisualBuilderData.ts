@@ -113,13 +113,22 @@ export function useVisualBuilderData(props: any) {
 
   // Process the returned data into a consistent structure
   const processedData = useMemo(() => {
-    const experiences = !isSearchMode ? data?._Experience?.items ?? [] : [];
-    const pages = !isSearchMode ? data?.CityPage?.items ?? [] : [];
-    const searchResults = isSearchMode && isSearchResultsQuery(data) ? data._Component?.items ?? [] : [];
+    if (isSearchMode) {
+      // Only access _Component for search results
+      const searchResults = isSearchResultsQuery(data) ? data?._Component?.items ?? [] : [];
+      return {
+        experience: undefined,
+        page: undefined,
+        searchResult: getFirstItem(searchResults),
+      };
+    }
+    // For non-search mode, safely access _Experience and CityPage if they exist
+    const experiences = (data && (data as any)._Experience?.items) || [];
+    const pages = (data && (data as any).CityPage?.items) || [];
     return {
       experience: getFirstItem(experiences),
       page: getFirstItem(pages),
-      searchResult: getFirstItem(searchResults),
+      searchResult: undefined,
     };
   }, [data, isSearchMode]);
 
