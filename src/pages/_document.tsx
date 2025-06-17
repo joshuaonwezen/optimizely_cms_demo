@@ -1,25 +1,5 @@
 import { Html, Head, Main, NextScript } from "next/document";
 import Script from "next/script";
-import { useEffect, useState } from "react";
-
-function OptimizelyScript() {
-  const [strategy, setStrategy] = useState<"beforeInteractive" | "afterInteractive">("beforeInteractive");
-
-  useEffect(() => {
-    if (typeof window !== "undefined" && window.location.hostname === "localhost") {
-      setStrategy("afterInteractive");
-    } else {
-      setStrategy("beforeInteractive");
-    }
-  }, []);
-
-  return (
-    <Script
-      src="//cdn.optimizely.com/js/23338860169.js"
-      strategy={strategy}
-    />
-  );
-}
 
 export default function Document() {
   return (
@@ -31,7 +11,12 @@ export default function Document() {
 
         {/* Add other meta information here */}
         {/* Add stylesheets here */}
-        <OptimizelyScript />
+        
+        {/* Ensure script loads in head */}
+        <Script
+          src="//cdn.optimizely.com/js/23338860169.js"
+          strategy="beforeInteractive"
+        />
       </Head>
       <body>
         <Main />
