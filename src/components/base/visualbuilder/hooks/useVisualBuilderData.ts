@@ -94,25 +94,29 @@ export function useVisualBuilderData(props: any) {
   // Listen for content save events and refetch data if needed
   useEffect(() => {
     let debounceTimer: NodeJS.Timeout | null = null;
-    const handleContentSaved = (event: any) => {
+
+    function refetchOnContentSaved(event: any) {
       if (debounceTimer) clearTimeout(debounceTimer);
       debounceTimer = setTimeout(() => {
-        const contentIdArray = event.contentLink.split("_");
-        if (contentIdArray.length > 1) {
-          const newVersion = contentIdArray.at(-1);
+        const newVersion = event.contentLink?.split("_")?.at(-1);
+        if (newVersion) {
+          logQueryVariables(queryVariables);
           refetch(isPreview ? { ...queryVariables, version: newVersion } : queryVariables);
         }
       }, 1000);
-    };
+    }
 
-    console.log("Apollo useQuery variables:", queryVariables);
-
-    const unsubscribe: any = onContentSaved(handleContentSaved);
+    const unsubscribe = onContentSaved(refetchOnContentSaved);
     return () => {
       if (debounceTimer) clearTimeout(debounceTimer);
       if (unsubscribe) unsubscribe();
     };
   }, [refetch, queryVariables, isPreview]);
+
+  // Log query variables whenever they change
+  function logQueryVariables(vars: any) {
+    console.log("Apollo useQuery variables:", vars);
+  }
 
   // Process the returned data into a consistent structure
   const processedData = useMemo(() => {
