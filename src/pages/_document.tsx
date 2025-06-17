@@ -8,6 +8,8 @@ function OptimizelyScript() {
   useEffect(() => {
     if (typeof window !== "undefined" && window.location.hostname === "localhost") {
       setStrategy("afterInteractive");
+    } else {
+      setStrategy("beforeInteractive");
     }
   }, []);
 
@@ -29,8 +31,6 @@ export default function Document() {
 
         {/* Add other meta information here */}
         {/* Add stylesheets here */}
-        
-        {/* Conditionally load script based on hostname */}
         <OptimizelyScript />
       </Head>
       <body>
