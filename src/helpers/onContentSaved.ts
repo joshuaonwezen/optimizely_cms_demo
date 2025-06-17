@@ -32,6 +32,8 @@ export function onContentSaved(callback: (message: ContentSavedEventArgs) => voi
     }
 
     const handler = (event: any) => {
+        // Logging for demo purposes
+        console.log(event);
         callback(event.detail);
     };
 
