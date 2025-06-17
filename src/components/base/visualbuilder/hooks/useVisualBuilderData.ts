@@ -109,6 +109,9 @@ export function useVisualBuilderData(props: any) {
       if (debounceTimer) clearTimeout(debounceTimer);
       if (unsubscribe) unsubscribe();
     };
+
+    console.log("Apollo useQuery variables:", queryVariables);
+
   }, [refetch, queryVariables, isPreview]);
 
   // Process the returned data into a consistent structure
