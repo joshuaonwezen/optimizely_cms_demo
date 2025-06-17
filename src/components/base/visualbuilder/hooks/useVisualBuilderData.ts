@@ -104,14 +104,14 @@ export function useVisualBuilderData(props: any) {
         }
       }, 1000);
     };
+
+    console.log("Apollo useQuery variables:", queryVariables);
+
     const unsubscribe: any = onContentSaved(handleContentSaved);
     return () => {
       if (debounceTimer) clearTimeout(debounceTimer);
       if (unsubscribe) unsubscribe();
     };
-
-    console.log("Apollo useQuery variables:", queryVariables);
-
   }, [refetch, queryVariables, isPreview]);
 
   // Process the returned data into a consistent structure
