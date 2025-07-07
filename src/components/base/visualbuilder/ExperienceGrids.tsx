@@ -1,6 +1,7 @@
 import React from "react";
 import HeaderElementComponent from "../../elements/HeaderElementComponent";
 import CompositionNodeComponent from "../CompositionNodeComponent";
+import HeroBanner from "@/components/elements/HeroBanner";
 
 const ExperienceGrids = ({ experience }: { experience: any }) => (
   <div className="relative w-full flex-1 vb:outline" data-component="experience-grids-root">

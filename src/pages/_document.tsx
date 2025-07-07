@@ -1,6 +1,8 @@
 import { Html, Head, Main, NextScript } from "next/document";
 import Script from "next/script";
 
+const isLocal = process.env.NODE_ENV === "development";
+
 export default function Document() {
   return (
     <Html lang="en">
@@ -13,10 +15,12 @@ export default function Document() {
         {/* Add stylesheets here */}
         
         {/* Ensure script loads in head */}
-        <Script
-          src="//cdn.optimizely.com/js/23338860169.js"
-          strategy="beforeInteractive"
-        />
+        {!isLocal && (
+          <Script
+            src="//cdn.optimizely.com/js/23338860169.js"
+            strategy="beforeInteractive"
+          />
+        )}
       </Head>
       <body>
         <Main />

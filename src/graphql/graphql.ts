@@ -634,6 +634,7 @@ export type CompositionComponentNode = ICompositionComponentNode & ICompositionN
   displaySettings?: Maybe<Array<Maybe<CompositionDisplaySetting>>>;
   displayTemplateKey?: Maybe<Scalars['String']['output']>;
   key?: Maybe<Scalars['String']['output']>;
+  layoutType?: Maybe<Scalars['String']['output']>;
   nodeType?: Maybe<Scalars['String']['output']>;
   type?: Maybe<Scalars['String']['output']>;
 };
@@ -700,16 +701,19 @@ export type CompositionNode = ICompositionNode & {
   displaySettings?: Maybe<Array<Maybe<CompositionDisplaySetting>>>;
   displayTemplateKey?: Maybe<Scalars['String']['output']>;
   key?: Maybe<Scalars['String']['output']>;
+  layoutType?: Maybe<Scalars['String']['output']>;
   nodeType?: Maybe<Scalars['String']['output']>;
   type?: Maybe<Scalars['String']['output']>;
 };
 
 export type CompositionStructureNode = ICompositionNode & ICompositionStructureNode & {
   __typename?: 'CompositionStructureNode';
+  component?: Maybe<_IComponent>;
   displayName?: Maybe<Scalars['String']['output']>;
   displaySettings?: Maybe<Array<Maybe<CompositionDisplaySetting>>>;
   displayTemplateKey?: Maybe<Scalars['String']['output']>;
   key?: Maybe<Scalars['String']['output']>;
+  layoutType?: Maybe<Scalars['String']['output']>;
   nodeType?: Maybe<Scalars['String']['output']>;
   nodes?: Maybe<Array<Maybe<ICompositionNode>>>;
   type?: Maybe<Scalars['String']['output']>;
@@ -721,6 +725,7 @@ export type CompositionStructureNodeAutocomplete = {
   displaySettings?: Maybe<CompositionDisplaySettingAutocomplete>;
   displayTemplateKey?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
   key?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  layoutType?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
   nodeType?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
   nodes?: Maybe<ICompositionNodeAutocomplete>;
   type?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
@@ -745,6 +750,12 @@ export type CompositionStructureNodeAutocompleteKeyArgs = {
 };
 
 
+export type CompositionStructureNodeAutocompleteLayoutTypeArgs = {
+  limit?: Scalars['Int']['input'];
+  value: Scalars['String']['input'];
+};
+
+
 export type CompositionStructureNodeAutocompleteNodeTypeArgs = {
   limit?: Scalars['Int']['input'];
   value: Scalars['String']['input'];
@@ -758,10 +769,12 @@ export type CompositionStructureNodeAutocompleteTypeArgs = {
 
 export type CompositionStructureNodeFacet = {
   __typename?: 'CompositionStructureNodeFacet';
+  component?: Maybe<_IComponentFacet>;
   displayName?: Maybe<Array<Maybe<StringFacet>>>;
   displaySettings?: Maybe<CompositionDisplaySettingFacet>;
   displayTemplateKey?: Maybe<Array<Maybe<StringFacet>>>;
   key?: Maybe<Array<Maybe<StringFacet>>>;
+  layoutType?: Maybe<Array<Maybe<StringFacet>>>;
   nodeType?: Maybe<Array<Maybe<StringFacet>>>;
   nodes?: Maybe<ICompositionNodeFacet>;
   type?: Maybe<Array<Maybe<StringFacet>>>;
@@ -792,6 +805,14 @@ export type CompositionStructureNodeFacetKeyArgs = {
 };
 
 
+export type CompositionStructureNodeFacetLayoutTypeArgs = {
+  filters?: InputMaybe<Array<Scalars['String']['input']>>;
+  limit?: Scalars['Int']['input'];
+  orderBy?: InputMaybe<OrderBy>;
+  orderType?: InputMaybe<OrderByFacetType>;
+};
+
+
 export type CompositionStructureNodeFacetNodeTypeArgs = {
   filters?: InputMaybe<Array<Scalars['String']['input']>>;
   limit?: Scalars['Int']['input'];
@@ -808,20 +829,24 @@ export type CompositionStructureNodeFacetTypeArgs = {
 };
 
 export type CompositionStructureNodeOrderByInput = {
+  component?: InputMaybe<_IComponentOrderByInput>;
   displayName?: InputMaybe<OrderBy>;
   displaySettings?: InputMaybe<CompositionDisplaySettingOrderByInput>;
   displayTemplateKey?: InputMaybe<OrderBy>;
   key?: InputMaybe<OrderBy>;
+  layoutType?: InputMaybe<OrderBy>;
   nodeType?: InputMaybe<OrderBy>;
   nodes?: InputMaybe<ICompositionNodeOrderByInput>;
   type?: InputMaybe<OrderBy>;
 };
 
 export type CompositionStructureNodeWhereInput = {
+  component?: InputMaybe<_IComponentWhereInput>;
   displayName?: InputMaybe<StringFilterInput>;
   displaySettings?: InputMaybe<CompositionDisplaySettingWhereInput>;
   displayTemplateKey?: InputMaybe<StringFilterInput>;
   key?: InputMaybe<StringFilterInput>;
+  layoutType?: InputMaybe<StringFilterInput>;
   nodeType?: InputMaybe<StringFilterInput>;
   nodes?: InputMaybe<ICompositionNodeWhereInput>;
   type?: InputMaybe<StringFilterInput>;
@@ -837,9 +862,11 @@ export type ContentMetadata = IContentMetadata & {
   lastModified?: Maybe<Scalars['DateTime']['output']>;
   locale?: Maybe<Scalars['String']['output']>;
   published?: Maybe<Scalars['DateTime']['output']>;
+  sortOrder?: Maybe<Scalars['Int']['output']>;
   status?: Maybe<Scalars['String']['output']>;
   types?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
   url?: Maybe<ContentUrl>;
+  variation?: Maybe<Scalars['String']['output']>;
   version?: Maybe<Scalars['String']['output']>;
 };
 
@@ -1116,6 +1143,19 @@ export type Decay = {
   scale?: InputMaybe<Scalars['Int']['input']>;
 };
 
+export enum FactorModifier {
+  /** Add 1 to the field value and take the natural logarithm */
+  Log = 'LOG',
+  /** Do not apply any multiplier to the field value */
+  None = 'NONE',
+  /** Reciprocate the field value, same as 1/x where x is the field's value */
+  Reciprocal = 'RECIPROCAL',
+  /** Take the square root of the field value */
+  Sqrt = 'SQRT',
+  /** Square the field value (multiply it by itself) */
+  Square = 'SQUARE'
+}
+
 export type GenericMedia = IData & _IContent & _IMedia & {
   __typename?: 'GenericMedia';
   /** @deprecated Use `_link` field instead */
@@ -1182,6 +1222,79 @@ export type GenericMediaWhereInput = {
   _or?: InputMaybe<Array<InputMaybe<GenericMediaWhereInput>>>;
 };
 
+export type HeroBanner = IData & _IComponent & _IContent & {
+  __typename?: 'HeroBanner';
+  BackgroundImage?: Maybe<ContentUrl>;
+  Subtitle?: Maybe<Scalars['String']['output']>;
+  Title?: Maybe<Scalars['String']['output']>;
+  /** @deprecated Use `_link` field instead */
+  _children?: Maybe<QueryRef>;
+  _deleted?: Maybe<Scalars['Bool']['output']>;
+  _fulltext?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  _id?: Maybe<Scalars['String']['output']>;
+  _link?: Maybe<QueryRef>;
+  _metadata?: Maybe<IContentMetadata>;
+  _modified?: Maybe<Scalars['Date']['output']>;
+  _score?: Maybe<Scalars['Float']['output']>;
+};
+
+
+export type HeroBanner_FulltextArgs = {
+  highlight?: InputMaybe<HighlightOptions>;
+};
+
+
+export type HeroBanner_LinkArgs = {
+  type?: InputMaybe<LinkTypes>;
+};
+
+export type HeroBannerAutocomplete = {
+  __typename?: 'HeroBannerAutocomplete';
+  BackgroundImage?: Maybe<ContentUrlAutocomplete>;
+  _metadata?: Maybe<IContentMetadataAutocomplete>;
+};
+
+export type HeroBannerFacet = {
+  __typename?: 'HeroBannerFacet';
+  BackgroundImage?: Maybe<ContentUrlFacet>;
+  _metadata?: Maybe<IContentMetadataFacet>;
+};
+
+export type HeroBannerOrderByInput = {
+  BackgroundImage?: InputMaybe<ContentUrlOrderByInput>;
+  _metadata?: InputMaybe<IContentMetadataOrderByInput>;
+  _minimumScore?: InputMaybe<Scalars['Float']['input']>;
+  _modified?: InputMaybe<OrderBy>;
+  _ranking?: InputMaybe<Ranking>;
+  /** The value needs to be a positive value, but cannot exceed the maximum value of an integer. In case it is exceeded, the maximum of an integer is used. In case of a negative value, semantic search will be disabled. */
+  _semanticWeight?: InputMaybe<Scalars['Float']['input']>;
+};
+
+export type HeroBannerOutput = {
+  __typename?: 'HeroBannerOutput';
+  autocomplete?: Maybe<HeroBannerAutocomplete>;
+  cursor?: Maybe<Scalars['String']['output']>;
+  facets?: Maybe<HeroBannerFacet>;
+  item?: Maybe<HeroBanner>;
+  items?: Maybe<Array<Maybe<HeroBanner>>>;
+  total?: Maybe<Scalars['Int']['output']>;
+};
+
+
+export type HeroBannerOutputTotalArgs = {
+  all?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type HeroBannerWhereInput = {
+  BackgroundImage?: InputMaybe<ContentUrlWhereInput>;
+  _and?: InputMaybe<Array<InputMaybe<HeroBannerWhereInput>>>;
+  _fulltext?: InputMaybe<SearchableStringFilterInput>;
+  _metadata?: InputMaybe<IContentMetadataWhereInput>;
+  _modified?: InputMaybe<DateFilterInput>;
+  _not?: InputMaybe<Array<InputMaybe<HeroBannerWhereInput>>>;
+  _or?: InputMaybe<Array<InputMaybe<HeroBannerWhereInput>>>;
+};
+
 /** Options for highlighting */
 export type HighlightOptions = {
   enabled?: InputMaybe<Scalars['Boolean']['input']>;
@@ -1195,6 +1308,7 @@ export type ICompositionComponentNode = {
   displaySettings?: Maybe<Array<Maybe<CompositionDisplaySetting>>>;
   displayTemplateKey?: Maybe<Scalars['String']['output']>;
   key?: Maybe<Scalars['String']['output']>;
+  layoutType?: Maybe<Scalars['String']['output']>;
   nodeType?: Maybe<Scalars['String']['output']>;
   type?: Maybe<Scalars['String']['output']>;
 };
@@ -1204,6 +1318,7 @@ export type ICompositionNode = {
   displaySettings?: Maybe<Array<Maybe<CompositionDisplaySetting>>>;
   displayTemplateKey?: Maybe<Scalars['String']['output']>;
   key?: Maybe<Scalars['String']['output']>;
+  layoutType?: Maybe<Scalars['String']['output']>;
   nodeType?: Maybe<Scalars['String']['output']>;
   type?: Maybe<Scalars['String']['output']>;
 };
@@ -1214,6 +1329,7 @@ export type ICompositionNodeAutocomplete = {
   displaySettings?: Maybe<CompositionDisplaySettingAutocomplete>;
   displayTemplateKey?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
   key?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  layoutType?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
   nodeType?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
   type?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
 };
@@ -1237,6 +1353,12 @@ export type ICompositionNodeAutocompleteKeyArgs = {
 };
 
 
+export type ICompositionNodeAutocompleteLayoutTypeArgs = {
+  limit?: Scalars['Int']['input'];
+  value: Scalars['String']['input'];
+};
+
+
 export type ICompositionNodeAutocompleteNodeTypeArgs = {
   limit?: Scalars['Int']['input'];
   value: Scalars['String']['input'];
@@ -1254,6 +1376,7 @@ export type ICompositionNodeFacet = {
   displaySettings?: Maybe<CompositionDisplaySettingFacet>;
   displayTemplateKey?: Maybe<Array<Maybe<StringFacet>>>;
   key?: Maybe<Array<Maybe<StringFacet>>>;
+  layoutType?: Maybe<Array<Maybe<StringFacet>>>;
   nodeType?: Maybe<Array<Maybe<StringFacet>>>;
   type?: Maybe<Array<Maybe<StringFacet>>>;
 };
@@ -1283,6 +1406,14 @@ export type ICompositionNodeFacetKeyArgs = {
 };
 
 
+export type ICompositionNodeFacetLayoutTypeArgs = {
+  filters?: InputMaybe<Array<Scalars['String']['input']>>;
+  limit?: Scalars['Int']['input'];
+  orderBy?: InputMaybe<OrderBy>;
+  orderType?: InputMaybe<OrderByFacetType>;
+};
+
+
 export type ICompositionNodeFacetNodeTypeArgs = {
   filters?: InputMaybe<Array<Scalars['String']['input']>>;
   limit?: Scalars['Int']['input'];
@@ -1303,6 +1434,7 @@ export type ICompositionNodeOrderByInput = {
   displaySettings?: InputMaybe<CompositionDisplaySettingOrderByInput>;
   displayTemplateKey?: InputMaybe<OrderBy>;
   key?: InputMaybe<OrderBy>;
+  layoutType?: InputMaybe<OrderBy>;
   nodeType?: InputMaybe<OrderBy>;
   type?: InputMaybe<OrderBy>;
 };
@@ -1312,15 +1444,18 @@ export type ICompositionNodeWhereInput = {
   displaySettings?: InputMaybe<CompositionDisplaySettingWhereInput>;
   displayTemplateKey?: InputMaybe<StringFilterInput>;
   key?: InputMaybe<StringFilterInput>;
+  layoutType?: InputMaybe<StringFilterInput>;
   nodeType?: InputMaybe<StringFilterInput>;
   type?: InputMaybe<StringFilterInput>;
 };
 
 export type ICompositionStructureNode = {
+  component?: Maybe<_IComponent>;
   displayName?: Maybe<Scalars['String']['output']>;
   displaySettings?: Maybe<Array<Maybe<CompositionDisplaySetting>>>;
   displayTemplateKey?: Maybe<Scalars['String']['output']>;
   key?: Maybe<Scalars['String']['output']>;
+  layoutType?: Maybe<Scalars['String']['output']>;
   nodeType?: Maybe<Scalars['String']['output']>;
   nodes?: Maybe<Array<Maybe<ICompositionNode>>>;
   type?: Maybe<Scalars['String']['output']>;
@@ -1335,9 +1470,11 @@ export type IContentMetadata = {
   lastModified?: Maybe<Scalars['DateTime']['output']>;
   locale?: Maybe<Scalars['String']['output']>;
   published?: Maybe<Scalars['DateTime']['output']>;
+  sortOrder?: Maybe<Scalars['Int']['output']>;
   status?: Maybe<Scalars['String']['output']>;
   types?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
   url?: Maybe<ContentUrl>;
+  variation?: Maybe<Scalars['String']['output']>;
   version?: Maybe<Scalars['String']['output']>;
 };
 
@@ -1355,6 +1492,7 @@ export type IContentMetadataAutocomplete = {
   status?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
   types?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
   url?: Maybe<ContentUrlAutocomplete>;
+  variation?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
   version?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
 };
 
@@ -1395,6 +1533,12 @@ export type IContentMetadataAutocompleteTypesArgs = {
 };
 
 
+export type IContentMetadataAutocompleteVariationArgs = {
+  limit?: Scalars['Int']['input'];
+  value: Scalars['String']['input'];
+};
+
+
 export type IContentMetadataAutocompleteVersionArgs = {
   limit?: Scalars['Int']['input'];
   value: Scalars['String']['input'];
@@ -1410,9 +1554,11 @@ export type IContentMetadataFacet = {
   lastModified?: Maybe<Array<Maybe<DateFacet>>>;
   locale?: Maybe<Array<Maybe<StringFacet>>>;
   published?: Maybe<Array<Maybe<DateFacet>>>;
+  sortOrder?: Maybe<Array<Maybe<NumberFacet>>>;
   status?: Maybe<Array<Maybe<StringFacet>>>;
   types?: Maybe<Array<Maybe<StringFacet>>>;
   url?: Maybe<ContentUrlFacet>;
+  variation?: Maybe<Array<Maybe<StringFacet>>>;
   version?: Maybe<Array<Maybe<StringFacet>>>;
 };
 
@@ -1475,6 +1621,15 @@ export type IContentMetadataFacetPublishedArgs = {
 };
 
 
+export type IContentMetadataFacetSortOrderArgs = {
+  filters?: InputMaybe<Array<Scalars['String']['input']>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<OrderBy>;
+  orderType?: InputMaybe<OrderByFacetType>;
+  ranges?: InputMaybe<Array<InputMaybe<RangeFacetsInput>>>;
+};
+
+
 export type IContentMetadataFacetStatusArgs = {
   filters?: InputMaybe<Array<Scalars['String']['input']>>;
   limit?: Scalars['Int']['input'];
@@ -1484,6 +1639,14 @@ export type IContentMetadataFacetStatusArgs = {
 
 
 export type IContentMetadataFacetTypesArgs = {
+  filters?: InputMaybe<Array<Scalars['String']['input']>>;
+  limit?: Scalars['Int']['input'];
+  orderBy?: InputMaybe<OrderBy>;
+  orderType?: InputMaybe<OrderByFacetType>;
+};
+
+
+export type IContentMetadataFacetVariationArgs = {
   filters?: InputMaybe<Array<Scalars['String']['input']>>;
   limit?: Scalars['Int']['input'];
   orderBy?: InputMaybe<OrderBy>;
@@ -1507,9 +1670,11 @@ export type IContentMetadataOrderByInput = {
   lastModified?: InputMaybe<OrderBy>;
   locale?: InputMaybe<OrderBy>;
   published?: InputMaybe<OrderBy>;
+  sortOrder?: InputMaybe<OrderBy>;
   status?: InputMaybe<OrderBy>;
   types?: InputMaybe<OrderBy>;
   url?: InputMaybe<ContentUrlOrderByInput>;
+  variation?: InputMaybe<OrderBy>;
   version?: InputMaybe<OrderBy>;
 };
 
@@ -1522,9 +1687,11 @@ export type IContentMetadataWhereInput = {
   lastModified?: InputMaybe<DateFilterInput>;
   locale?: InputMaybe<StringFilterInput>;
   published?: InputMaybe<DateFilterInput>;
+  sortOrder?: InputMaybe<IntFilterInput>;
   status?: InputMaybe<StringFilterInput>;
   types?: InputMaybe<StringFilterInput>;
   url?: InputMaybe<ContentUrlWhereInput>;
+  variation?: InputMaybe<StringFilterInput>;
   version?: InputMaybe<StringFilterInput>;
 };
 
@@ -1566,9 +1733,11 @@ export type IInstanceMetadata = {
   path?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
   published?: Maybe<Scalars['DateTime']['output']>;
   routeSegment?: Maybe<Scalars['String']['output']>;
+  sortOrder?: Maybe<Scalars['Int']['output']>;
   status?: Maybe<Scalars['String']['output']>;
   types?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
   url?: Maybe<ContentUrl>;
+  variation?: Maybe<Scalars['String']['output']>;
   version?: Maybe<Scalars['String']['output']>;
 };
 
@@ -1587,9 +1756,11 @@ export type IItemMetadata = {
   lastModified?: Maybe<Scalars['DateTime']['output']>;
   locale?: Maybe<Scalars['String']['output']>;
   published?: Maybe<Scalars['DateTime']['output']>;
+  sortOrder?: Maybe<Scalars['Int']['output']>;
   status?: Maybe<Scalars['String']['output']>;
   types?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
   url?: Maybe<ContentUrl>;
+  variation?: Maybe<Scalars['String']['output']>;
   version?: Maybe<Scalars['String']['output']>;
 };
 
@@ -1617,10 +1788,12 @@ export type IMediaMetadata = {
   path?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
   published?: Maybe<Scalars['DateTime']['output']>;
   routeSegment?: Maybe<Scalars['String']['output']>;
+  sortOrder?: Maybe<Scalars['Int']['output']>;
   status?: Maybe<Scalars['String']['output']>;
   thumbnail?: Maybe<Scalars['String']['output']>;
   types?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
   url?: Maybe<ContentUrl>;
+  variation?: Maybe<Scalars['String']['output']>;
   version?: Maybe<Scalars['String']['output']>;
 };
 
@@ -1718,15 +1891,42 @@ export type InstanceMetadata = IContentMetadata & IInstanceMetadata & {
   path?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
   published?: Maybe<Scalars['DateTime']['output']>;
   routeSegment?: Maybe<Scalars['String']['output']>;
+  sortOrder?: Maybe<Scalars['Int']['output']>;
   status?: Maybe<Scalars['String']['output']>;
   types?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
   url?: Maybe<ContentUrl>;
+  variation?: Maybe<Scalars['String']['output']>;
   version?: Maybe<Scalars['String']['output']>;
 };
 
 
 export type InstanceMetadataDisplayNameArgs = {
   highlight?: InputMaybe<HighlightOptions>;
+};
+
+export type IntFilterInput = {
+  /** `boost` influences the weight of a field by boosting a match with a number (default: 1) — counts more towards the eventual relevance score which can be projected with `_score` — at query time. Note that `boost` cannot be a negative number. */
+  boost?: InputMaybe<Scalars['Int']['input']>;
+  /** `eq` matches on an exact value, but the value is case-insensitive. */
+  eq?: InputMaybe<Scalars['Int']['input']>;
+  /** `exist` matches results that have this field. */
+  exist?: InputMaybe<Scalars['Boolean']['input']>;
+  /** `Factor` allows you to use a number value in a field to influence the `_score` directly. If used on a multi-valued field, then only the lowest value of the field is used in calculations. Default for `value` is `1`. Default for `modifier` is `NONE`. */
+  factor?: InputMaybe<NumberFactor>;
+  /** `gt` retrieves results with matches that have a value which is `greater than` it. */
+  gt?: InputMaybe<Scalars['Int']['input']>;
+  /** `gte` retrieves results with matches that have a value which is `greater than or equal to` it. */
+  gte?: InputMaybe<Scalars['Int']['input']>;
+  /** `in` matches with 1 or more exact values in a list. Example: `in: ["word1", "word2", "this is a phrase"]` */
+  in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  /** `lt` retrieves results with matches that have a value which is `lower than` it. */
+  lt?: InputMaybe<Scalars['Int']['input']>;
+  /** `lte` retrieves results with matches that have a value which is `lower than or equal to` it. */
+  lte?: InputMaybe<Scalars['Int']['input']>;
+  /** `not_eq` retrieves results not matching with an exact (but case-insensitive) value. */
+  notEq?: InputMaybe<Scalars['Int']['input']>;
+  /** `not_in` returns results that do not match with 1 or more exact values in a list. Example: `not_in: ["word1", "word2", "this is a phrase"]` */
+  notIn?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
 };
 
 export type ItemMetadata = IContentMetadata & IItemMetadata & {
@@ -1740,9 +1940,11 @@ export type ItemMetadata = IContentMetadata & IItemMetadata & {
   lastModified?: Maybe<Scalars['DateTime']['output']>;
   locale?: Maybe<Scalars['String']['output']>;
   published?: Maybe<Scalars['DateTime']['output']>;
+  sortOrder?: Maybe<Scalars['Int']['output']>;
   status?: Maybe<Scalars['String']['output']>;
   types?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
   url?: Maybe<ContentUrl>;
+  variation?: Maybe<Scalars['String']['output']>;
   version?: Maybe<Scalars['String']['output']>;
 };
 
@@ -1817,10 +2019,12 @@ export type MediaMetadata = IContentMetadata & IInstanceMetadata & IMediaMetadat
   path?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
   published?: Maybe<Scalars['DateTime']['output']>;
   routeSegment?: Maybe<Scalars['String']['output']>;
+  sortOrder?: Maybe<Scalars['Int']['output']>;
   status?: Maybe<Scalars['String']['output']>;
   thumbnail?: Maybe<Scalars['String']['output']>;
   types?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
   url?: Maybe<ContentUrl>;
+  variation?: Maybe<Scalars['String']['output']>;
   version?: Maybe<Scalars['String']['output']>;
 };
 
@@ -1832,6 +2036,18 @@ export type MediaMetadataContentArgs = {
 
 export type MediaMetadataDisplayNameArgs = {
   highlight?: InputMaybe<HighlightOptions>;
+};
+
+export type NumberFacet = {
+  __typename?: 'NumberFacet';
+  count?: Maybe<Scalars['Int']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+};
+
+/** Factor influences the score based of number values with a factor function */
+export type NumberFactor = {
+  modifier?: InputMaybe<FactorModifier>;
+  value?: InputMaybe<Scalars['Float']['input']>;
 };
 
 export enum OrderBy {
@@ -1856,6 +2072,7 @@ export type Query = {
   CityPageSettings?: Maybe<CityPageSettingsOutput>;
   Data?: Maybe<DataOutput>;
   GenericMedia?: Maybe<GenericMediaOutput>;
+  HeroBanner?: Maybe<HeroBannerOutput>;
   ImageMedia?: Maybe<ImageMediaOutput>;
   SysContentFolder?: Maybe<SysContentFolderOutput>;
   VideoMedia?: Maybe<VideoMediaOutput>;
@@ -1878,6 +2095,7 @@ export type QueryAlertMessageArgs = {
   locale?: InputMaybe<Array<InputMaybe<Locales>>>;
   orderBy?: InputMaybe<AlertMessageOrderByInput>;
   skip?: Scalars['Int']['input'];
+  variation?: InputMaybe<VariationInput>;
   where?: InputMaybe<AlertMessageWhereInput>;
 };
 
@@ -1889,6 +2107,7 @@ export type QueryBlankExperienceArgs = {
   locale?: InputMaybe<Array<InputMaybe<Locales>>>;
   orderBy?: InputMaybe<BlankExperienceOrderByInput>;
   skip?: Scalars['Int']['input'];
+  variation?: InputMaybe<VariationInput>;
   where?: InputMaybe<BlankExperienceWhereInput>;
 };
 
@@ -1900,6 +2119,7 @@ export type QueryBlankSectionArgs = {
   locale?: InputMaybe<Array<InputMaybe<Locales>>>;
   orderBy?: InputMaybe<BlankSectionOrderByInput>;
   skip?: Scalars['Int']['input'];
+  variation?: InputMaybe<VariationInput>;
   where?: InputMaybe<BlankSectionWhereInput>;
 };
 
@@ -1911,6 +2131,7 @@ export type QueryCityBlockArgs = {
   locale?: InputMaybe<Array<InputMaybe<Locales>>>;
   orderBy?: InputMaybe<CityBlockOrderByInput>;
   skip?: Scalars['Int']['input'];
+  variation?: InputMaybe<VariationInput>;
   where?: InputMaybe<CityBlockWhereInput>;
 };
 
@@ -1922,6 +2143,7 @@ export type QueryCityExperienceArgs = {
   locale?: InputMaybe<Array<InputMaybe<Locales>>>;
   orderBy?: InputMaybe<CityExperienceOrderByInput>;
   skip?: Scalars['Int']['input'];
+  variation?: InputMaybe<VariationInput>;
   where?: InputMaybe<CityExperienceWhereInput>;
 };
 
@@ -1933,6 +2155,7 @@ export type QueryCityOverviewArgs = {
   locale?: InputMaybe<Array<InputMaybe<Locales>>>;
   orderBy?: InputMaybe<CityOverviewOrderByInput>;
   skip?: Scalars['Int']['input'];
+  variation?: InputMaybe<VariationInput>;
   where?: InputMaybe<CityOverviewWhereInput>;
 };
 
@@ -1944,6 +2167,7 @@ export type QueryCityPageArgs = {
   locale?: InputMaybe<Array<InputMaybe<Locales>>>;
   orderBy?: InputMaybe<CityPageOrderByInput>;
   skip?: Scalars['Int']['input'];
+  variation?: InputMaybe<VariationInput>;
   where?: InputMaybe<CityPageWhereInput>;
 };
 
@@ -1955,6 +2179,7 @@ export type QueryCityPageSettingsArgs = {
   locale?: InputMaybe<Array<InputMaybe<Locales>>>;
   orderBy?: InputMaybe<CityPageSettingsOrderByInput>;
   skip?: Scalars['Int']['input'];
+  variation?: InputMaybe<VariationInput>;
   where?: InputMaybe<CityPageSettingsWhereInput>;
 };
 
@@ -1966,6 +2191,7 @@ export type QueryDataArgs = {
   locale?: InputMaybe<Array<InputMaybe<System_Locales>>>;
   orderBy?: InputMaybe<DataOrderByInput>;
   skip?: Scalars['Int']['input'];
+  variation?: InputMaybe<VariationInput>;
   where?: InputMaybe<DataWhereInput>;
 };
 
@@ -1977,7 +2203,20 @@ export type QueryGenericMediaArgs = {
   locale?: InputMaybe<Array<InputMaybe<Locales>>>;
   orderBy?: InputMaybe<GenericMediaOrderByInput>;
   skip?: Scalars['Int']['input'];
+  variation?: InputMaybe<VariationInput>;
   where?: InputMaybe<GenericMediaWhereInput>;
+};
+
+
+export type QueryHeroBannerArgs = {
+  cursor?: InputMaybe<Scalars['String']['input']>;
+  ids?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  limit?: Scalars['Int']['input'];
+  locale?: InputMaybe<Array<InputMaybe<Locales>>>;
+  orderBy?: InputMaybe<HeroBannerOrderByInput>;
+  skip?: Scalars['Int']['input'];
+  variation?: InputMaybe<VariationInput>;
+  where?: InputMaybe<HeroBannerWhereInput>;
 };
 
 
@@ -1988,6 +2227,7 @@ export type QueryImageMediaArgs = {
   locale?: InputMaybe<Array<InputMaybe<Locales>>>;
   orderBy?: InputMaybe<ImageMediaOrderByInput>;
   skip?: Scalars['Int']['input'];
+  variation?: InputMaybe<VariationInput>;
   where?: InputMaybe<ImageMediaWhereInput>;
 };
 
@@ -1999,6 +2239,7 @@ export type QuerySysContentFolderArgs = {
   locale?: InputMaybe<Array<InputMaybe<Locales>>>;
   orderBy?: InputMaybe<SysContentFolderOrderByInput>;
   skip?: Scalars['Int']['input'];
+  variation?: InputMaybe<VariationInput>;
   where?: InputMaybe<SysContentFolderWhereInput>;
 };
 
@@ -2010,6 +2251,7 @@ export type QueryVideoMediaArgs = {
   locale?: InputMaybe<Array<InputMaybe<Locales>>>;
   orderBy?: InputMaybe<VideoMediaOrderByInput>;
   skip?: Scalars['Int']['input'];
+  variation?: InputMaybe<VariationInput>;
   where?: InputMaybe<VideoMediaWhereInput>;
 };
 
@@ -2021,6 +2263,7 @@ export type Query_ComponentArgs = {
   locale?: InputMaybe<Array<InputMaybe<Locales>>>;
   orderBy?: InputMaybe<_ComponentOrderByInput>;
   skip?: Scalars['Int']['input'];
+  variation?: InputMaybe<VariationInput>;
   where?: InputMaybe<_ComponentWhereInput>;
 };
 
@@ -2032,6 +2275,7 @@ export type Query_ContentArgs = {
   locale?: InputMaybe<Array<InputMaybe<Locales>>>;
   orderBy?: InputMaybe<_ContentOrderByInput>;
   skip?: Scalars['Int']['input'];
+  variation?: InputMaybe<VariationInput>;
   where?: InputMaybe<_ContentWhereInput>;
 };
 
@@ -2043,6 +2287,7 @@ export type Query_ExperienceArgs = {
   locale?: InputMaybe<Array<InputMaybe<Locales>>>;
   orderBy?: InputMaybe<_ExperienceOrderByInput>;
   skip?: Scalars['Int']['input'];
+  variation?: InputMaybe<VariationInput>;
   where?: InputMaybe<_ExperienceWhereInput>;
 };
 
@@ -2054,6 +2299,7 @@ export type Query_FolderArgs = {
   locale?: InputMaybe<Array<InputMaybe<Locales>>>;
   orderBy?: InputMaybe<_FolderOrderByInput>;
   skip?: Scalars['Int']['input'];
+  variation?: InputMaybe<VariationInput>;
   where?: InputMaybe<_FolderWhereInput>;
 };
 
@@ -2065,6 +2311,7 @@ export type Query_ImageArgs = {
   locale?: InputMaybe<Array<InputMaybe<Locales>>>;
   orderBy?: InputMaybe<_ImageOrderByInput>;
   skip?: Scalars['Int']['input'];
+  variation?: InputMaybe<VariationInput>;
   where?: InputMaybe<_ImageWhereInput>;
 };
 
@@ -2076,6 +2323,7 @@ export type Query_MediaArgs = {
   locale?: InputMaybe<Array<InputMaybe<Locales>>>;
   orderBy?: InputMaybe<_MediaOrderByInput>;
   skip?: Scalars['Int']['input'];
+  variation?: InputMaybe<VariationInput>;
   where?: InputMaybe<_MediaWhereInput>;
 };
 
@@ -2087,6 +2335,7 @@ export type Query_PageArgs = {
   locale?: InputMaybe<Array<InputMaybe<Locales>>>;
   orderBy?: InputMaybe<_PageOrderByInput>;
   skip?: Scalars['Int']['input'];
+  variation?: InputMaybe<VariationInput>;
   where?: InputMaybe<_PageWhereInput>;
 };
 
@@ -2098,6 +2347,7 @@ export type Query_SectionArgs = {
   locale?: InputMaybe<Array<InputMaybe<Locales>>>;
   orderBy?: InputMaybe<_SectionOrderByInput>;
   skip?: Scalars['Int']['input'];
+  variation?: InputMaybe<VariationInput>;
   where?: InputMaybe<_SectionWhereInput>;
 };
 
@@ -2109,6 +2359,7 @@ export type Query_VideoArgs = {
   locale?: InputMaybe<Array<InputMaybe<Locales>>>;
   orderBy?: InputMaybe<_VideoOrderByInput>;
   skip?: Scalars['Int']['input'];
+  variation?: InputMaybe<VariationInput>;
   where?: InputMaybe<_VideoWhereInput>;
 };
 
@@ -2124,6 +2375,7 @@ export type QueryRef = {
   CityPageSettings?: Maybe<CityPageSettingsOutput>;
   Data?: Maybe<DataOutput>;
   GenericMedia?: Maybe<GenericMediaOutput>;
+  HeroBanner?: Maybe<HeroBannerOutput>;
   ImageMedia?: Maybe<ImageMediaOutput>;
   SysContentFolder?: Maybe<SysContentFolderOutput>;
   VideoMedia?: Maybe<VideoMediaOutput>;
@@ -2146,6 +2398,7 @@ export type QueryRefAlertMessageArgs = {
   locale?: InputMaybe<Array<InputMaybe<Locales>>>;
   orderBy?: InputMaybe<AlertMessageOrderByInput>;
   skip?: Scalars['Int']['input'];
+  variation?: InputMaybe<VariationInput>;
   where?: InputMaybe<AlertMessageWhereInput>;
 };
 
@@ -2157,6 +2410,7 @@ export type QueryRefBlankExperienceArgs = {
   locale?: InputMaybe<Array<InputMaybe<Locales>>>;
   orderBy?: InputMaybe<BlankExperienceOrderByInput>;
   skip?: Scalars['Int']['input'];
+  variation?: InputMaybe<VariationInput>;
   where?: InputMaybe<BlankExperienceWhereInput>;
 };
 
@@ -2168,6 +2422,7 @@ export type QueryRefBlankSectionArgs = {
   locale?: InputMaybe<Array<InputMaybe<Locales>>>;
   orderBy?: InputMaybe<BlankSectionOrderByInput>;
   skip?: Scalars['Int']['input'];
+  variation?: InputMaybe<VariationInput>;
   where?: InputMaybe<BlankSectionWhereInput>;
 };
 
@@ -2179,6 +2434,7 @@ export type QueryRefCityBlockArgs = {
   locale?: InputMaybe<Array<InputMaybe<Locales>>>;
   orderBy?: InputMaybe<CityBlockOrderByInput>;
   skip?: Scalars['Int']['input'];
+  variation?: InputMaybe<VariationInput>;
   where?: InputMaybe<CityBlockWhereInput>;
 };
 
@@ -2190,6 +2446,7 @@ export type QueryRefCityExperienceArgs = {
   locale?: InputMaybe<Array<InputMaybe<Locales>>>;
   orderBy?: InputMaybe<CityExperienceOrderByInput>;
   skip?: Scalars['Int']['input'];
+  variation?: InputMaybe<VariationInput>;
   where?: InputMaybe<CityExperienceWhereInput>;
 };
 
@@ -2201,6 +2458,7 @@ export type QueryRefCityOverviewArgs = {
   locale?: InputMaybe<Array<InputMaybe<Locales>>>;
   orderBy?: InputMaybe<CityOverviewOrderByInput>;
   skip?: Scalars['Int']['input'];
+  variation?: InputMaybe<VariationInput>;
   where?: InputMaybe<CityOverviewWhereInput>;
 };
 
@@ -2212,6 +2470,7 @@ export type QueryRefCityPageArgs = {
   locale?: InputMaybe<Array<InputMaybe<Locales>>>;
   orderBy?: InputMaybe<CityPageOrderByInput>;
   skip?: Scalars['Int']['input'];
+  variation?: InputMaybe<VariationInput>;
   where?: InputMaybe<CityPageWhereInput>;
 };
 
@@ -2223,6 +2482,7 @@ export type QueryRefCityPageSettingsArgs = {
   locale?: InputMaybe<Array<InputMaybe<Locales>>>;
   orderBy?: InputMaybe<CityPageSettingsOrderByInput>;
   skip?: Scalars['Int']['input'];
+  variation?: InputMaybe<VariationInput>;
   where?: InputMaybe<CityPageSettingsWhereInput>;
 };
 
@@ -2234,6 +2494,7 @@ export type QueryRefDataArgs = {
   locale?: InputMaybe<Array<InputMaybe<System_Locales>>>;
   orderBy?: InputMaybe<DataOrderByInput>;
   skip?: Scalars['Int']['input'];
+  variation?: InputMaybe<VariationInput>;
   where?: InputMaybe<DataWhereInput>;
 };
 
@@ -2245,7 +2506,20 @@ export type QueryRefGenericMediaArgs = {
   locale?: InputMaybe<Array<InputMaybe<Locales>>>;
   orderBy?: InputMaybe<GenericMediaOrderByInput>;
   skip?: Scalars['Int']['input'];
+  variation?: InputMaybe<VariationInput>;
   where?: InputMaybe<GenericMediaWhereInput>;
+};
+
+
+export type QueryRefHeroBannerArgs = {
+  cursor?: InputMaybe<Scalars['String']['input']>;
+  ids?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  limit?: Scalars['Int']['input'];
+  locale?: InputMaybe<Array<InputMaybe<Locales>>>;
+  orderBy?: InputMaybe<HeroBannerOrderByInput>;
+  skip?: Scalars['Int']['input'];
+  variation?: InputMaybe<VariationInput>;
+  where?: InputMaybe<HeroBannerWhereInput>;
 };
 
 
@@ -2256,6 +2530,7 @@ export type QueryRefImageMediaArgs = {
   locale?: InputMaybe<Array<InputMaybe<Locales>>>;
   orderBy?: InputMaybe<ImageMediaOrderByInput>;
   skip?: Scalars['Int']['input'];
+  variation?: InputMaybe<VariationInput>;
   where?: InputMaybe<ImageMediaWhereInput>;
 };
 
@@ -2267,6 +2542,7 @@ export type QueryRefSysContentFolderArgs = {
   locale?: InputMaybe<Array<InputMaybe<Locales>>>;
   orderBy?: InputMaybe<SysContentFolderOrderByInput>;
   skip?: Scalars['Int']['input'];
+  variation?: InputMaybe<VariationInput>;
   where?: InputMaybe<SysContentFolderWhereInput>;
 };
 
@@ -2278,6 +2554,7 @@ export type QueryRefVideoMediaArgs = {
   locale?: InputMaybe<Array<InputMaybe<Locales>>>;
   orderBy?: InputMaybe<VideoMediaOrderByInput>;
   skip?: Scalars['Int']['input'];
+  variation?: InputMaybe<VariationInput>;
   where?: InputMaybe<VideoMediaWhereInput>;
 };
 
@@ -2289,6 +2566,7 @@ export type QueryRef_ComponentArgs = {
   locale?: InputMaybe<Array<InputMaybe<Locales>>>;
   orderBy?: InputMaybe<_ComponentOrderByInput>;
   skip?: Scalars['Int']['input'];
+  variation?: InputMaybe<VariationInput>;
   where?: InputMaybe<_ComponentWhereInput>;
 };
 
@@ -2300,6 +2578,7 @@ export type QueryRef_ContentArgs = {
   locale?: InputMaybe<Array<InputMaybe<Locales>>>;
   orderBy?: InputMaybe<_ContentOrderByInput>;
   skip?: Scalars['Int']['input'];
+  variation?: InputMaybe<VariationInput>;
   where?: InputMaybe<_ContentWhereInput>;
 };
 
@@ -2311,6 +2590,7 @@ export type QueryRef_ExperienceArgs = {
   locale?: InputMaybe<Array<InputMaybe<Locales>>>;
   orderBy?: InputMaybe<_ExperienceOrderByInput>;
   skip?: Scalars['Int']['input'];
+  variation?: InputMaybe<VariationInput>;
   where?: InputMaybe<_ExperienceWhereInput>;
 };
 
@@ -2322,6 +2602,7 @@ export type QueryRef_FolderArgs = {
   locale?: InputMaybe<Array<InputMaybe<Locales>>>;
   orderBy?: InputMaybe<_FolderOrderByInput>;
   skip?: Scalars['Int']['input'];
+  variation?: InputMaybe<VariationInput>;
   where?: InputMaybe<_FolderWhereInput>;
 };
 
@@ -2333,6 +2614,7 @@ export type QueryRef_ImageArgs = {
   locale?: InputMaybe<Array<InputMaybe<Locales>>>;
   orderBy?: InputMaybe<_ImageOrderByInput>;
   skip?: Scalars['Int']['input'];
+  variation?: InputMaybe<VariationInput>;
   where?: InputMaybe<_ImageWhereInput>;
 };
 
@@ -2344,6 +2626,7 @@ export type QueryRef_MediaArgs = {
   locale?: InputMaybe<Array<InputMaybe<Locales>>>;
   orderBy?: InputMaybe<_MediaOrderByInput>;
   skip?: Scalars['Int']['input'];
+  variation?: InputMaybe<VariationInput>;
   where?: InputMaybe<_MediaWhereInput>;
 };
 
@@ -2355,6 +2638,7 @@ export type QueryRef_PageArgs = {
   locale?: InputMaybe<Array<InputMaybe<Locales>>>;
   orderBy?: InputMaybe<_PageOrderByInput>;
   skip?: Scalars['Int']['input'];
+  variation?: InputMaybe<VariationInput>;
   where?: InputMaybe<_PageWhereInput>;
 };
 
@@ -2366,6 +2650,7 @@ export type QueryRef_SectionArgs = {
   locale?: InputMaybe<Array<InputMaybe<Locales>>>;
   orderBy?: InputMaybe<_SectionOrderByInput>;
   skip?: Scalars['Int']['input'];
+  variation?: InputMaybe<VariationInput>;
   where?: InputMaybe<_SectionWhereInput>;
 };
 
@@ -2377,7 +2662,13 @@ export type QueryRef_VideoArgs = {
   locale?: InputMaybe<Array<InputMaybe<Locales>>>;
   orderBy?: InputMaybe<_VideoOrderByInput>;
   skip?: Scalars['Int']['input'];
+  variation?: InputMaybe<VariationInput>;
   where?: InputMaybe<_VideoWhereInput>;
+};
+
+export type RangeFacetsInput = {
+  from?: InputMaybe<Scalars['Int']['input']>;
+  to?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export enum Ranking {
@@ -2554,6 +2845,18 @@ export type SysContentFolderWhereInput = {
   _modified?: InputMaybe<DateFilterInput>;
   _not?: InputMaybe<Array<InputMaybe<SysContentFolderWhereInput>>>;
   _or?: InputMaybe<Array<InputMaybe<SysContentFolderWhereInput>>>;
+};
+
+export enum VariationIncludeMode {
+  All = 'ALL',
+  None = 'NONE',
+  Some = 'SOME'
+}
+
+export type VariationInput = {
+  include?: InputMaybe<VariationIncludeMode>;
+  includeOriginal?: InputMaybe<Scalars['Boolean']['input']>;
+  value?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
 };
 
 export type VideoMedia = IData & _IContent & _IMedia & _IVideo & {
@@ -2911,6 +3214,29 @@ export type _IComponent_FulltextArgs = {
 
 export type _IComponent_LinkArgs = {
   type?: InputMaybe<LinkTypes>;
+};
+
+export type _IComponentFacet = {
+  __typename?: '_IComponentFacet';
+  _metadata?: Maybe<IContentMetadataFacet>;
+};
+
+export type _IComponentOrderByInput = {
+  _metadata?: InputMaybe<IContentMetadataOrderByInput>;
+  _minimumScore?: InputMaybe<Scalars['Float']['input']>;
+  _modified?: InputMaybe<OrderBy>;
+  _ranking?: InputMaybe<Ranking>;
+  /** The value needs to be a positive value, but cannot exceed the maximum value of an integer. In case it is exceeded, the maximum of an integer is used. In case of a negative value, semantic search will be disabled. */
+  _semanticWeight?: InputMaybe<Scalars['Float']['input']>;
+};
+
+export type _IComponentWhereInput = {
+  _and?: InputMaybe<Array<InputMaybe<_IComponentWhereInput>>>;
+  _fulltext?: InputMaybe<SearchableStringFilterInput>;
+  _metadata?: InputMaybe<IContentMetadataWhereInput>;
+  _modified?: InputMaybe<DateFilterInput>;
+  _not?: InputMaybe<Array<InputMaybe<_IComponentWhereInput>>>;
+  _or?: InputMaybe<Array<InputMaybe<_IComponentWhereInput>>>;
 };
 
 export type _IContent = {
@@ -3462,12 +3788,15 @@ export enum System_Locales {
 export type CompositionComponentNodeFragment = { __typename?: 'CompositionComponentNode', key?: string | null, component?: { __typename?: 'AlertMessage', _metadata?: { __typename?: 'ContentMetadata', types?: Array<string | null> | null } | { __typename?: 'InstanceMetadata', types?: Array<string | null> | null } | { __typename?: 'ItemMetadata', types?: Array<string | null> | null } | { __typename?: 'MediaMetadata', types?: Array<string | null> | null } | null } | { __typename?: 'BlankSection', _metadata?: { __typename?: 'ContentMetadata', types?: Array<string | null> | null } | { __typename?: 'InstanceMetadata', types?: Array<string | null> | null } | { __typename?: 'ItemMetadata', types?: Array<string | null> | null } | { __typename?: 'MediaMetadata', types?: Array<string | null> | null } | null } | (
     { __typename?: 'CityBlock', _metadata?: { __typename?: 'ContentMetadata', types?: Array<string | null> | null } | { __typename?: 'InstanceMetadata', types?: Array<string | null> | null } | { __typename?: 'ItemMetadata', types?: Array<string | null> | null } | { __typename?: 'MediaMetadata', types?: Array<string | null> | null } | null }
     & { ' $fragmentRefs'?: { 'CityElementFragment': CityElementFragment } }
-  ) | { __typename?: 'CityOverview', _metadata?: { __typename?: 'ContentMetadata', types?: Array<string | null> | null } | { __typename?: 'InstanceMetadata', types?: Array<string | null> | null } | { __typename?: 'ItemMetadata', types?: Array<string | null> | null } | { __typename?: 'MediaMetadata', types?: Array<string | null> | null } | null } | { __typename?: 'CityPageSettings', _metadata?: { __typename?: 'ContentMetadata', types?: Array<string | null> | null } | { __typename?: 'InstanceMetadata', types?: Array<string | null> | null } | { __typename?: 'ItemMetadata', types?: Array<string | null> | null } | { __typename?: 'MediaMetadata', types?: Array<string | null> | null } | null } | { __typename?: '_Component', _metadata?: { __typename?: 'ContentMetadata', types?: Array<string | null> | null } | { __typename?: 'InstanceMetadata', types?: Array<string | null> | null } | { __typename?: 'ItemMetadata', types?: Array<string | null> | null } | { __typename?: 'MediaMetadata', types?: Array<string | null> | null } | null } | { __typename?: '_Section', _metadata?: { __typename?: 'ContentMetadata', types?: Array<string | null> | null } | { __typename?: 'InstanceMetadata', types?: Array<string | null> | null } | { __typename?: 'ItemMetadata', types?: Array<string | null> | null } | { __typename?: 'MediaMetadata', types?: Array<string | null> | null } | null } | null } & { ' $fragmentName'?: 'CompositionComponentNodeFragment' };
+  ) | { __typename?: 'CityOverview', _metadata?: { __typename?: 'ContentMetadata', types?: Array<string | null> | null } | { __typename?: 'InstanceMetadata', types?: Array<string | null> | null } | { __typename?: 'ItemMetadata', types?: Array<string | null> | null } | { __typename?: 'MediaMetadata', types?: Array<string | null> | null } | null } | { __typename?: 'CityPageSettings', _metadata?: { __typename?: 'ContentMetadata', types?: Array<string | null> | null } | { __typename?: 'InstanceMetadata', types?: Array<string | null> | null } | { __typename?: 'ItemMetadata', types?: Array<string | null> | null } | { __typename?: 'MediaMetadata', types?: Array<string | null> | null } | null } | (
+    { __typename?: 'HeroBanner', _metadata?: { __typename?: 'ContentMetadata', types?: Array<string | null> | null } | { __typename?: 'InstanceMetadata', types?: Array<string | null> | null } | { __typename?: 'ItemMetadata', types?: Array<string | null> | null } | { __typename?: 'MediaMetadata', types?: Array<string | null> | null } | null }
+    & { ' $fragmentRefs'?: { 'HeroBannerFragment': HeroBannerFragment } }
+  ) | { __typename?: '_Component', _metadata?: { __typename?: 'ContentMetadata', types?: Array<string | null> | null } | { __typename?: 'InstanceMetadata', types?: Array<string | null> | null } | { __typename?: 'ItemMetadata', types?: Array<string | null> | null } | { __typename?: 'MediaMetadata', types?: Array<string | null> | null } | null } | { __typename?: '_Section', _metadata?: { __typename?: 'ContentMetadata', types?: Array<string | null> | null } | { __typename?: 'InstanceMetadata', types?: Array<string | null> | null } | { __typename?: 'ItemMetadata', types?: Array<string | null> | null } | { __typename?: 'MediaMetadata', types?: Array<string | null> | null } | null } | null } & { ' $fragmentName'?: 'CompositionComponentNodeFragment' };
 
 export type GetCitiesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCitiesQuery = { __typename?: 'Query', _Content?: { __typename?: '_ContentOutput', items?: Array<{ __typename?: 'AlertMessage' } | { __typename?: 'BlankExperience' } | { __typename?: 'BlankSection' } | { __typename?: 'CityBlock', Title?: string | null, _metadata?: { __typename?: 'ContentMetadata', key?: string | null } | { __typename?: 'InstanceMetadata', key?: string | null } | { __typename?: 'ItemMetadata', key?: string | null } | { __typename?: 'MediaMetadata', key?: string | null } | null } | { __typename?: 'CityExperience' } | { __typename?: 'CityOverview' } | { __typename?: 'CityPage' } | { __typename?: 'CityPageSettings' } | { __typename?: 'GenericMedia' } | { __typename?: 'ImageMedia' } | { __typename?: 'SysContentFolder' } | { __typename?: 'VideoMedia' } | { __typename?: '_Component' } | { __typename?: '_Content' } | { __typename?: '_Experience' } | { __typename?: '_Folder' } | { __typename?: '_Image' } | { __typename?: '_Media' } | { __typename?: '_Page' } | { __typename?: '_Section' } | { __typename?: '_Video' } | null> | null } | null };
+export type GetCitiesQuery = { __typename?: 'Query', _Content?: { __typename?: '_ContentOutput', items?: Array<{ __typename?: 'AlertMessage' } | { __typename?: 'BlankExperience' } | { __typename?: 'BlankSection' } | { __typename?: 'CityBlock', Title?: string | null, _metadata?: { __typename?: 'ContentMetadata', key?: string | null } | { __typename?: 'InstanceMetadata', key?: string | null } | { __typename?: 'ItemMetadata', key?: string | null } | { __typename?: 'MediaMetadata', key?: string | null } | null } | { __typename?: 'CityExperience' } | { __typename?: 'CityOverview' } | { __typename?: 'CityPage' } | { __typename?: 'CityPageSettings' } | { __typename?: 'GenericMedia' } | { __typename?: 'HeroBanner' } | { __typename?: 'ImageMedia' } | { __typename?: 'SysContentFolder' } | { __typename?: 'VideoMedia' } | { __typename?: '_Component' } | { __typename?: '_Content' } | { __typename?: '_Experience' } | { __typename?: '_Folder' } | { __typename?: '_Image' } | { __typename?: '_Media' } | { __typename?: '_Page' } | { __typename?: '_Section' } | { __typename?: '_Video' } | null> | null } | null };
 
 export type PreviewQueryVariables = Exact<{
   key?: InputMaybe<Scalars['String']['input']>;
@@ -3485,7 +3814,7 @@ export type PreviewQuery = { __typename?: 'Query', _Experience?: { __typename?: 
               ) | { __typename?: 'CompositionNode' } | { __typename?: 'CompositionStructureNode' } | null> | null } | null> | null } | null> | null } | null> | null } | null, _metadata?: { __typename?: 'ContentMetadata', key?: string | null, version?: string | null } | { __typename?: 'InstanceMetadata', key?: string | null, version?: string | null } | { __typename?: 'ItemMetadata', key?: string | null, version?: string | null } | { __typename?: 'MediaMetadata', key?: string | null, version?: string | null } | null } | { __typename?: '_Experience', composition?: { __typename?: 'CompositionStructureNode', grids?: Array<{ __typename?: 'CompositionComponentNode' } | { __typename?: 'CompositionNode' } | { __typename?: 'CompositionStructureNode', key?: string | null, displaySettings?: Array<{ __typename?: 'CompositionDisplaySetting', key?: string | null, value?: string | null } | null> | null, rows?: Array<{ __typename?: 'CompositionComponentNode' } | { __typename?: 'CompositionNode' } | { __typename?: 'CompositionStructureNode', key?: string | null, columns?: Array<{ __typename?: 'CompositionComponentNode' } | { __typename?: 'CompositionNode' } | { __typename?: 'CompositionStructureNode', key?: string | null, elements?: Array<(
                 { __typename?: 'CompositionComponentNode' }
                 & { ' $fragmentRefs'?: { 'CompositionComponentNodeFragment': CompositionComponentNodeFragment } }
-              ) | { __typename?: 'CompositionNode' } | { __typename?: 'CompositionStructureNode' } | null> | null } | null> | null } | null> | null } | null> | null } | null, _metadata?: { __typename?: 'ContentMetadata', key?: string | null, version?: string | null } | { __typename?: 'InstanceMetadata', key?: string | null, version?: string | null } | { __typename?: 'ItemMetadata', key?: string | null, version?: string | null } | { __typename?: 'MediaMetadata', key?: string | null, version?: string | null } | null } | null> | null } | null, CityPage?: { __typename?: 'CityPageOutput', items?: Array<{ __typename?: 'CityPage', CityReference?: { __typename?: 'AlertMessage' } | { __typename?: 'BlankExperience' } | { __typename?: 'BlankSection' } | { __typename?: 'CityBlock', Title?: string | null, Image?: { __typename?: 'ContentReference', key?: string | null, url?: { __typename?: 'ContentUrl', default?: string | null } | null } | null, Description?: { __typename?: 'RichText', html?: string | null } | null, _metadata?: { __typename?: 'ContentMetadata', key?: string | null } | { __typename?: 'InstanceMetadata', key?: string | null } | { __typename?: 'ItemMetadata', key?: string | null } | { __typename?: 'MediaMetadata', key?: string | null } | null } | { __typename?: 'CityExperience' } | { __typename?: 'CityOverview' } | { __typename?: 'CityPage' } | { __typename?: 'CityPageSettings' } | { __typename?: 'GenericMedia' } | { __typename?: 'ImageMedia' } | { __typename?: 'SysContentFolder' } | { __typename?: 'VideoMedia' } | { __typename?: '_Component' } | { __typename?: '_Content' } | { __typename?: '_Experience' } | { __typename?: '_Folder' } | { __typename?: '_Image' } | { __typename?: '_Media' } | { __typename?: '_Page' } | { __typename?: '_Section' } | { __typename?: '_Video' } | null } | null> | null } | null };
+              ) | { __typename?: 'CompositionNode' } | { __typename?: 'CompositionStructureNode' } | null> | null } | null> | null } | null> | null } | null> | null } | null, _metadata?: { __typename?: 'ContentMetadata', key?: string | null, version?: string | null } | { __typename?: 'InstanceMetadata', key?: string | null, version?: string | null } | { __typename?: 'ItemMetadata', key?: string | null, version?: string | null } | { __typename?: 'MediaMetadata', key?: string | null, version?: string | null } | null } | null> | null } | null, CityPage?: { __typename?: 'CityPageOutput', items?: Array<{ __typename?: 'CityPage', CityReference?: { __typename?: 'AlertMessage' } | { __typename?: 'BlankExperience' } | { __typename?: 'BlankSection' } | { __typename?: 'CityBlock', Title?: string | null, Image?: { __typename?: 'ContentReference', key?: string | null, url?: { __typename?: 'ContentUrl', default?: string | null } | null } | null, Description?: { __typename?: 'RichText', html?: string | null } | null, _metadata?: { __typename?: 'ContentMetadata', key?: string | null } | { __typename?: 'InstanceMetadata', key?: string | null } | { __typename?: 'ItemMetadata', key?: string | null } | { __typename?: 'MediaMetadata', key?: string | null } | null } | { __typename?: 'CityExperience' } | { __typename?: 'CityOverview' } | { __typename?: 'CityPage' } | { __typename?: 'CityPageSettings' } | { __typename?: 'GenericMedia' } | { __typename?: 'HeroBanner' } | { __typename?: 'ImageMedia' } | { __typename?: 'SysContentFolder' } | { __typename?: 'VideoMedia' } | { __typename?: '_Component' } | { __typename?: '_Content' } | { __typename?: '_Experience' } | { __typename?: '_Folder' } | { __typename?: '_Image' } | { __typename?: '_Media' } | { __typename?: '_Page' } | { __typename?: '_Section' } | { __typename?: '_Video' } | null } | null> | null } | null };
 
 export type SearchResultsCitiesQueryVariables = Exact<{
   searchQuery?: InputMaybe<Scalars['String']['input']>;
@@ -3493,7 +3822,7 @@ export type SearchResultsCitiesQueryVariables = Exact<{
 }>;
 
 
-export type SearchResultsCitiesQuery = { __typename?: 'Query', _Component?: { __typename?: '_ComponentOutput', items?: Array<{ __typename?: 'AlertMessage' } | { __typename?: 'BlankSection' } | { __typename?: 'CityBlock', Title?: string | null, Image?: { __typename?: 'ContentReference', key?: string | null, url?: { __typename?: 'ContentUrl', default?: string | null } | null } | null, Description?: { __typename?: 'RichText', html?: string | null } | null, _metadata?: { __typename?: 'ContentMetadata', key?: string | null } | { __typename?: 'InstanceMetadata', key?: string | null } | { __typename?: 'ItemMetadata', key?: string | null } | { __typename?: 'MediaMetadata', key?: string | null } | null } | { __typename?: 'CityOverview' } | { __typename?: 'CityPageSettings' } | { __typename?: '_Component' } | { __typename?: '_Section' } | null> | null } | null };
+export type SearchResultsCitiesQuery = { __typename?: 'Query', _Component?: { __typename?: '_ComponentOutput', items?: Array<{ __typename?: 'AlertMessage' } | { __typename?: 'BlankSection' } | { __typename?: 'CityBlock', Title?: string | null, Image?: { __typename?: 'ContentReference', key?: string | null, url?: { __typename?: 'ContentUrl', default?: string | null } | null } | null, Description?: { __typename?: 'RichText', html?: string | null } | null, _metadata?: { __typename?: 'ContentMetadata', key?: string | null } | { __typename?: 'InstanceMetadata', key?: string | null } | { __typename?: 'ItemMetadata', key?: string | null } | { __typename?: 'MediaMetadata', key?: string | null } | null } | { __typename?: 'CityOverview' } | { __typename?: 'CityPageSettings' } | { __typename?: 'HeroBanner' } | { __typename?: '_Component' } | { __typename?: '_Section' } | null> | null } | null };
 
 export type VisualBuilderQueryVariables = Exact<{
   url?: InputMaybe<Scalars['String']['input']>;
@@ -3509,13 +3838,16 @@ export type VisualBuilderQuery = { __typename?: 'Query', _Experience?: { __typen
               ) | { __typename?: 'CompositionNode' } | { __typename?: 'CompositionStructureNode' } | null> | null } | null> | null } | null> | null } | null> | null } | null, _metadata?: { __typename?: 'ContentMetadata', key?: string | null, version?: string | null } | { __typename?: 'InstanceMetadata', key?: string | null, version?: string | null } | { __typename?: 'ItemMetadata', key?: string | null, version?: string | null } | { __typename?: 'MediaMetadata', key?: string | null, version?: string | null } | null } | { __typename?: '_Experience', composition?: { __typename?: 'CompositionStructureNode', grids?: Array<{ __typename?: 'CompositionComponentNode' } | { __typename?: 'CompositionNode' } | { __typename?: 'CompositionStructureNode', key?: string | null, displaySettings?: Array<{ __typename?: 'CompositionDisplaySetting', key?: string | null, value?: string | null } | null> | null, rows?: Array<{ __typename?: 'CompositionComponentNode' } | { __typename?: 'CompositionNode' } | { __typename?: 'CompositionStructureNode', key?: string | null, columns?: Array<{ __typename?: 'CompositionComponentNode' } | { __typename?: 'CompositionNode' } | { __typename?: 'CompositionStructureNode', key?: string | null, elements?: Array<(
                 { __typename?: 'CompositionComponentNode' }
                 & { ' $fragmentRefs'?: { 'CompositionComponentNodeFragment': CompositionComponentNodeFragment } }
-              ) | { __typename?: 'CompositionNode' } | { __typename?: 'CompositionStructureNode' } | null> | null } | null> | null } | null> | null } | null> | null } | null, _metadata?: { __typename?: 'ContentMetadata', key?: string | null, version?: string | null } | { __typename?: 'InstanceMetadata', key?: string | null, version?: string | null } | { __typename?: 'ItemMetadata', key?: string | null, version?: string | null } | { __typename?: 'MediaMetadata', key?: string | null, version?: string | null } | null } | null> | null } | null, CityPage?: { __typename?: 'CityPageOutput', items?: Array<{ __typename?: 'CityPage', CityReference?: { __typename?: 'AlertMessage' } | { __typename?: 'BlankExperience' } | { __typename?: 'BlankSection' } | { __typename?: 'CityBlock', Title?: string | null, Image?: { __typename?: 'ContentReference', key?: string | null, url?: { __typename?: 'ContentUrl', default?: string | null } | null } | null, Description?: { __typename?: 'RichText', html?: string | null } | null, _metadata?: { __typename?: 'ContentMetadata', key?: string | null } | { __typename?: 'InstanceMetadata', key?: string | null } | { __typename?: 'ItemMetadata', key?: string | null } | { __typename?: 'MediaMetadata', key?: string | null } | null } | { __typename?: 'CityExperience' } | { __typename?: 'CityOverview' } | { __typename?: 'CityPage' } | { __typename?: 'CityPageSettings' } | { __typename?: 'GenericMedia' } | { __typename?: 'ImageMedia' } | { __typename?: 'SysContentFolder' } | { __typename?: 'VideoMedia' } | { __typename?: '_Component' } | { __typename?: '_Content' } | { __typename?: '_Experience' } | { __typename?: '_Folder' } | { __typename?: '_Image' } | { __typename?: '_Media' } | { __typename?: '_Page' } | { __typename?: '_Section' } | { __typename?: '_Video' } | null } | null> | null } | null };
+              ) | { __typename?: 'CompositionNode' } | { __typename?: 'CompositionStructureNode' } | null> | null } | null> | null } | null> | null } | null> | null } | null, _metadata?: { __typename?: 'ContentMetadata', key?: string | null, version?: string | null } | { __typename?: 'InstanceMetadata', key?: string | null, version?: string | null } | { __typename?: 'ItemMetadata', key?: string | null, version?: string | null } | { __typename?: 'MediaMetadata', key?: string | null, version?: string | null } | null } | null> | null } | null, CityPage?: { __typename?: 'CityPageOutput', items?: Array<{ __typename?: 'CityPage', CityReference?: { __typename?: 'AlertMessage' } | { __typename?: 'BlankExperience' } | { __typename?: 'BlankSection' } | { __typename?: 'CityBlock', Title?: string | null, Image?: { __typename?: 'ContentReference', key?: string | null, url?: { __typename?: 'ContentUrl', default?: string | null } | null } | null, Description?: { __typename?: 'RichText', html?: string | null } | null, _metadata?: { __typename?: 'ContentMetadata', key?: string | null } | { __typename?: 'InstanceMetadata', key?: string | null } | { __typename?: 'ItemMetadata', key?: string | null } | { __typename?: 'MediaMetadata', key?: string | null } | null } | { __typename?: 'CityExperience' } | { __typename?: 'CityOverview' } | { __typename?: 'CityPage' } | { __typename?: 'CityPageSettings' } | { __typename?: 'GenericMedia' } | { __typename?: 'HeroBanner' } | { __typename?: 'ImageMedia' } | { __typename?: 'SysContentFolder' } | { __typename?: 'VideoMedia' } | { __typename?: '_Component' } | { __typename?: '_Content' } | { __typename?: '_Experience' } | { __typename?: '_Folder' } | { __typename?: '_Image' } | { __typename?: '_Media' } | { __typename?: '_Page' } | { __typename?: '_Section' } | { __typename?: '_Video' } | null } | null> | null } | null };
 
 export type CityElementFragment = { __typename?: 'CityBlock', Title?: string | null, Image?: { __typename?: 'ContentReference', url?: { __typename?: 'ContentUrl', default?: string | null } | null } | null, Description?: { __typename?: 'RichText', html?: string | null } | null } & { ' $fragmentName'?: 'CityElementFragment' };
 
+export type HeroBannerFragment = { __typename?: 'HeroBanner', Title?: string | null, Subtitle?: string | null, BackgroundImage?: { __typename?: 'ContentUrl', default?: string | null } | null } & { ' $fragmentName'?: 'HeroBannerFragment' };
+
 export const CityElementFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"cityElement"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CityBlock"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Image"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"default"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"Description"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"html"}}]}},{"kind":"Field","name":{"kind":"Name","value":"Title"}}]}}]} as unknown as DocumentNode<CityElementFragment, unknown>;
-export const CompositionComponentNodeFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"compositionComponentNode"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CompositionComponentNode"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"component"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"_metadata"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"types"}}]}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"cityElement"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"cityElement"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CityBlock"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Image"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"default"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"Description"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"html"}}]}},{"kind":"Field","name":{"kind":"Name","value":"Title"}}]}}]} as unknown as DocumentNode<CompositionComponentNodeFragment, unknown>;
+export const HeroBannerFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"heroBanner"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"HeroBanner"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Title"}},{"kind":"Field","name":{"kind":"Name","value":"Subtitle"}},{"kind":"Field","name":{"kind":"Name","value":"BackgroundImage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"default"}}]}}]}}]} as unknown as DocumentNode<HeroBannerFragment, unknown>;
+export const CompositionComponentNodeFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"compositionComponentNode"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CompositionComponentNode"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"component"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"_metadata"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"types"}}]}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"cityElement"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"heroBanner"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"cityElement"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CityBlock"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Image"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"default"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"Description"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"html"}}]}},{"kind":"Field","name":{"kind":"Name","value":"Title"}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"heroBanner"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"HeroBanner"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Title"}},{"kind":"Field","name":{"kind":"Name","value":"Subtitle"}},{"kind":"Field","name":{"kind":"Name","value":"BackgroundImage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"default"}}]}}]}}]} as unknown as DocumentNode<CompositionComponentNodeFragment, unknown>;
 export const GetCitiesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetCities"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"_Content"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CityBlock"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Title"}},{"kind":"Field","name":{"kind":"Name","value":"_metadata"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetCitiesQuery, GetCitiesQueryVariables>;
-export const PreviewDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Preview"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"key"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"version"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"locale"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"_Experience"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_and"},"value":{"kind":"ListValue","values":[{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_metadata"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"key"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"key"}}}]}}]}}]},{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_metadata"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"version"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"version"}}}]}}]}}]},{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_metadata"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"locale"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"locale"}}}]}}]}}]}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"composition"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"grids"},"name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CompositionStructureNode"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"displaySettings"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}},{"kind":"Field","alias":{"kind":"Name","value":"rows"},"name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CompositionStructureNode"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","alias":{"kind":"Name","value":"columns"},"name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CompositionStructureNode"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","alias":{"kind":"Name","value":"elements"},"name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"compositionComponentNode"}}]}}]}}]}}]}}]}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"_metadata"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"version"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"CityPage"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_and"},"value":{"kind":"ListValue","values":[{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_metadata"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"key"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"key"}}}]}}]}}]},{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_metadata"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"version"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"version"}}}]}}]}}]}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"CityReference"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CityBlock"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Title"}},{"kind":"Field","name":{"kind":"Name","value":"Image"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"url"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"default"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"Description"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"html"}}]}},{"kind":"Field","name":{"kind":"Name","value":"_metadata"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}}]}}]}}]}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"cityElement"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CityBlock"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Image"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"default"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"Description"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"html"}}]}},{"kind":"Field","name":{"kind":"Name","value":"Title"}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"compositionComponentNode"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CompositionComponentNode"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"component"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"_metadata"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"types"}}]}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"cityElement"}}]}}]}}]} as unknown as DocumentNode<PreviewQuery, PreviewQueryVariables>;
+export const PreviewDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Preview"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"key"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"version"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"locale"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"_Experience"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_and"},"value":{"kind":"ListValue","values":[{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_metadata"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"key"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"key"}}}]}}]}}]},{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_metadata"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"version"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"version"}}}]}}]}}]},{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_metadata"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"locale"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"locale"}}}]}}]}}]}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"composition"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"grids"},"name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CompositionStructureNode"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"displaySettings"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}},{"kind":"Field","alias":{"kind":"Name","value":"rows"},"name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CompositionStructureNode"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","alias":{"kind":"Name","value":"columns"},"name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CompositionStructureNode"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","alias":{"kind":"Name","value":"elements"},"name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"compositionComponentNode"}}]}}]}}]}}]}}]}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"_metadata"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"version"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"CityPage"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_and"},"value":{"kind":"ListValue","values":[{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_metadata"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"key"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"key"}}}]}}]}}]},{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_metadata"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"version"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"version"}}}]}}]}}]}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"CityReference"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CityBlock"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Title"}},{"kind":"Field","name":{"kind":"Name","value":"Image"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"url"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"default"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"Description"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"html"}}]}},{"kind":"Field","name":{"kind":"Name","value":"_metadata"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}}]}}]}}]}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"cityElement"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CityBlock"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Image"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"default"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"Description"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"html"}}]}},{"kind":"Field","name":{"kind":"Name","value":"Title"}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"heroBanner"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"HeroBanner"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Title"}},{"kind":"Field","name":{"kind":"Name","value":"Subtitle"}},{"kind":"Field","name":{"kind":"Name","value":"BackgroundImage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"default"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"compositionComponentNode"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CompositionComponentNode"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"component"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"_metadata"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"types"}}]}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"cityElement"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"heroBanner"}}]}}]}}]} as unknown as DocumentNode<PreviewQuery, PreviewQueryVariables>;
 export const SearchResultsCitiesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"SearchResultsCities"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"searchQuery"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"orderBy"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"_ComponentOrderByInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"_Component"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"orderBy"},"value":{"kind":"Variable","name":{"kind":"Name","value":"orderBy"}}},{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_fulltext"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"match"},"value":{"kind":"Variable","name":{"kind":"Name","value":"searchQuery"}}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CityBlock"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Title"}},{"kind":"Field","name":{"kind":"Name","value":"Image"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"url"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"default"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"Description"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"html"}}]}},{"kind":"Field","name":{"kind":"Name","value":"_metadata"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<SearchResultsCitiesQuery, SearchResultsCitiesQueryVariables>;
-export const VisualBuilderDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"VisualBuilder"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"url"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"_Experience"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_metadata"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"url"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"default"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"url"}}}]}}]}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"composition"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"grids"},"name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CompositionStructureNode"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"displaySettings"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}},{"kind":"Field","alias":{"kind":"Name","value":"rows"},"name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CompositionStructureNode"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","alias":{"kind":"Name","value":"columns"},"name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CompositionStructureNode"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","alias":{"kind":"Name","value":"elements"},"name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"compositionComponentNode"}}]}}]}}]}}]}}]}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"_metadata"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"version"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"CityPage"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_metadata"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"url"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"default"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"url"}}}]}}]}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"CityReference"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CityBlock"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Title"}},{"kind":"Field","name":{"kind":"Name","value":"Image"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"url"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"default"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"Description"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"html"}}]}},{"kind":"Field","name":{"kind":"Name","value":"_metadata"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}}]}}]}}]}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"cityElement"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CityBlock"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Image"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"default"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"Description"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"html"}}]}},{"kind":"Field","name":{"kind":"Name","value":"Title"}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"compositionComponentNode"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CompositionComponentNode"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"component"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"_metadata"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"types"}}]}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"cityElement"}}]}}]}}]} as unknown as DocumentNode<VisualBuilderQuery, VisualBuilderQueryVariables>;
+export const VisualBuilderDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"VisualBuilder"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"url"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"_Experience"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_metadata"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"url"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"default"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"url"}}}]}}]}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"composition"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"grids"},"name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CompositionStructureNode"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"displaySettings"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}},{"kind":"Field","alias":{"kind":"Name","value":"rows"},"name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CompositionStructureNode"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","alias":{"kind":"Name","value":"columns"},"name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CompositionStructureNode"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","alias":{"kind":"Name","value":"elements"},"name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"compositionComponentNode"}}]}}]}}]}}]}}]}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"_metadata"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"version"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"CityPage"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_metadata"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"url"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"default"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"url"}}}]}}]}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"CityReference"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CityBlock"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Title"}},{"kind":"Field","name":{"kind":"Name","value":"Image"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"url"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"default"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"Description"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"html"}}]}},{"kind":"Field","name":{"kind":"Name","value":"_metadata"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}}]}}]}}]}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"cityElement"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CityBlock"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Image"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"default"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"Description"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"html"}}]}},{"kind":"Field","name":{"kind":"Name","value":"Title"}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"heroBanner"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"HeroBanner"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Title"}},{"kind":"Field","name":{"kind":"Name","value":"Subtitle"}},{"kind":"Field","name":{"kind":"Name","value":"BackgroundImage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"default"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"compositionComponentNode"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CompositionComponentNode"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"component"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"_metadata"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"types"}}]}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"cityElement"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"heroBanner"}}]}}]}}]} as unknown as DocumentNode<VisualBuilderQuery, VisualBuilderQueryVariables>;
