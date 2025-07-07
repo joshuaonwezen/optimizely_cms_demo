@@ -26,7 +26,6 @@ const CompositionComponentNodeComponent = (props: {
 }) => {
     const compositionComponentNode = useFragment(CompositionComponentNodeFragment, props.compositionComponentNode)
     const component = compositionComponentNode.component ?? compositionComponentNode
-console.log("Component typename:", component?.__typename);
 
     switch (component?.__typename) {
         case "CityBlock":
