@@ -1,7 +1,7 @@
 import React from "react";
 import { FragmentType, useFragment } from "../../graphql/fragment-masking";
 import { graphql } from "@/graphql";
-import { useDecision } from '@optimizely/react-sdk';
+import { useDecision } from "@optimizely/react-sdk";
 
 // Define the fragment for HeroBannerBlock
 export const HeroBannerFragment = graphql(/* GraphQL */ `
@@ -18,31 +18,42 @@ interface HeroBannerProps {
   heroBanner: FragmentType<typeof HeroBannerFragment>;
 }
 
+interface HeroBannerVariables {
+  title?: string;
+  subtitle?: string;
+  backgroundImage?: string;
+}
+
 const HeroBanner: React.FC<HeroBannerProps> = ({ heroBanner }) => {
   const data = useFragment(HeroBannerFragment, heroBanner);
 
   // Use feature flag to decide visibility and optionally override content
-  const [decision] = useDecision('banner');
-    
-  console.log('HeroBanner enabled:', decision);
+  const [decision] = useDecision("banner");
+
+  console.log("HeroBanner enabled:", decision);
   // Hide the banner if the feature flag is disabled
   if (!decision?.enabled) return null;
 
+  const variables = decision?.variables as HeroBannerVariables | undefined;
+
   // Use Optimizely variables if available, fallback to CMS content
-  const title = decision.variables?.title || data.Title;
-  const subtitle = decision.variables?.subtitle || data.Subtitle;
-  const backgroundImage = decision.variables?.backgroundImage || data.BackgroundImage?.default;
+  const title = variables?.title || data.Title || "";
+  const subtitle = variables?.subtitle || data.Subtitle || "";
+  const backgroundImage =
+    decision.variables?.backgroundImage || data.BackgroundImage?.default;
 
   const textShadowStyle = {
-    textShadow: '0 2px 6px rgba(0,0,0,0.8)',
+    textShadow: "0 2px 6px rgba(0,0,0,0.8)",
   };
 
-  console.log('hello')
+  console.log("hello");
   return (
     <section
       className="relative w-full rounded-lg overflow-hidden bg-gray-100"
       style={{
-        backgroundImage: backgroundImage ? `url(${backgroundImage})` : undefined,
+        backgroundImage: backgroundImage
+          ? `url(${backgroundImage})`
+          : undefined,
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
