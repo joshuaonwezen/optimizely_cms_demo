@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import HeaderElementComponent from "../../elements/HeaderElementComponent";
 import NoSearchResults from "../../elements/NoSearchResultsComponent";
-import LoadingComponent from "../../elements/LoadingComponent";
+import SkeletonLoader from "../../elements/SkeletonLoader";
 import { useVisualBuilderData } from "./hooks/useVisualBuilderData";
 import ExperienceGrids from "./ExperienceGrids";
 import CityPage from "./CityPage";
@@ -16,11 +16,19 @@ interface VisualBuilderProps {
 const VisualBuilderComponent: FC<VisualBuilderProps> = (props) => {
   const { loading, hasLoaded, processedData } = useVisualBuilderData(props);
 
+  // Determine skeleton type based on query mode and expected content
+  const getSkeletonType = () => {
+    if (props.searchQuery) return 'search';
+    if (processedData.experience) return 'experience';
+    if (processedData.page?.CityReference || processedData.searchResult) return 'city';
+    return 'default';
+  };
+
   if (loading && !hasLoaded) {
     return (
       <div className="relative w-full flex-1 vb:outline">
         <HeaderElementComponent />
-        <LoadingComponent />
+        <SkeletonLoader type={getSkeletonType()} />
       </div>
     );
   }
