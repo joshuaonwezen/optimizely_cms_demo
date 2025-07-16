@@ -24,7 +24,7 @@ const VisualBuilderComponent: FC<VisualBuilderProps> = (props) => {
     return 'default';
   };
 
-  if (loading && !hasLoaded) {
+  if (loading) {
     return (
       <div className="relative w-full flex-1 vb:outline">
         <HeaderElementComponent />
