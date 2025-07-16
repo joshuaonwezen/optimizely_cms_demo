@@ -5,7 +5,7 @@ interface ContactModalProps {
   onClose: () => void;
 }
 
-const ContactModalComponent: FC<ContactModalProps> = ({ onClose }) => {
+const ContactModal: FC<ContactModalProps> = ({ onClose }) => {
   return (
     <div
       className={styles.modalBackdrop}
@@ -65,4 +65,4 @@ const ContactModalComponent: FC<ContactModalProps> = ({ onClose }) => {
   );
 };
 
-export default ContactModalComponent;
+export default ContactModal;

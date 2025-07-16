@@ -1,11 +1,8 @@
 import { FragmentType, useFragment } from '../../graphql/fragment-masking'
 import { graphql } from '@/graphql'
-// import ParagraphElementComponent from '../elements/ParagraphElementComponent'
-import CityElementComponent from '../elements/CityElementComponent'
-import HeroBanner from '../elements/HeroBanner'
-import NoSearchResults from '../elements/NoSearchResultsComponent'
-// import FooterElementComponent from '../elements/FooterElementComponent'
-// import HeaderElementComponent from '../elements/HeaderElementComponent'
+import City from './City'
+import Hero from './Hero'
+
 
 
 export const CompositionComponentNodeFragment = graphql(/* GraphQL */ `
@@ -29,9 +26,9 @@ const CompositionComponentNodeComponent = (props: {
 
     switch (component?.__typename) {
         case "CityBlock":
-            return <CityElementComponent cityElement={component}/>
+            return <City cityElement={component}/>
         case "HeroBanner":
-            return <HeroBanner heroBanner={component}/>
+            return <Hero heroBanner={component}/>
         // case "FooterElement":
         //     return <FooterElementComponent footerElement={element}/>
         default:

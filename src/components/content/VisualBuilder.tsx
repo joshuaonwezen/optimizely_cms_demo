@@ -1,9 +1,9 @@
 import React, { FC } from "react";
-import HeaderElementComponent from "../../elements/HeaderElementComponent";
-import NoSearchResults from "../../elements/NoSearchResultsComponent";
-import SkeletonLoader from "../../elements/SkeletonLoader";
-import { useVisualBuilderData } from "./hooks/useVisualBuilderData";
-import ExperienceGrids from "./ExperienceGrids";
+import Header from "../layout/Header";
+import NoResults from "../ui/NoResults";
+import Skeleton from "../ui/Skeleton";
+import { useVisualBuilderData } from "../../hooks/useVisualBuilderData";
+import Experience from "./Experience";
 import CityPage from "./CityPage";
 
 interface VisualBuilderProps {
@@ -13,7 +13,7 @@ interface VisualBuilderProps {
   searchQuery?: string;
 }
 
-const VisualBuilderComponent: FC<VisualBuilderProps> = (props) => {
+const VisualBuilder: FC<VisualBuilderProps> = (props) => {
   const { loading, hasLoaded, processedData } = useVisualBuilderData(props);
 
   // Determine skeleton type based on query mode and expected content
@@ -27,8 +27,8 @@ const VisualBuilderComponent: FC<VisualBuilderProps> = (props) => {
   if (loading) {
     return (
       <div className="relative w-full flex-1 vb:outline">
-        <HeaderElementComponent />
-        <SkeletonLoader type={getSkeletonType()} />
+        <Header />
+        <Skeleton type={getSkeletonType()} />
       </div>
     );
   }
@@ -36,13 +36,13 @@ const VisualBuilderComponent: FC<VisualBuilderProps> = (props) => {
   if (!processedData.experience && !processedData.page && !processedData.searchResult) {
     return (
       <div className="relative w-full flex-1 vb:outline">
-        <HeaderElementComponent />
-        <NoSearchResults />
+        <Header />
+        <NoResults />
       </div>
     );
   }
 
-  if (processedData.experience) return <ExperienceGrids experience={processedData.experience} />;
+  if (processedData.experience) return <Experience experience={processedData.experience} />;
   if (
     (processedData.page && processedData.page?.CityReference?.__typename === "CityBlock") ||
     (processedData.searchResult && processedData.searchResult?.__typename === "CityBlock")
@@ -53,4 +53,4 @@ const VisualBuilderComponent: FC<VisualBuilderProps> = (props) => {
   return null;
 };
 
-export default React.memo(VisualBuilderComponent);
+export default React.memo(VisualBuilder);

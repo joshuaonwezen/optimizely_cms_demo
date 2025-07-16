@@ -1,11 +1,11 @@
 import React from "react";
-import HeaderElementComponent from "../../elements/HeaderElementComponent";
-import CompositionNodeComponent from "../CompositionNodeComponent";
-import HeroBanner from "@/components/elements/HeroBanner";
+import Header from "../layout/Header";
+import Composition from "./Composition";
+import Hero from "./Hero";
 
-const ExperienceGrids = ({ experience }: { experience: any }) => (
+const Experience = ({ experience }: { experience: any }) => (
   <div className="relative w-full flex-1 vb:outline" data-component="experience-grids-root">
-    <HeaderElementComponent />
+    <Header />
     {experience?.composition?.grids?.map((grid: any, gridIdx: number) => (
       <div
         key={grid.key ?? `grid-${gridIdx}`}
@@ -23,7 +23,7 @@ const ExperienceGrids = ({ experience }: { experience: any }) => (
               <div className="flex-1 flex flex-col flex-nowrap justify-start vb:col" key={column.key ?? `col-${colIdx}`} data-component="experience-grids-col">
                 {column.elements?.map((element: any, elIdx: number) => (
                   <div data-epi-block-id={element?.key} key={element?.key ?? `element-${elIdx}`} data-component="experience-grids-element">
-                    <CompositionNodeComponent compositionComponentNode={element} />
+                    <Composition compositionComponentNode={element} />
                   </div>
                 ))}
               </div>
@@ -35,4 +35,4 @@ const ExperienceGrids = ({ experience }: { experience: any }) => (
   </div>
 );
 
-export default ExperienceGrids;
+export default Experience;

@@ -1,12 +1,12 @@
 import { useState, useMemo, ChangeEvent, FormEvent } from "react";
 import { useRouter } from "next/router";
 import { useQuery } from "@apollo/client";
-import { GetCities } from "@/components/base/visualbuilder/queries/GetCitiesQuery";
+import { GetCities } from "../../queries/GetCitiesQuery";
 import React from "react";
 import OptimizelyLogo from "../icons/OptimizelyLogo";
-import ContactModalComponent from "./ContactModalComponent";
+import ContactModal from "../ui/ContactModal";
 
-const HeaderElementComponent = () => {
+const Header = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isFlyoutOpen, setFlyoutOpen] = useState(false);
   const [isModalOpen, setModalOpen] = useState(false); // ✅ Modal state
@@ -116,9 +116,9 @@ const HeaderElementComponent = () => {
       </header>
 
       {/* ✅ Contact Modal Component */}
-      {isModalOpen && <ContactModalComponent onClose={() => setModalOpen(false)} data-component="header-contact-modal" />}
+      {isModalOpen && <ContactModal onClose={() => setModalOpen(false)} data-component="header-contact-modal" />}
     </>
   );
 };
 
-export default HeaderElementComponent;
+export default Header;

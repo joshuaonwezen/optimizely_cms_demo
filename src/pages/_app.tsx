@@ -1,14 +1,9 @@
 import "@/styles/globals.css";
 import { ApolloProvider } from "@apollo/client";
 import type { AppProps } from "next/app";
-import client from "../apolloClient";
-import { OptimizelyProvider, createInstance } from "@optimizely/react-sdk";
-
-const optimizely = createInstance({
-    sdkKey: "XKkRw1SWTRnp5WXmVMYdB",
-});
-
-const visitorId = '123';
+import client from "../lib/apollo";
+import { OptimizelyProvider } from "@optimizely/react-sdk";
+import { optimizely, visitorId } from "../lib/optimizely";
 
 export default function App({ Component, pageProps }: AppProps) {
     return (

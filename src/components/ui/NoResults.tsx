@@ -1,4 +1,4 @@
-const NoSearchResults = () => {
+const NoResults = () => {
     return (
         <div
             className="relative w-full flex justify-center pt-12"
@@ -30,4 +30,4 @@ const NoSearchResults = () => {
     );
 };
 
-export default NoSearchResults;
+export default NoResults;
