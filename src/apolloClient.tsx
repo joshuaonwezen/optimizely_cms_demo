@@ -7,6 +7,19 @@ const graphUrl = process.env.GRAPH_URL;
 const cmsUrl = process.env.CMS_URL;
 const preview_token = getPreviewToken();
 
+// Enhanced cache for better performance
+const cache = new InMemoryCache({
+    typePolicies: {
+        Query: {
+            fields: {
+                _Experience: { merge: false },
+                CityPage: { merge: false },
+                _Component: { merge: false },
+            },
+        },
+    },
+});
+
 // In Preview Mode
 if (preview_token) {
     const httpLink = createHttpLink({
@@ -24,7 +37,11 @@ if (preview_token) {
 
     client = new ApolloClient({
         link: authLink.concat(httpLink),
-        cache: new InMemoryCache()
+        cache,
+        defaultOptions: {
+            watchQuery: { fetchPolicy: 'cache-first' },
+            query: { fetchPolicy: 'cache-first' },
+        },
     });
 
     const communicationScript = document.createElement('script');
@@ -50,7 +67,11 @@ if (client === undefined) {
 
     client = new ApolloClient({
         link: authLink.concat(httpLink),
-        cache: new InMemoryCache()
+        cache,
+        defaultOptions: {
+            watchQuery: { fetchPolicy: 'cache-first' },
+            query: { fetchPolicy: 'cache-first' },
+        },
     });
 }
 
