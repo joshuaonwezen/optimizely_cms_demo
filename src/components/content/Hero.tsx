@@ -46,19 +46,26 @@ const HeroBanner: React.FC<HeroBannerProps> = ({ heroBanner }) => {
     textShadow: "0 2px 6px rgba(0,0,0,0.8)",
   };
 
-  console.log("hello");
+  // Create gradient background style when no image is provided
+  const gradientStyle = {
+    background: "linear-gradient(135deg, #1a1736 0%, #3a2c98 50%, #4f3bd9 100%)",
+    backgroundSize: "400% 400%",
+  };
+
+  const backgroundStyle = backgroundImage
+    ? {
+      backgroundImage: `url(${backgroundImage})`,
+      backgroundSize: "cover",
+      backgroundPosition: "center",
+    }
+    : gradientStyle;
+
   return (
     <section
-      className="relative w-full rounded-lg overflow-hidden bg-gray-100"
-      style={{
-        backgroundImage: backgroundImage
-          ? `url(${backgroundImage})`
-          : undefined,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }}
+      className="relative w-full rounded-lg overflow-hidden"
+      style={backgroundStyle}
     >
-      <div className="bg-black/40 p-8 sm:p-12 lg:p-16 text-white text-left">
+      <div className={`p-8 sm:p-12 lg:p-16 text-white text-left ${backgroundImage ? 'bg-black/40' : ''}`}>
         <div className="max-w-3xl">
           <h1 className="text-4xl font-bold mb-4" style={textShadowStyle}>
             {title}

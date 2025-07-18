@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useState, useEffect } from "react";
 import Header from "../layout/Header";
 import NoResults from "../ui/NoResults";
 import Skeleton from "../ui/Skeleton";
@@ -15,16 +15,22 @@ interface VisualBuilderProps {
 
 const VisualBuilder: FC<VisualBuilderProps> = (props) => {
   const { loading, hasLoaded, processedData } = useVisualBuilderData(props);
+  const [isMounted, setIsMounted] = useState(false);
 
-  // Determine skeleton type based on query mode and expected content
+  // Ensure consistent server/client rendering
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  // Determine skeleton type once and use consistently
   const getSkeletonType = () => {
     if (props.searchQuery) return 'search';
-    if (processedData.experience) return 'experience';
-    if (processedData.page?.CityReference || processedData.searchResult) return 'city';
-    return 'default';
+    if (props.contentKey) return 'city';
+    return 'experience';
   };
 
-  if (loading) {
+  // Show loading state - use same skeleton type throughout
+  if (!isMounted || (loading && !hasLoaded)) {
     return (
       <div className="relative w-full flex-1 vb:outline">
         <Header />
@@ -33,22 +39,42 @@ const VisualBuilder: FC<VisualBuilderProps> = (props) => {
     );
   }
 
-  if (!processedData.experience && !processedData.page && !processedData.searchResult) {
-    return (
-      <div className="relative w-full flex-1 vb:outline">
-        <Header />
-        <NoResults />
-      </div>
-    );
+  // Handle search results first
+  if (props.searchQuery) {
+    if (processedData.searchResult) {
+      return <CityPage cityBlock={processedData.searchResult} />;
+    } else if (loading || !hasLoaded) {
+      // Still loading search results - show skeleton
+      return (
+        <div className="relative w-full flex-1 vb:outline">
+          <Header />
+          <Skeleton type="search" />
+        </div>
+      );
+    } else {
+      // Finished loading but no search results found
+      return (
+        <div className="relative w-full flex-1 vb:outline">
+          <Header />
+          <NoResults />
+        </div>
+      );
+    }
   }
 
+  // Handle regular content
   if (processedData.experience) return <Experience experience={processedData.experience} />;
-  if (
-    (processedData.page && processedData.page?.CityReference?.__typename === "CityBlock") ||
-    (processedData.searchResult && processedData.searchResult?.__typename === "CityBlock")
-  ) {
-    return <CityPage cityBlock={processedData.page?.CityReference ?? processedData.searchResult} />;
+  if (processedData.page && processedData.page?.CityReference?.__typename === "CityBlock") {
+    return <CityPage cityBlock={processedData.page?.CityReference} />;
   }
+
+  // Show no results only if we have no data at all
+  return (
+    <div className="relative w-full flex-1 vb:outline">
+      <Header />
+      <NoResults />
+    </div>
+  );
 
   return null;
 };
