@@ -5,68 +5,90 @@ import Skeleton from "../ui/Skeleton";
 import { useVisualBuilderData } from "../../hooks/useVisualBuilderData";
 import Experience from "./Experience";
 import CityPage from "./CityPage";
+import { PageParams, SSRData } from "../../types";
 
-interface VisualBuilderProps {
-  contentKey?: string;
-  version?: string;
-  url?: string;
-  searchQuery?: string;
-  ssrData?: any; // <-- new prop for SSR
+/**
+ * VisualBuilder Component - Main Content Router
+ * 
+ * Demonstrates Optimizely SaaS CMS capabilities:
+ * - Unified content delivery for experiences, pages, and search
+ * - Server-side rendering with client-side hydration
+ * - Content type-specific rendering logic
+ * - Loading states and error handling
+ */
+
+interface VisualBuilderProps extends PageParams {
+  /** Pre-fetched server-side data for initial render */
+  ssrData?: SSRData | null;
 }
 
 const VisualBuilder: FC<VisualBuilderProps> = (props) => {
-  // If SSR data is provided, use it as the initial data
+  // Server-side rendering optimization
   const [ssrUsed, setSsrUsed] = useState(!!props.ssrData);
   const [ssrData, setSsrData] = useState(props.ssrData);
-  const { loading, hasLoaded, processedData } = useVisualBuilderData(props, ssrUsed ? ssrData : undefined);
+  
+  // Custom hook handles all data fetching logic with feature flag support
+  const { loading, hasLoaded, processedData } = useVisualBuilderData(
+    props, 
+    ssrUsed ? ssrData : undefined
+  );
 
+  // Ensure SSR data is only used on initial render
   useEffect(() => {
     if (ssrUsed) {
-      setSsrUsed(false); // Only use SSR data on first render
+      setSsrUsed(false);
     }
   }, [ssrUsed]);
 
-  // Ensure consistent server/client rendering
+  // Hydration consistency - prevent server/client mismatch
   const [isMounted, setIsMounted] = useState(false);
-
-  // Ensure consistent server/client rendering
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
-  // Determine skeleton type once and use consistently
-  const getSkeletonType = () => {
+  /**
+   * Determine appropriate skeleton type based on content request
+   * Provides visual feedback matching expected content structure
+   */
+  const getSkeletonType = (): 'search' | 'city' | 'experience' => {
     if (props.searchQuery) return 'search';
     if (props.contentKey) return 'city';
     return 'experience';
   };
 
-  // Show loading state - use same skeleton type throughout
+  // Initial loading state - show skeleton until mounted and data loads
   if (!isMounted || (loading && !hasLoaded)) {
     return (
-      <div className="relative w-full flex-1 vb:outline">
+      <div 
+        className="relative w-full flex-1 vb:outline"
+        data-component="visual-builder-loading"
+      >
         <Header />
         <Skeleton type={getSkeletonType()} />
       </div>
     );
   }
 
-  // Handle search results first
+  // Search Results Flow - Optimizely Graph search demonstration
   if (props.searchQuery) {
     if (processedData.searchResult) {
       return <CityPage cityBlock={processedData.searchResult} />;
     } else if (loading || !hasLoaded) {
-      // Still loading search results - show skeleton
       return (
-        <div className="relative w-full flex-1 vb:outline">
+        <div 
+          className="relative w-full flex-1 vb:outline"
+          data-component="search-loading"
+        >
           <Header />
           <Skeleton type="search" />
         </div>
       );
     } else {
-      // Finished loading but no search results found
       return (
-        <div className="relative w-full flex-1 vb:outline">
+        <div 
+          className="relative w-full flex-1 vb:outline"
+          data-component="no-search-results"
+        >
           <Header />
           <NoResults />
         </div>
@@ -74,21 +96,25 @@ const VisualBuilder: FC<VisualBuilderProps> = (props) => {
     }
   }
 
-  // Handle regular content
-  if (processedData.experience) return <Experience experience={processedData.experience} />;
-  if (processedData.page && processedData.page?.CityReference?.__typename === "CityBlock") {
-    return <CityPage cityBlock={processedData.page?.CityReference} />;
+  // Content Delivery Flow - Regular CMS content
+  if (processedData.experience) {
+    return <Experience experience={processedData.experience} />;
+  }
+  
+  if (processedData.page?.CityReference?.__typename === "CityBlock") {
+    return <CityPage cityBlock={processedData.page.CityReference} />;
   }
 
-  // Show no results only if we have no data at all
+  // Fallback - No content found
   return (
-    <div className="relative w-full flex-1 vb:outline">
+    <div 
+      className="relative w-full flex-1 vb:outline"
+      data-component="no-content-found"
+    >
       <Header />
       <NoResults />
     </div>
   );
-
-  return null;
 };
 
 export default React.memo(VisualBuilder);

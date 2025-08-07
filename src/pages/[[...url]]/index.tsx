@@ -6,23 +6,37 @@ import { initializeApollo } from "../../lib/apollo-ssr";
 import { selectQuery } from "../../utils/querySelector";
 import { ApolloProvider } from "@apollo/client";
 import { GetServerSideProps } from "next";
+import { HomePageProps, PageParams, SSRData } from "../../types";
 
 const inter = Inter({ subsets: ["latin"] });
 
 /**
- * Main page component for Optimizely CMS demo
- * Handles different URL patterns and renders appropriate content
+ * Optimizely CMS Demo - Main Page Component
+ * 
+ * This component demonstrates key Optimizely SaaS CMS capabilities:
+ * - Content delivery via GraphQL (Optimizely Graph)
+ * - Server-side rendering for SEO and performance
+ * - Feature experimentation with search ranking algorithms
+ * - Unified content management across experiences and pages
+ * 
+ * URL Patterns Supported:
+ * - Search: ?query=searchterm
+ * - Direct content: ?key=contentkey&ver=version  
+ * - URL routing: /path/to/content
  */
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  // Parse params as in the component
+export const getServerSideProps: GetServerSideProps<HomePageProps> = async (context) => {
   const { query, resolvedUrl } = context;
-  let pageParams: any = {};
+  let pageParams: PageParams = {};
   
   // Only check for specific keys that the application cares about
+  // This ignores Optimizely editor parameters (optimizely_*, etc.)
   if (query.query) {
-    pageParams = { searchQuery: query.query };
+    pageParams = { searchQuery: query.query as string };
   } else if (query.key) {
-    pageParams = { contentKey: query.key, version: query.ver };
+    pageParams = { 
+      contentKey: query.key as string, 
+      version: query.ver as string | undefined 
+    };
   } else {
     // Clean the URL by removing query parameters for URL-based routing
     const cleanUrl = resolvedUrl.split('?')[0];
@@ -34,14 +48,19 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const searchOrderBy = { _ranking: "SEMANTIC", _semanticWeight: 0.9 };
   const { queryDocument, queryVariables } = selectQuery(pageParams, searchOrderBy);
 
-  // Create Apollo client for SSR
+  // Create Apollo client for server-side data fetching
   const apolloClient = initializeApollo();
-  let data = null;
+  let data: SSRData | null = null;
+  
   try {
-    const result = await apolloClient.query({ query: queryDocument, variables: queryVariables });
-    data = result.data;
-  } catch (e) {
-    // handle error, optionally log
+    const result = await apolloClient.query({ 
+      query: queryDocument, 
+      variables: queryVariables 
+    });
+    data = result.data as SSRData;
+  } catch (error) {
+    // Log error in production applications
+    console.error('SSR data fetch error:', error);
   }
 
   return {
@@ -53,15 +72,23 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 }
 
-export default function Home({ initialApolloState, ssrData, pageParams }: {
-  initialApolloState: any;
-  ssrData: any;
-  pageParams: any;
-}) {
+/**
+ * Optimizely CMS Demo - Home Page Component
+ * 
+ * Demonstrates how to integrate Optimizely SaaS CMS with Next.js:
+ * - Server-side rendering with GraphQL data fetching
+ * - Apollo Client state hydration
+ * - Content routing based on URL patterns
+ */
+export default function Home({ initialApolloState, ssrData, pageParams }: HomePageProps) {
   const client = initializeApollo(initialApolloState);
+  
   return (
     <ApolloProvider client={client}>
-      <main className={`flex min-h-screen flex-col items-center px-12 justify-between ${inter.className}`}>
+      <main 
+        className={`flex min-h-screen flex-col items-center px-12 justify-between ${inter.className}`}
+        data-component="main-layout"
+      >
         <VisualBuilder {...pageParams} ssrData={ssrData} />
       </main>
     </ApolloProvider>
