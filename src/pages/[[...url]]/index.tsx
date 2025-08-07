@@ -5,6 +5,7 @@ import { useMemo } from "react";
 import { initializeApollo } from "../../lib/apollo-ssr";
 import { selectQuery } from "../../utils/querySelector";
 import { ApolloProvider } from "@apollo/client";
+import { GetServerSideProps } from "next";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -12,7 +13,7 @@ const inter = Inter({ subsets: ["latin"] });
  * Main page component for Optimizely CMS demo
  * Handles different URL patterns and renders appropriate content
  */
-export async function getServerSideProps(context) {
+export const getServerSideProps: GetServerSideProps = async (context) => {
   // Parse params as in the component
   const { query, resolvedUrl } = context;
   let pageParams: any = {};
@@ -48,7 +49,11 @@ export async function getServerSideProps(context) {
   };
 }
 
-export default function Home({ initialApolloState, ssrData, pageParams }) {
+export default function Home({ initialApolloState, ssrData, pageParams }: {
+  initialApolloState: any;
+  ssrData: any;
+  pageParams: any;
+}) {
   const client = initializeApollo(initialApolloState);
   return (
     <ApolloProvider client={client}>
