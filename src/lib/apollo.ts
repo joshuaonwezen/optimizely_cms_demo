@@ -26,70 +26,85 @@ const cache = new InMemoryCache({
     },
 });
 
-let client: ApolloClient<any> | undefined = undefined;
+let globalApolloClient: ApolloClient<any> | undefined = undefined;
 
-/**
- * PREVIEW MODE - When editing content in Optimizely CMS
- * Uses Bearer token authentication and loads Visual Builder scripts
- */
-if (preview_token) {
-    const httpLink = createHttpLink({
-        uri: `https://${graphUrl}/content/v2`,
-    });
-
-    const authLink = setContext((_, { headers }) => {
-        return {
-            headers: {
-                ...headers,
-                authorization: `Bearer ${preview_token}`
-            }
-        };
-    });
-
-    client = new ApolloClient({
-        link: authLink.concat(httpLink),
-        cache,
-        defaultOptions: {
-            watchQuery: { fetchPolicy: 'cache-first' },
-            query: { fetchPolicy: 'cache-first' },
-        },
-    });
-
-    // Load Visual Builder communication script for live editing
-    const communicationScript = document.createElement('script');
-    communicationScript.src = `${cmsUrl}util/javascript/communicationInjector.js`;
-    communicationScript.setAttribute('data-nscript', 'afterInteractive')
-    document.body.appendChild(communicationScript);
+export function initializeApollo(initialState?: any) {
+    // Always create a new client for SSR, reuse singleton on client
+    const isServer = typeof window === "undefined";
+    let _client: ApolloClient<any>;
+    if (isServer) {
+        _client = createApolloClient();
+    } else {
+        if (!globalApolloClient) {
+            globalApolloClient = createApolloClient();
+        }
+        _client = globalApolloClient;
+    }
+    if (initialState) {
+        _client.cache.restore(initialState);
+    }
+    return _client;
 }
 
-/**
- * PUBLIC MODE - For regular website visitors
- * Uses single key authentication (simpler, no bearer token needed)
- */
-if (client === undefined) {
-    const singleGraphKey = process.env.GRAPH_SINGLE_KEY;
-    
-    const httpLink = createHttpLink({
-        uri: `https://${graphUrl}/content/v2?auth=${singleGraphKey}`,
-    });
-
-    const authLink = setContext((_, { headers }) => {
-        return {
-            headers: {
-                ...headers
-            }
-        };
-    });
-
-    client = new ApolloClient({
-        link: authLink.concat(httpLink),
-        cache,
-        defaultOptions: {
-            watchQuery: { fetchPolicy: 'cache-first' },
-            query: { fetchPolicy: 'cache-first' },
-        },
-    });
+function createApolloClient() {
+    const graphUrl = process.env.GRAPH_URL;
+    const cmsUrl = process.env.CMS_URL;
+    const preview_token = getPreviewToken();
+    let client: ApolloClient<any>;
+    if (preview_token) {
+        const httpLink = createHttpLink({ uri: `https://${graphUrl}/content/v2` });
+        const authLink = setContext((_, { headers }) => ({
+            headers: { ...headers, authorization: `Bearer ${preview_token}` }
+        }));
+        client = new ApolloClient({
+            link: authLink.concat(httpLink),
+            cache: new InMemoryCache({
+                typePolicies: {
+                    Query: {
+                        fields: {
+                            _Experience: { merge: false },
+                            CityPage: { merge: false },
+                            _Component: { merge: false },
+                        },
+                    },
+                },
+            }),
+            defaultOptions: {
+                watchQuery: { fetchPolicy: 'cache-first' },
+                query: { fetchPolicy: 'cache-first' },
+            },
+        });
+        if (typeof window !== "undefined") {
+            const communicationScript = document.createElement('script');
+            communicationScript.src = `${cmsUrl}util/javascript/communicationInjector.js`;
+            communicationScript.setAttribute('data-nscript', 'afterInteractive')
+            document.body.appendChild(communicationScript);
+        }
+    } else {
+        const singleGraphKey = process.env.GRAPH_SINGLE_KEY;
+        const httpLink = createHttpLink({ uri: `https://${graphUrl}/content/v2?auth=${singleGraphKey}` });
+        const authLink = setContext((_, { headers }) => ({ headers: { ...headers } }));
+        client = new ApolloClient({
+            link: authLink.concat(httpLink),
+            cache: new InMemoryCache({
+                typePolicies: {
+                    Query: {
+                        fields: {
+                            _Experience: { merge: false },
+                            CityPage: { merge: false },
+                            _Component: { merge: false },
+                        },
+                    },
+                },
+            }),
+            defaultOptions: {
+                watchQuery: { fetchPolicy: 'cache-first' },
+                query: { fetchPolicy: 'cache-first' },
+            },
+        });
+    }
+    return client;
 }
 
-export default client;
+export default initializeApollo();
 

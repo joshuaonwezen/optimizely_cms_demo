@@ -11,10 +11,22 @@ interface VisualBuilderProps {
   version?: string;
   url?: string;
   searchQuery?: string;
+  ssrData?: any; // <-- new prop for SSR
 }
 
 const VisualBuilder: FC<VisualBuilderProps> = (props) => {
-  const { loading, hasLoaded, processedData } = useVisualBuilderData(props);
+  // If SSR data is provided, use it as the initial data
+  const [ssrUsed, setSsrUsed] = useState(!!props.ssrData);
+  const [ssrData, setSsrData] = useState(props.ssrData);
+  const { loading, hasLoaded, processedData } = useVisualBuilderData(props, ssrUsed ? ssrData : undefined);
+
+  useEffect(() => {
+    if (ssrUsed) {
+      setSsrUsed(false); // Only use SSR data on first render
+    }
+  }, [ssrUsed]);
+
+  // Ensure consistent server/client rendering
   const [isMounted, setIsMounted] = useState(false);
 
   // Ensure consistent server/client rendering

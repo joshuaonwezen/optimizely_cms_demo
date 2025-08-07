@@ -16,8 +16,9 @@ interface PageParams {
  * Main hook for fetching and processing Optimizely CMS content
  * Handles 3 scenarios: regular pages, search results, and preview mode
  */
-export function useVisualBuilderData(params: PageParams) {
-  const [hasLoaded, setHasLoaded] = useState(false);
+export function useVisualBuilderData(params: PageParams, initialData?: any) {
+  const [hasLoaded, setHasLoaded] = useState(!!initialData);
+  const [data, setData] = useState(initialData);
 
   // Get search ranking from Optimizely Feature Experimentation
   const searchOrderBy = useSearchRanking();
@@ -28,13 +29,20 @@ export function useVisualBuilderData(params: PageParams) {
     [params.version, params.contentKey, params.url, params.searchQuery, searchOrderBy]
   );
 
-  // Fetch data from Optimizely Graph
-  const { data, refetch, loading } = useQuery(queryDocument, {
+  // Fetch data from Optimizely Graph (skip if initialData is present)
+  const { data: clientData, refetch, loading } = useQuery(queryDocument, {
     variables: queryVariables,
     notifyOnNetworkStatusChange: true,
     fetchPolicy: "cache-and-network",
     onCompleted: () => setHasLoaded(true),
+    skip: !!initialData,
   });
+
+  useEffect(() => {
+    if (!initialData && clientData) {
+      setData(clientData);
+    }
+  }, [clientData, initialData]);
 
   // Listen for CMS content changes (Visual Builder integration)
   useContentSavedListener(refetch, queryVariables, mode === "preview");
@@ -44,7 +52,7 @@ export function useVisualBuilderData(params: PageParams) {
     return processGraphQLData(data, mode);
   }, [data, mode]);
 
-  return { loading, hasLoaded, processedData };
+  return { loading: !hasLoaded && loading, hasLoaded, processedData };
 }
 
 /**

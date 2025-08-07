@@ -1,0 +1,1 @@
+export { initializeApollo } from './apollo';
