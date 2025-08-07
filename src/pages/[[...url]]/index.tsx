@@ -17,12 +17,16 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   // Parse params as in the component
   const { query, resolvedUrl } = context;
   let pageParams: any = {};
+  
+  // Only check for specific keys that the application cares about
   if (query.query) {
     pageParams = { searchQuery: query.query };
   } else if (query.key) {
     pageParams = { contentKey: query.key, version: query.ver };
   } else {
-    const url = resolvedUrl === "/" ? "/en/" : resolvedUrl;
+    // Clean the URL by removing query parameters for URL-based routing
+    const cleanUrl = resolvedUrl.split('?')[0];
+    const url = cleanUrl === "/" ? "/en/" : cleanUrl;
     pageParams = { url: url.endsWith("/") ? url : url + "/" };
   }
 
