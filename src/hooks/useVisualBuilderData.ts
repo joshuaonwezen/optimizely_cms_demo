@@ -91,7 +91,7 @@ function usePreviewModeListener(refetch: any, queryVariables: any) {
           // Fallback: refetch with original variables
           refetch(queryVariables);
         }
-      }, 1000); // 1 second debounce
+      }, 500); // 500ms debounce
     };
 
     const unsubscribe = onContentSaved(handleContentSaved);
