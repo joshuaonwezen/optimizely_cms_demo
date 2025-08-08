@@ -1,13 +1,22 @@
 import { createInstance } from "@optimizely/react-sdk";
+import {v4} from 'uuid';
+import cookies from 'js-cookie';
 
 /**
  * Optimizely Feature Experimentation Configuration
  * This is where we configure A/B testing and feature flags
  */
 
+
+function getOptimizelyId() {
+  const visitorId = cookies.get('visitorId') || v4();
+  cookies.set('visitorId', visitorId, {expires: 365});
+  return visitorId;
+}
+
 export const optimizely = createInstance({
     sdkKey: "XKkRw1SWTRnp5WXmVMYdB",
 });
 
-// Demo visitor ID - in production, this would be dynamic
-export const visitorId = '123';
+export const visitorId = getOptimizelyId();
+
