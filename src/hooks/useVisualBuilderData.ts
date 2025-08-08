@@ -67,37 +67,28 @@ export function useVisualBuilderData(params: PageParams, initialData?: any) {
  * Sets up content save listener with debouncing for live editing
  */
 function usePreviewModeListener(refetch: any, queryVariables: any) {
-  useEffect(() => {
-    let debounceTimer: NodeJS.Timeout | null = null;
-    
+  useEffect(() => {    
     const handleContentSaved = (event: any) => {
-      // Clear previous timer to reset debounce window
-      if (debounceTimer) clearTimeout(debounceTimer);
-      
-      // Debounce refetch calls to prevent API spam during rapid edits
-      debounceTimer = setTimeout(() => {
-        try {
-          const contentIdArray = event?.contentLink?.split("_");
-          if (contentIdArray && contentIdArray.length > 1) {
-            const newVersion = contentIdArray.at(-1);
-            console.log("Preview content saved, refetching with version:", newVersion);
+      try {
+        const contentIdArray = event?.contentLink?.split("_");
+        if (contentIdArray && contentIdArray.length > 1) {
+          const newVersion = contentIdArray.at(-1);
+          console.log("Preview content saved, refetching with version:", newVersion);
 
-            // Update variables with new version for preview
-            const updatedVariables = { ...queryVariables, version: newVersion };
-            refetch(updatedVariables);
-          }
-        } catch (error) {
-          console.warn("Failed to handle content save event:", error);
-          // Fallback: refetch with original variables
-          refetch(queryVariables);
+          // Update variables with new version for preview
+          const updatedVariables = { ...queryVariables, version: newVersion };
+          refetch(updatedVariables);
         }
-      }, 500); // 500ms debounce
+      } catch (error) {
+        console.warn("Failed to handle content save event:", error);
+        // Fallback: refetch with original variables
+        refetch(queryVariables);
+      }
     };
 
     const unsubscribe = onContentSaved(handleContentSaved);
     
     return () => {
-      if (debounceTimer) clearTimeout(debounceTimer);
       if (unsubscribe) unsubscribe();
     };
   }, [refetch, queryVariables]);
