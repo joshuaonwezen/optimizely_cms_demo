@@ -101,22 +101,16 @@ function usePreviewModeListener(refetch: any, queryVariables: any) {
  * Regular/Preview Mode: Returns experiences and pages from standard queries
  */
 function processDataByMode(data: any, mode: string) {
-  switch (mode) {
-    case "search":
-      return processSearchData(data);
-    case "preview":
-    case "default":
-      return processStandardData(data);
-    default:
-      return processStandardData(data);
-  }
+  return mode === "search"
+    ? processSearchData(data)
+    : processStandardData(data);
 }
 
 /**
  * Search Mode: Process search results
  */
 function processSearchData(data: any) {
-  const searchResults = isSearchResultsQuery(data) ? data?._Component?.items ?? [] : [];
+  const searchResults = isSearchResultsQuery(data) ? data?._Component?.items || [] : [];
   return {
     experience: undefined,
     page: undefined,
@@ -128,9 +122,9 @@ function processSearchData(data: any) {
  * Regular/Preview Mode: Process standard CMS content
  */
 function processStandardData(data: any) {
-  const experiences = (data && data._Experience?.items) || [];
-  const pages = (data && data.CityPage?.items) || [];
-  
+  const experiences = data?._Experience?.items || [];
+  const pages = data?.CityPage?.items || [];
+
   return {
     experience: getFirstItem(experiences),
     page: getFirstItem(pages),
