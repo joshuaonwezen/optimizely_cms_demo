@@ -4,7 +4,6 @@ import cookies from 'js-cookie';
 
 /**
  * Optimizely Feature Experimentation Configuration
- * This is where we configure A/B testing and feature flags
  */
 
 
