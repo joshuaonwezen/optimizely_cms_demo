@@ -8,7 +8,8 @@ import cookies from 'js-cookie';
 
 
 function getOptimizelyId() {
-  const visitorId = cookies.get('visitorId') || v4();
+  //const visitorId = cookies.get('visitorId') || v4();
+  const visitorId = v4();
   cookies.set('visitorId', visitorId, {expires: 365});
   return visitorId;
 }
